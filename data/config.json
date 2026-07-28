@@ -1,0 +1,22 @@
+﻿{
+  "window": {
+    "width": 450,
+    "height": 700,
+    "opacity": 0.95,
+    "always_on_top": true
+  },
+  "font": {
+    "family": "微软雅黑",
+    "size": 10
+  },
+  "colors": {
+    "background": "#f0f0f0",
+    "foreground": "#333333",
+    "highlight": "#0078d7"
+  },
+  "shortcuts": {
+    "search": "Ctrl+F",
+    "quit": "Escape",
+    "clear_filters": "Ctrl+D"
+  }
+}

@@ -1,0 +1,6344 @@
+﻿<!doctype html>
+<html lang="en">
+
+<head>
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<link rel="icon" type="image/x-icon" href="/favicon.ico">
+	<meta name="theme-color" content="#ffffff">
+	<meta http-equiv="Content-Security-Policy" content="block-all-mixed-content" />
+
+	
+	
+
+	<meta name='robots' content='noindex, follow' />
+<script id="gamurs-growthbook-loader">
+(function () {
+  // Respect user privacy signals. If either Do Not Track or Global Privacy Control
+  // is set, skip GrowthBook initialization entirely â no SDK fetch, no bucketing,
+  // no exposure events. Those users see the default rendering for every flag.
+  var dnt = (typeof navigator.doNotTrack !== 'undefined' && navigator.doNotTrack === '1') ||
+            window.doNotTrack === '1' ||
+            navigator.msDoNotTrack === '1';
+  var gpc = navigator.globalPrivacyControl === true;
+  if (dnt || gpc) { return; }
+
+  if (window.growthbook_config) { return; } // GTM tag 356 still active? Let one of us win.
+
+  function getSnowplowDomainUserId() {
+    var pairs = document.cookie.split('; ');
+    for (var i = 0; i < pairs.length; i++) {
+      if (pairs[i].indexOf('_sp_id.') === 0) {
+        return pairs[i].split('=')[1].split('.')[0] || null;
+      }
+    }
+    return null;
+  }
+
+  window.growthbook_config = {};
+  window.growthbook_config.attributes = {
+    country: "HK",
+    anonymous_id: getSnowplowDomainUserId(),
+    user_id: null,
+    referrer: document.referrer,
+    url: window.location.href,
+    userAgent: navigator.userAgent
+  };
+
+  window.growthbook_config.trackingCallback = function (experiment, result) {
+    if (window.snowplow) {
+      window.snowplow('trackStructEvent', {
+        category: 'Experiments',
+        action: 'GrowthBook Experiment Viewed',
+        label: experiment.key,
+        property: result.key
+      });
+    }
+    if (window.clarity) {
+      window.clarity('set', 'experiment', experiment.key);
+    }
+  };
+
+  window.growthbook_queue = window.growthbook_queue || [];
+  window.growthbook_queue.push(function (gb) { gb.init(); });
+
+  var s = document.createElement('script');
+  s.async = true;
+  s.dataset.clientKey = "sdk-LmjHnXEHTGSazmI";
+  s.dataset.decryptionKey = "kvNCD6hH4ykx5B3xd8jSRA==";
+  s.src = "\/static\/v2\/growthbook.js";
+  document.head.appendChild(s);
+})();
+</script>
+	<style id="gamurs-critical-css-proguides-style">@charset "UTF-8";
+/*!
+Theme Name: Pro Game Guides - Lightweight
+Theme URI: https://progameguides.com
+Text Domain: proguides
+*/
+/*! Spectre.css v0.5.3 | MIT License | github.com/picturepan2/spectre */
+/* Manually forked from Normalize.css */
+/* normalize.css v5.0.0 | MIT License | github.com/necolas/normalize.css */
+/**
+ * 1. Change the default font family in all browsers (opinionated).
+ * 2. Correct the line height in all browsers.
+ * 3. Prevent adjustments of font size after orientation changes in
+ *    IE on Windows Phone and in iOS.
+ */
+/* Document
+   ========================================================================== */
+html {
+  font-family: sans-serif; /* 1 */
+  -ms-text-size-adjust: 100%; /* 3 */
+  -webkit-text-size-adjust: 100%; /* 3 */
+}
+
+/* Sections
+   ========================================================================== */
+/**
+ * Remove the margin in all browsers (opinionated).
+ */
+body {
+  margin: 0;
+  padding-bottom: 6rem;
+}
+
+/**
+ * Add the correct display in IE 9-.
+ */
+article,
+aside,
+footer,
+header,
+nav,
+section {
+  display: block;
+}
+
+/**
+ * Correct the font size and margin on `h1` elements within `section` and
+ * `article` contexts in Chrome, Firefox, and Safari.
+ */
+h1 {
+  font-size: 2em;
+  margin: 0.67em 0;
+}
+
+/* Grouping content
+   ========================================================================== */
+/**
+ * Add the correct display in IE 9-.
+ * 1. Add the correct display in IE.
+ */
+figcaption,
+figure,
+main { /* 1 */
+  display: block;
+}
+
+/**
+ * Add the correct margin in IE 8 (removed).
+ */
+/**
+ * 1. Add the correct box sizing in Firefox.
+ * 2. Show the overflow in Edge and IE.
+ */
+hr {
+  box-sizing: content-box; /* 1 */
+  height: 0; /* 1 */
+  overflow: visible; /* 2 */
+}
+
+/**
+ * 1. Correct the inheritance and scaling of font size in all browsers. (removed)
+ * 2. Correct the odd `em` font sizing in all browsers.
+ */
+/* Text-level semantics
+   ========================================================================== */
+/**
+ * 1. Remove the gray background on active links in IE 10.
+ * 2. Remove gaps in links underline in iOS 8+ and Safari 8+.
+ */
+a {
+  background-color: transparent; /* 1 */
+  -webkit-text-decoration-skip: objects; /* 2 */
+}
+
+/**
+ * Remove the outline on focused links when they are also active or hovered
+ * in all browsers (opinionated).
+ */
+a:active,
+a:hover {
+  outline-width: 0;
+}
+
+/**
+ * Modify default styling of address.
+ */
+address {
+  font-style: normal;
+}
+
+/**
+ * 1. Remove the bottom border in Firefox 39-.
+ * 2. Add the correct text decoration in Chrome, Edge, IE, Opera, and Safari. (removed)
+ */
+/**
+ * Prevent the duplicate application of `bolder` by the next rule in Safari 6.
+ */
+b,
+strong {
+  font-weight: inherit;
+}
+
+/**
+ * Add the correct font weight in Chrome, Edge, and Safari.
+ */
+b,
+strong {
+  font-weight: bolder;
+}
+
+/**
+ * 1. Correct the inheritance and scaling of font size in all browsers.
+ * 2. Correct the odd `em` font sizing in all browsers.
+ */
+code,
+kbd,
+pre,
+samp {
+  font-family: "SF Mono", "Segoe UI Mono", "Roboto Mono", Menlo, Courier, monospace; /* 1 (changed) */
+  font-size: 1em; /* 2 */
+}
+
+/**
+ * Add the correct font style in Android 4.3-.
+ */
+dfn {
+  font-style: italic;
+}
+
+/**
+ * Add the correct background and color in IE 9-. (Removed)
+ */
+/**
+ * Add the correct font size in all browsers.
+ */
+small {
+  font-size: 80%;
+  font-weight: 400; /* (added) */
+}
+
+/**
+ * Prevent `sub` and `sup` elements from affecting the line height in
+ * all browsers.
+ */
+sub,
+sup {
+  font-size: 75%;
+  line-height: 0;
+  position: relative;
+  vertical-align: baseline;
+}
+
+sub {
+  bottom: -0.25em;
+}
+
+sup {
+  top: -0.5em;
+}
+
+/* Embedded content
+   ========================================================================== */
+/**
+ * Add the correct display in IE 9-.
+ */
+audio,
+video {
+  display: inline-block;
+}
+
+/**
+ * Add the correct display in iOS 4-7.
+ */
+audio:not([controls]) {
+  display: none;
+  height: 0;
+}
+
+/**
+ * Remove the border on images inside links in IE 10-.
+ */
+img {
+  border-style: none;
+}
+
+/**
+ * Hide the overflow in IE.
+ */
+svg:not(:root) {
+  overflow: hidden;
+}
+
+/* Forms
+   ========================================================================== */
+/**
+ * 1. Change the font styles in all browsers (opinionated).
+ * 2. Remove the margin in Firefox and Safari.
+ */
+button,
+input,
+optgroup,
+select,
+textarea {
+  font-family: inherit; /* 1 (changed) */
+  font-size: inherit; /* 1 (changed) */
+  line-height: inherit; /* 1 (changed) */
+  margin: 0; /* 2 */
+}
+
+/**
+ * Show the overflow in IE.
+ * 1. Show the overflow in Edge.
+ */
+button,
+input { /* 1 */
+  overflow: visible;
+}
+
+/**
+ * Remove the inheritance of text transform in Edge, Firefox, and IE.
+ * 1. Remove the inheritance of text transform in Firefox.
+ */
+button,
+select { /* 1 */
+  text-transform: none;
+}
+
+/**
+ * 1. Prevent a WebKit bug where (2) destroys native `audio` and `video`
+ *    controls in Android 4.
+ * 2. Correct the inability to style clickable types in iOS and Safari.
+ */
+button,
+html [type=button],
+[type=reset],
+[type=submit] {
+  -webkit-appearance: button; /* 2 */
+}
+
+/**
+ * Remove the inner border and padding in Firefox.
+ */
+button::-moz-focus-inner,
+[type=button]::-moz-focus-inner,
+[type=reset]::-moz-focus-inner,
+[type=submit]::-moz-focus-inner {
+  border-style: none;
+  padding: 0;
+}
+
+/**
+ * Restore the focus styles unset by the previous rule (removed).
+ */
+/**
+ * Change the border, margin, and padding in all browsers (opinionated) (changed).
+ */
+fieldset {
+  border: 0;
+  margin: 0;
+  padding: 0;
+}
+
+/**
+ * 1. Correct the text wrapping in Edge and IE.
+ * 2. Correct the color inheritance from `fieldset` elements in IE.
+ * 3. Remove the padding so developers are not caught out when they zero out
+ *    `fieldset` elements in all browsers.
+ */
+legend {
+  box-sizing: border-box; /* 1 */
+  color: inherit; /* 2 */
+  display: table; /* 1 */
+  max-width: 100%; /* 1 */
+  padding: 0; /* 3 */
+  white-space: normal; /* 1 */
+}
+
+/**
+ * 1. Add the correct display in IE 9-.
+ * 2. Add the correct vertical alignment in Chrome, Firefox, and Opera.
+ */
+progress {
+  display: inline-block; /* 1 */
+  vertical-align: baseline; /* 2 */
+}
+
+/**
+ * Remove the default vertical scrollbar in IE.
+ */
+textarea {
+  overflow: auto;
+}
+
+/**
+ * 1. Add the correct box sizing in IE 10-.
+ * 2. Remove the padding in IE 10-.
+ */
+[type=checkbox],
+[type=radio] {
+  box-sizing: border-box; /* 1 */
+  padding: 0; /* 2 */
+}
+
+/**
+ * Correct the cursor style of increment and decrement buttons in Chrome.
+ */
+[type=number]::-webkit-inner-spin-button,
+[type=number]::-webkit-outer-spin-button {
+  height: auto;
+}
+
+/**
+ * 1. Correct the odd appearance in Chrome and Safari.
+ * 2. Correct the outline style in Safari.
+ */
+[type=search] {
+  -webkit-appearance: textfield; /* 1 */
+  outline-offset: -2px; /* 2 */
+}
+
+/**
+ * Remove the inner padding and cancel buttons in Chrome and Safari on macOS.
+ */
+[type=search]::-webkit-search-cancel-button,
+[type=search]::-webkit-search-decoration {
+  -webkit-appearance: none;
+}
+
+/**
+ * 1. Correct the inability to style clickable types in iOS and Safari.
+ * 2. Change font properties to `inherit` in Safari.
+ */
+::-webkit-file-upload-button {
+  -webkit-appearance: button; /* 1 */
+  font: inherit; /* 2 */
+}
+
+/* Interactive
+   ========================================================================== */
+/*
+ * Add the correct display in IE 9-.
+ * 1. Add the correct display in Edge, IE, and Firefox.
+ */
+details,
+menu {
+  display: block;
+}
+
+/*
+ * Add the correct display in all browsers.
+ */
+summary {
+  display: list-item;
+  outline: none;
+}
+
+/* Scripting
+   ========================================================================== */
+/**
+ * Add the correct display in IE 9-.
+ */
+canvas {
+  display: inline-block;
+}
+
+/**
+ * Add the correct display in IE.
+ */
+template {
+  display: none;
+}
+
+/* Hidden
+   ========================================================================== */
+/**
+ * Add the correct display in IE 10-.
+ */
+[hidden] {
+  display: none;
+}
+
+*,
+*::before,
+*::after {
+  box-sizing: inherit;
+}
+
+html {
+  box-sizing: border-box;
+  font-size: 20px;
+  line-height: 1.5;
+  -webkit-tap-highlight-color: transparent;
+}
+
+body {
+  background: #fff;
+  color: rgb(79.8611111111, 89.1203703704, 107.6388888889);
+  font-family: -apple-system, system-ui, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", sans-serif;
+  font-size: 0.8rem;
+  padding-bottom: 6rem;
+  overflow-x: hidden;
+  text-rendering: optimizeLegibility;
+}
+
+a {
+  color: #5755d9;
+  outline: none;
+  text-decoration: none;
+}
+a:focus {
+  box-shadow: 0 0 0 0.1rem rgba(87, 85, 217, 0.2);
+}
+a:focus, a:hover, a:active, a.active {
+  color: rgb(48.2692307692, 45.8557692308, 205.1442307692);
+  text-decoration: underline;
+}
+a:visited {
+  color: rgb(128.1923076923, 126.6826923077, 226.3173076923);
+}
+
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+  color: inherit;
+  font-weight: 500;
+  line-height: 1.2;
+  margin-bottom: 0.5em;
+  margin-top: 0;
+}
+
+.h1,
+.h2,
+.h3,
+.h4,
+.h5,
+.h6 {
+  font-weight: 500;
+}
+
+h1,
+.h1 {
+  font-size: 2rem;
+}
+
+h2,
+.h2 {
+  font-size: 1.6rem;
+}
+
+h3,
+.h3 {
+  font-size: 1.4rem;
+}
+
+h4,
+.h4 {
+  font-size: 1.2rem;
+}
+
+h5,
+.h5 {
+  font-size: 1rem;
+}
+
+h6,
+.h6 {
+  font-size: 0.8rem;
+}
+
+p {
+  margin: 0 0 1.2rem;
+}
+
+a,
+ins,
+u {
+  text-decoration-skip: ink edges;
+}
+
+abbr[title] {
+  border-bottom: 0.05rem dotted;
+  cursor: help;
+  text-decoration: none;
+}
+
+kbd {
+  border-radius: 0.1rem;
+  line-height: 1.2;
+  padding: 0.1rem 0.2rem;
+  background: #454d5d;
+  color: #fff;
+  font-size: 0.7rem;
+}
+
+mark {
+  background: #ffe9b3;
+  color: rgb(79.8611111111, 89.1203703704, 107.6388888889);
+  border-radius: 0.1rem;
+  padding: 0.05rem;
+}
+
+blockquote {
+  border-left: 0.1rem solid rgb(230.8888888889, 232.962962963, 237.1111111111);
+  margin-left: 0;
+  padding: 0.4rem 0.8rem;
+}
+blockquote p:last-child {
+  margin-bottom: 0;
+}
+
+ul,
+ol {
+  margin: 0.8rem 0 0.8rem 0.8rem;
+  padding: 0;
+}
+ul ul,
+ul ol,
+ol ul,
+ol ol {
+  margin: 0.8rem 0 0.8rem 0.8rem;
+}
+ul li,
+ol li {
+  margin-top: 0.4rem;
+}
+
+ul {
+  list-style: disc inside;
+}
+ul ul {
+  list-style-type: circle;
+}
+
+ol {
+  list-style: decimal inside;
+}
+ol ol {
+  list-style-type: lower-alpha;
+}
+
+dl dt {
+  font-weight: bold;
+}
+dl dd {
+  margin: 0.4rem 0 0.8rem 0;
+}
+
+:lang(zh),
+:lang(zh-Hans) {
+  font-family: -apple-system, system-ui, BlinkMacSystemFont, "Segoe UI", Roboto, "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", "Helvetica Neue", sans-serif;
+}
+
+:lang(zh-Hant) {
+  font-family: -apple-system, system-ui, BlinkMacSystemFont, "Segoe UI", Roboto, "PingFang TC", "Hiragino Sans CNS", "Microsoft JhengHei", "Helvetica Neue", sans-serif;
+}
+
+:lang(ja) {
+  font-family: -apple-system, system-ui, BlinkMacSystemFont, "Segoe UI", Roboto, "Hiragino Sans", "Hiragino Kaku Gothic Pro", "Yu Gothic", YuGothic, Meiryo, "Helvetica Neue", sans-serif;
+}
+
+:lang(ko) {
+  font-family: -apple-system, system-ui, BlinkMacSystemFont, "Segoe UI", Roboto, "Malgun Gothic", "Helvetica Neue", sans-serif;
+}
+
+:lang(zh) ins,
+:lang(zh) u,
+:lang(ja) ins,
+:lang(ja) u,
+.cjk ins,
+.cjk u {
+  border-bottom: 0.05rem solid;
+  text-decoration: none;
+}
+:lang(zh) del + del,
+:lang(zh) del + s,
+:lang(zh) ins + ins,
+:lang(zh) ins + u,
+:lang(zh) s + del,
+:lang(zh) s + s,
+:lang(zh) u + ins,
+:lang(zh) u + u,
+:lang(ja) del + del,
+:lang(ja) del + s,
+:lang(ja) ins + ins,
+:lang(ja) ins + u,
+:lang(ja) s + del,
+:lang(ja) s + s,
+:lang(ja) u + ins,
+:lang(ja) u + u,
+.cjk del + del,
+.cjk del + s,
+.cjk ins + ins,
+.cjk ins + u,
+.cjk s + del,
+.cjk s + s,
+.cjk u + ins,
+.cjk u + u {
+  margin-left: 0.125em;
+}
+
+.table {
+  border-collapse: collapse;
+  border-spacing: 0;
+  width: 100%;
+  text-align: left;
+}
+.table.table-striped tbody tr:nth-of-type(odd) {
+  background: rgb(248.4555555556, 249.0185185185, 250.1444444444);
+}
+.table tbody tr.active, .table.table-striped tbody tr.active {
+  background: rgb(239.6722222222, 240.9907407407, 243.6277777778);
+}
+.table.table-hover tbody tr:hover {
+  background: rgb(239.6722222222, 240.9907407407, 243.6277777778);
+}
+.table.table-scroll {
+  display: block;
+  overflow-x: auto;
+  padding-bottom: 0.75rem;
+  white-space: nowrap;
+}
+.table td,
+.table th {
+  border-bottom: 0.05rem solid rgb(230.8888888889, 232.962962963, 237.1111111111);
+  padding: 0.6rem 0.4rem;
+}
+.table th {
+  border-bottom-width: 0.1rem;
+}
+
+.btn {
+  transition: all 0.2s ease;
+  appearance: none;
+  background: #fff;
+  border: 0.05rem solid #5755d9;
+  border-radius: 0.1rem;
+  color: #5755d9;
+  cursor: pointer;
+  display: inline-block;
+  font-size: 0.8rem;
+  height: 1.8rem;
+  line-height: 1.2rem;
+  outline: none;
+  padding: 0.25rem 0.4rem;
+  text-align: center;
+  text-decoration: none;
+  user-select: none;
+  vertical-align: middle;
+  white-space: nowrap;
+}
+.btn:focus {
+  box-shadow: 0 0 0 0.1rem rgba(87, 85, 217, 0.2);
+}
+.btn:focus, .btn:hover {
+  background: rgb(241.4711538462, 241.3100961538, 251.9399038462);
+  border-color: rgb(74.6423076923, 72.4951923077, 214.2048076923);
+  text-decoration: none;
+}
+.btn:active, .btn.active {
+  background: rgb(74.6423076923, 72.4951923077, 214.2048076923);
+  border-color: rgb(54.0461538462, 51.6538461538, 209.5461538462);
+  color: #fff;
+  text-decoration: none;
+}
+.btn:active.loading::after, .btn.active.loading::after {
+  border-bottom-color: #fff;
+  border-left-color: #fff;
+}
+.btn[disabled], .btn:disabled, .btn.disabled {
+  cursor: default;
+  opacity: 0.5;
+  pointer-events: none;
+}
+.btn.btn-primary {
+  background: #5755d9;
+  border-color: rgb(74.6423076923, 72.4951923077, 214.2048076923);
+  color: #fff;
+}
+.btn.btn-primary:focus, .btn.btn-primary:hover {
+  background: rgb(66.4038461538, 64.1586538462, 212.3413461538);
+  border-color: rgb(54.0461538462, 51.6538461538, 209.5461538462);
+  color: #fff;
+}
+.btn.btn-primary:active, .btn.btn-primary.active {
+  background: rgb(58.1653846154, 55.8221153846, 210.4778846154);
+  border-color: rgb(48.2692307692, 45.8557692308, 205.1442307692);
+  color: #fff;
+}
+.btn.btn-primary.loading::after {
+  border-bottom-color: #fff;
+  border-left-color: #fff;
+}
+.btn.btn-success {
+  background: #32b643;
+  border-color: rgb(46.7025862069, 169.9974137931, 62.5814655172);
+  color: #fff;
+}
+.btn.btn-success:focus {
+  box-shadow: 0 0 0 0.1rem rgba(50, 182, 67, 0.2);
+}
+.btn.btn-success:focus, .btn.btn-success:hover {
+  background: rgb(47.8017241379, 173.9982758621, 64.0543103448);
+  border-color: rgb(44.5043103448, 161.9956896552, 59.6357758621);
+  color: #fff;
+}
+.btn.btn-success:active, .btn.btn-success.active {
+  background: rgb(42.3060344828, 153.9939655172, 56.6900862069);
+  border-color: rgb(39.0086206897, 141.9913793103, 52.2715517241);
+  color: #fff;
+}
+.btn.btn-success.loading::after {
+  border-bottom-color: #fff;
+  border-left-color: #fff;
+}
+.btn.btn-error {
+  background: #e85600;
+  border-color: rgb(216.7, 80.3284482759, 0);
+  color: #fff;
+}
+.btn.btn-error:focus {
+  box-shadow: 0 0 0 0.1rem rgba(232, 86, 0, 0.2);
+}
+.btn.btn-error:focus, .btn.btn-error:hover {
+  background: rgb(221.8, 82.2189655172, 0);
+  border-color: rgb(206.5, 76.5474137931, 0);
+  color: #fff;
+}
+.btn.btn-error:active, .btn.btn-error.active {
+  background: rgb(196.3, 72.7663793103, 0);
+  border-color: rgb(181, 67.0948275862, 0);
+  color: #fff;
+}
+.btn.btn-error.loading::after {
+  border-bottom-color: #fff;
+  border-left-color: #fff;
+}
+.btn.btn-link {
+  background: transparent;
+  border-color: transparent;
+  color: #5755d9;
+}
+.btn.btn-link:focus, .btn.btn-link:hover, .btn.btn-link:active, .btn.btn-link.active {
+  color: rgb(48.2692307692, 45.8557692308, 205.1442307692);
+}
+.btn.btn-sm {
+  font-size: 0.7rem;
+  height: 1.4rem;
+  padding: 0.05rem 0.3rem;
+}
+.btn.btn-lg {
+  font-size: 0.9rem;
+  height: 2rem;
+  padding: 0.35rem 0.6rem;
+}
+.btn.btn-block {
+  display: block;
+  width: 100%;
+}
+.btn.btn-action {
+  width: 1.8rem;
+  padding-left: 0;
+  padding-right: 0;
+}
+.btn.btn-action.btn-sm {
+  width: 1.4rem;
+}
+.btn.btn-action.btn-lg {
+  width: 2rem;
+}
+.btn.btn-clear {
+  background: transparent;
+  border: 0;
+  color: currentColor;
+  height: 0.8rem;
+  line-height: 0.8rem;
+  margin-left: 0.2rem;
+  margin-right: -2px;
+  opacity: 1;
+  padding: 0;
+  text-decoration: none;
+  width: 0.8rem;
+}
+.btn.btn-clear:hover {
+  opacity: 0.95;
+}
+.btn.btn-clear::before {
+  content: "â";
+}
+
+.btn-group {
+  display: inline-flex;
+  flex-wrap: wrap;
+}
+.btn-group .btn {
+  flex: 1 0 auto;
+}
+.btn-group .btn:first-child:not(:last-child) {
+  border-bottom-right-radius: 0;
+  border-top-right-radius: 0;
+}
+.btn-group .btn:not(:first-child):not(:last-child) {
+  border-radius: 0;
+  margin-left: -0.05rem;
+}
+.btn-group .btn:last-child:not(:first-child) {
+  border-bottom-left-radius: 0;
+  border-top-left-radius: 0;
+  margin-left: -0.05rem;
+}
+.btn-group .btn:focus, .btn-group .btn:hover, .btn-group .btn:active, .btn-group .btn.active {
+  z-index: 1;
+}
+.btn-group.btn-group-block {
+  display: flex;
+}
+.btn-group.btn-group-block .btn {
+  flex: 1 0 0;
+}
+
+.form-group:not(:last-child) {
+  margin-bottom: 0.4rem;
+}
+
+fieldset {
+  margin-bottom: 0.8rem;
+}
+
+legend {
+  font-size: 0.9rem;
+  font-weight: 500;
+  margin-bottom: 0.8rem;
+}
+
+.form-label {
+  display: block;
+  line-height: 1.2rem;
+  padding: 0.3rem 0;
+}
+.form-label.label-sm {
+  font-size: 0.7rem;
+  padding: 0.1rem 0;
+}
+.form-label.label-lg {
+  font-size: 0.9rem;
+  padding: 0.4rem 0;
+}
+
+.form-input {
+  transition: all 0.2s ease;
+  appearance: none;
+  background: #fff;
+  background-image: none;
+  border: 0.05rem solid rgb(201.6111111111, 206.2037037037, 215.3888888889);
+  border-radius: 0.1rem;
+  color: rgb(79.8611111111, 89.1203703704, 107.6388888889);
+  display: block;
+  font-size: 0.8rem;
+  height: 1.8rem;
+  line-height: 1.2rem;
+  max-width: 100%;
+  outline: none;
+  padding: 0.25rem 0.4rem;
+  position: relative;
+  width: 100%;
+}
+.form-input:focus {
+  box-shadow: 0 0 0 0.1rem rgba(87, 85, 217, 0.2);
+  border-color: #5755d9;
+}
+.form-input::placeholder {
+  color: rgb(172.3333333333, 179.4444444444, 193.6666666667);
+}
+.form-input.input-sm {
+  font-size: 0.7rem;
+  height: 1.4rem;
+  padding: 0.05rem 0.3rem;
+}
+.form-input.input-lg {
+  font-size: 0.9rem;
+  height: 2rem;
+  padding: 0.35rem 0.6rem;
+}
+.form-input.input-inline {
+  display: inline-block;
+  vertical-align: middle;
+  width: auto;
+}
+.form-input[type=file] {
+  height: auto;
+}
+
+textarea.form-input {
+  height: auto;
+}
+
+.form-input-hint {
+  color: rgb(172.3333333333, 179.4444444444, 193.6666666667);
+  font-size: 0.7rem;
+  margin-top: 0.2rem;
+}
+.has-success .form-input-hint, .is-success + .form-input-hint {
+  color: #32b643;
+}
+.has-error .form-input-hint, .is-error + .form-input-hint {
+  color: #e85600;
+}
+
+.form-select {
+  appearance: none;
+  border: 0.05rem solid rgb(201.6111111111, 206.2037037037, 215.3888888889);
+  border-radius: 0.1rem;
+  color: inherit;
+  font-size: 0.8rem;
+  height: 1.8rem;
+  line-height: 1.2rem;
+  outline: none;
+  padding: 0.25rem 0.4rem;
+  vertical-align: middle;
+  width: 100%;
+}
+.form-select[size], .form-select[multiple] {
+  height: auto;
+}
+.form-select[size] option, .form-select[multiple] option {
+  padding: 0.1rem 0.2rem;
+}
+.form-select:not([multiple]):not([size]) {
+  background: #fff url("data:image/svg+xml;charset=utf8,%3Csvg%20xmlns='http://www.w3.org/2000/svg'%20viewBox='0%200%204%205'%3E%3Cpath%20fill='%23667189'%20d='M2%200L0%202h4zm0%205L0%203h4z'/%3E%3C/svg%3E") no-repeat right 0.35rem center/0.4rem 0.5rem;
+  padding-right: 1.2rem;
+}
+.form-select:focus {
+  box-shadow: 0 0 0 0.1rem rgba(87, 85, 217, 0.2);
+  border-color: #5755d9;
+}
+.form-select::-ms-expand {
+  display: none;
+}
+.form-select.select-sm {
+  font-size: 0.7rem;
+  height: 1.4rem;
+  padding: 0.05rem 1.1rem 0.05rem 0.3rem;
+}
+.form-select.select-lg {
+  font-size: 0.9rem;
+  height: 2rem;
+  padding: 0.35rem 1.4rem 0.35rem 0.6rem;
+}
+
+.has-icon-left,
+.has-icon-right {
+  position: relative;
+}
+.has-icon-left .form-icon,
+.has-icon-right .form-icon {
+  height: 0.8rem;
+  margin: 0 0.25rem;
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 0.8rem;
+  z-index: 2;
+}
+
+.has-icon-left .form-icon {
+  left: 0.05rem;
+}
+.has-icon-left .form-input {
+  padding-left: 1.3rem;
+}
+
+.has-icon-right .form-icon {
+  right: 0.05rem;
+}
+.has-icon-right .form-input {
+  padding-right: 1.3rem;
+}
+
+.form-checkbox,
+.form-radio,
+.form-switch {
+  display: block;
+  line-height: 1.2rem;
+  margin: 0.2rem 0;
+  min-height: 1.2rem;
+  padding: 0.1rem 0.4rem 0.1rem 1.2rem;
+  position: relative;
+}
+.form-checkbox input,
+.form-radio input,
+.form-switch input {
+  clip: rect(0, 0, 0, 0);
+  height: 1px;
+  margin: -1px;
+  overflow: hidden;
+  position: absolute;
+  width: 1px;
+}
+.form-checkbox input:focus + .form-icon,
+.form-radio input:focus + .form-icon,
+.form-switch input:focus + .form-icon {
+  box-shadow: 0 0 0 0.1rem rgba(87, 85, 217, 0.2);
+  border-color: #5755d9;
+}
+.form-checkbox input:checked + .form-icon,
+.form-radio input:checked + .form-icon,
+.form-switch input:checked + .form-icon {
+  background: #5755d9;
+  border-color: #5755d9;
+}
+.form-checkbox .form-icon,
+.form-radio .form-icon,
+.form-switch .form-icon {
+  transition: all 0.2s ease;
+  border: 0.05rem solid rgb(201.6111111111, 206.2037037037, 215.3888888889);
+  cursor: pointer;
+  display: inline-block;
+  position: absolute;
+}
+.form-checkbox.input-sm,
+.form-radio.input-sm,
+.form-switch.input-sm {
+  font-size: 0.7rem;
+  margin: 0;
+}
+.form-checkbox.input-lg,
+.form-radio.input-lg,
+.form-switch.input-lg {
+  font-size: 0.9rem;
+  margin: 0.3rem 0;
+}
+
+.form-checkbox .form-icon,
+.form-radio .form-icon {
+  background: #fff;
+  height: 0.8rem;
+  left: 0;
+  top: 0.3rem;
+  width: 0.8rem;
+}
+.form-checkbox input:active + .form-icon,
+.form-radio input:active + .form-icon {
+  background: rgb(239.6722222222, 240.9907407407, 243.6277777778);
+}
+
+.form-checkbox .form-icon {
+  border-radius: 0.1rem;
+}
+.form-checkbox input:checked + .form-icon::before {
+  background-clip: padding-box;
+  border: 0.1rem solid #fff;
+  border-left-width: 0;
+  border-top-width: 0;
+  content: "";
+  height: 12px;
+  left: 50%;
+  margin-left: -4px;
+  margin-top: -8px;
+  position: absolute;
+  top: 50%;
+  transform: rotate(45deg);
+  width: 8px;
+}
+.form-checkbox input:indeterminate + .form-icon {
+  background: #5755d9;
+  border-color: #5755d9;
+}
+.form-checkbox input:indeterminate + .form-icon::before {
+  background: #fff;
+  content: "";
+  height: 2px;
+  left: 50%;
+  margin-left: -5px;
+  margin-top: -1px;
+  position: absolute;
+  top: 50%;
+  width: 10px;
+}
+
+.form-radio .form-icon {
+  border-radius: 50%;
+}
+.form-radio input:checked + .form-icon::before {
+  background: #fff;
+  border-radius: 50%;
+  content: "";
+  height: 4px;
+  left: 50%;
+  position: absolute;
+  top: 50%;
+  transform: translate(-50%, -50%);
+  width: 4px;
+}
+
+.form-switch {
+  padding-left: 2rem;
+}
+.form-switch .form-icon {
+  background: rgb(230.8888888889, 232.962962963, 237.1111111111);
+  background-clip: padding-box;
+  border-radius: 0.45rem;
+  height: 0.9rem;
+  left: 0;
+  top: 0.25rem;
+  width: 1.6rem;
+}
+.form-switch .form-icon::before {
+  transition: all 0.2s ease;
+  background: #fff;
+  border-radius: 50%;
+  content: "";
+  display: block;
+  height: 0.8rem;
+  left: 0;
+  position: absolute;
+  top: 0;
+  width: 0.8rem;
+}
+.form-switch input:checked + .form-icon::before {
+  left: 14px;
+}
+.form-switch input:active + .form-icon::before {
+  background: rgb(248.4555555556, 249.0185185185, 250.1444444444);
+}
+
+.input-group {
+  display: flex;
+}
+.input-group .input-group-addon {
+  background: rgb(248.4555555556, 249.0185185185, 250.1444444444);
+  border: 0.05rem solid rgb(201.6111111111, 206.2037037037, 215.3888888889);
+  border-radius: 0.1rem;
+  line-height: 1.2rem;
+  padding: 0.25rem 0.4rem;
+  white-space: nowrap;
+}
+.input-group .input-group-addon.addon-sm {
+  font-size: 0.7rem;
+  padding: 0.05rem 0.3rem;
+}
+.input-group .input-group-addon.addon-lg {
+  font-size: 0.9rem;
+  padding: 0.35rem 0.6rem;
+}
+.input-group .form-input,
+.input-group .form-select {
+  flex: 1 1 auto;
+  width: 1%;
+}
+.input-group .input-group-btn {
+  z-index: 1;
+}
+.input-group .form-input:first-child:not(:last-child),
+.input-group .form-select:first-child:not(:last-child),
+.input-group .input-group-addon:first-child:not(:last-child),
+.input-group .input-group-btn:first-child:not(:last-child) {
+  border-bottom-right-radius: 0;
+  border-top-right-radius: 0;
+}
+.input-group .form-input:not(:first-child):not(:last-child),
+.input-group .form-select:not(:first-child):not(:last-child),
+.input-group .input-group-addon:not(:first-child):not(:last-child),
+.input-group .input-group-btn:not(:first-child):not(:last-child) {
+  border-radius: 0;
+  margin-left: -0.05rem;
+}
+.input-group .form-input:last-child:not(:first-child),
+.input-group .form-select:last-child:not(:first-child),
+.input-group .input-group-addon:last-child:not(:first-child),
+.input-group .input-group-btn:last-child:not(:first-child) {
+  border-bottom-left-radius: 0;
+  border-top-left-radius: 0;
+  margin-left: -0.05rem;
+}
+.input-group .form-input:focus,
+.input-group .form-select:focus,
+.input-group .input-group-addon:focus,
+.input-group .input-group-btn:focus {
+  z-index: 2;
+}
+.input-group .form-select {
+  width: auto;
+}
+.input-group.input-inline {
+  display: inline-flex;
+}
+
+.has-success .form-input, .form-input.is-success,
+.has-success .form-select,
+.form-select.is-success {
+  border-color: #32b643;
+}
+.has-success .form-input:focus, .form-input.is-success:focus,
+.has-success .form-select:focus,
+.form-select.is-success:focus {
+  box-shadow: 0 0 0 0.1rem rgba(50, 182, 67, 0.2);
+}
+.has-error .form-input, .form-input.is-error,
+.has-error .form-select,
+.form-select.is-error {
+  border-color: #e85600;
+}
+.has-error .form-input:focus, .form-input.is-error:focus,
+.has-error .form-select:focus,
+.form-select.is-error:focus {
+  box-shadow: 0 0 0 0.1rem rgba(232, 86, 0, 0.2);
+}
+
+.has-error .form-checkbox .form-icon, .form-checkbox.is-error .form-icon,
+.has-error .form-radio .form-icon,
+.form-radio.is-error .form-icon,
+.has-error .form-switch .form-icon,
+.form-switch.is-error .form-icon {
+  border-color: #e85600;
+}
+.has-error .form-checkbox input:checked + .form-icon, .form-checkbox.is-error input:checked + .form-icon,
+.has-error .form-radio input:checked + .form-icon,
+.form-radio.is-error input:checked + .form-icon,
+.has-error .form-switch input:checked + .form-icon,
+.form-switch.is-error input:checked + .form-icon {
+  background: #e85600;
+  border-color: #e85600;
+}
+.has-error .form-checkbox input:focus + .form-icon, .form-checkbox.is-error input:focus + .form-icon,
+.has-error .form-radio input:focus + .form-icon,
+.form-radio.is-error input:focus + .form-icon,
+.has-error .form-switch input:focus + .form-icon,
+.form-switch.is-error input:focus + .form-icon {
+  box-shadow: 0 0 0 0.1rem rgba(232, 86, 0, 0.2);
+  border-color: #e85600;
+}
+
+.has-error .form-checkbox input:indeterminate + .form-icon, .form-checkbox.is-error input:indeterminate + .form-icon {
+  background: #e85600;
+  border-color: #e85600;
+}
+
+.form-input:not(:placeholder-shown):invalid {
+  border-color: #e85600;
+}
+.form-input:not(:placeholder-shown):invalid:focus {
+  box-shadow: 0 0 0 0.1rem rgba(232, 86, 0, 0.2);
+}
+.form-input:not(:placeholder-shown):invalid + .form-input-hint {
+  color: #e85600;
+}
+
+.form-input:disabled, .form-input.disabled,
+.form-select:disabled,
+.form-select.disabled {
+  background-color: rgb(239.6722222222, 240.9907407407, 243.6277777778);
+  cursor: not-allowed;
+  opacity: 0.5;
+}
+
+.form-input[readonly] {
+  background-color: rgb(248.4555555556, 249.0185185185, 250.1444444444);
+}
+
+input:disabled + .form-icon, input.disabled + .form-icon {
+  background: rgb(239.6722222222, 240.9907407407, 243.6277777778);
+  cursor: not-allowed;
+  opacity: 0.5;
+}
+
+.form-switch input:disabled + .form-icon::before, .form-switch input.disabled + .form-icon::before {
+  background: #fff;
+}
+
+.form-horizontal {
+  padding: 0.4rem 0;
+}
+.form-horizontal .form-group {
+  display: flex;
+  flex-wrap: wrap;
+}
+
+.form-inline {
+  display: inline-block;
+}
+
+.label {
+  border-radius: 0.1rem;
+  line-height: 1.2;
+  padding: 0.1rem 0.2rem;
+  background: rgb(239.6722222222, 240.9907407407, 243.6277777778);
+  color: rgb(90.7222222222, 101.2407407407, 122.2777777778);
+  display: inline-block;
+}
+.label.label-rounded {
+  border-radius: 5rem;
+  padding-left: 0.4rem;
+  padding-right: 0.4rem;
+}
+.label.label-primary {
+  background: #5755d9;
+  color: #fff;
+}
+.label.label-secondary {
+  background: rgb(241.4711538462, 241.3100961538, 251.9399038462);
+  color: #5755d9;
+}
+.label.label-success {
+  background: #32b643;
+  color: #fff;
+}
+.label.label-warning {
+  background: #ffb700;
+  color: #fff;
+}
+.label.label-error {
+  background: #e85600;
+  color: #fff;
+}
+
+code {
+  border-radius: 0.1rem;
+  line-height: 1.2;
+  padding: 0.1rem 0.2rem;
+  background: rgb(252.2103004292, 241.5396995708, 242.2371244635);
+  color: #d73e48;
+  font-size: 85%;
+}
+
+.code {
+  border-radius: 0.1rem;
+  color: rgb(79.8611111111, 89.1203703704, 107.6388888889);
+  position: relative;
+}
+.code::before {
+  color: rgb(172.3333333333, 179.4444444444, 193.6666666667);
+  content: attr(data-lang);
+  font-size: 0.7rem;
+  position: absolute;
+  right: 0.4rem;
+  top: 0.1rem;
+}
+.code code {
+  background: rgb(248.4555555556, 249.0185185185, 250.1444444444);
+  color: inherit;
+  display: block;
+  line-height: 1.5;
+  overflow-x: auto;
+  padding: 1rem;
+  width: 100%;
+}
+
+.img-responsive {
+  display: block;
+  height: auto;
+  max-width: 100%;
+}
+
+.img-fit-cover {
+  object-fit: cover;
+}
+
+.img-fit-contain {
+  object-fit: contain;
+}
+
+.video-responsive {
+  display: block;
+  overflow: hidden;
+  padding: 0;
+  position: relative;
+  width: 100%;
+}
+.video-responsive::before {
+  content: "";
+  display: block;
+  padding-bottom: 56.25%;
+}
+.video-responsive iframe,
+.video-responsive object,
+.video-responsive embed {
+  border: 0;
+  bottom: 0;
+  height: 100%;
+  left: 0;
+  position: absolute;
+  right: 0;
+  top: 0;
+  width: 100%;
+}
+
+video.video-responsive {
+  height: auto;
+  max-width: 100%;
+}
+video.video-responsive::before {
+  content: none;
+}
+
+.video-responsive-4-3::before {
+  padding-bottom: 75%;
+}
+
+.video-responsive-1-1::before {
+  padding-bottom: 100%;
+}
+
+.figure {
+  margin: 0 0 0.4rem 0;
+}
+.figure .figure-caption {
+  color: rgb(101.5833333333, 113.3611111111, 136.9166666667);
+  margin-top: 0.4rem;
+}
+
+.container {
+  margin-left: auto;
+  margin-right: auto;
+  padding-left: 0.4rem;
+  padding-right: 0.4rem;
+  width: 100%;
+}
+.container.grid-xl {
+  max-width: 1296px;
+}
+.container.grid-lg {
+  max-width: 976px;
+}
+.container.grid-md {
+  max-width: 856px;
+}
+.container.grid-sm {
+  max-width: 616px;
+}
+.container.grid-xs {
+  max-width: 496px;
+}
+
+.show-xs,
+.show-sm,
+.show-md,
+.show-lg,
+.show-xl {
+  display: none !important;
+}
+
+.columns {
+  display: flex;
+  flex-wrap: wrap;
+  margin-left: -0.4rem;
+  margin-right: -0.4rem;
+}
+.columns.col-gapless {
+  margin-left: 0;
+  margin-right: 0;
+}
+.columns.col-gapless > .column {
+  padding-left: 0;
+  padding-right: 0;
+}
+.columns.col-oneline {
+  flex-wrap: nowrap;
+  overflow-x: auto;
+}
+
+.column {
+  flex: 1;
+  max-width: 100%;
+  padding-left: 0.4rem;
+  padding-right: 0.4rem;
+}
+.column.col-12, .column.col-11, .column.col-10, .column.col-9, .column.col-8, .column.col-7, .column.col-6, .column.col-5, .column.col-4, .column.col-3, .column.col-2, .column.col-1 {
+  flex: none;
+}
+
+.col-12 {
+  width: 100%;
+}
+
+.col-11 {
+  width: 91.66666667%;
+}
+
+.col-10 {
+  width: 83.33333333%;
+}
+
+.col-9 {
+  width: 75%;
+}
+
+.col-8 {
+  width: 66.66666667%;
+}
+
+.col-7 {
+  width: 58.33333333%;
+}
+
+.col-6 {
+  width: 50%;
+}
+
+.col-5 {
+  width: 41.66666667%;
+}
+
+.col-4 {
+  width: 33.33333333%;
+}
+
+.col-3 {
+  width: 25%;
+}
+
+.col-2 {
+  width: 16.66666667%;
+}
+
+.col-1 {
+  width: 8.33333333%;
+}
+
+.col-auto {
+  flex: 0 0 auto;
+  max-width: none;
+  width: auto;
+}
+
+.col-mx-auto {
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.col-ml-auto {
+  margin-left: auto;
+}
+
+.col-mr-auto {
+  margin-right: auto;
+}
+
+@media (max-width: 1280px) {
+  .col-xl-12,
+  .col-xl-11,
+  .col-xl-10,
+  .col-xl-9,
+  .col-xl-8,
+  .col-xl-7,
+  .col-xl-6,
+  .col-xl-5,
+  .col-xl-4,
+  .col-xl-3,
+  .col-xl-2,
+  .col-xl-1 {
+    flex: none;
+  }
+  .col-xl-12 {
+    width: 100%;
+  }
+  .col-xl-11 {
+    width: 91.66666667%;
+  }
+  .col-xl-10 {
+    width: 83.33333333%;
+  }
+  .col-xl-9 {
+    width: 75%;
+  }
+  .col-xl-8 {
+    width: 66.66666667%;
+  }
+  .col-xl-7 {
+    width: 58.33333333%;
+  }
+  .col-xl-6 {
+    width: 50%;
+  }
+  .col-xl-5 {
+    width: 41.66666667%;
+  }
+  .col-xl-4 {
+    width: 33.33333333%;
+  }
+  .col-xl-3 {
+    width: 25%;
+  }
+  .col-xl-2 {
+    width: 16.66666667%;
+  }
+  .col-xl-1 {
+    width: 8.33333333%;
+  }
+  .hide-xl {
+    display: none !important;
+  }
+  .show-xl {
+    display: block !important;
+  }
+}
+@media (max-width: 960px) {
+  .col-lg-12,
+  .col-lg-11,
+  .col-lg-10,
+  .col-lg-9,
+  .col-lg-8,
+  .col-lg-7,
+  .col-lg-6,
+  .col-lg-5,
+  .col-lg-4,
+  .col-lg-3,
+  .col-lg-2,
+  .col-lg-1 {
+    flex: none;
+  }
+  .col-lg-12 {
+    width: 100%;
+  }
+  .col-lg-11 {
+    width: 91.66666667%;
+  }
+  .col-lg-10 {
+    width: 83.33333333%;
+  }
+  .col-lg-9 {
+    width: 75%;
+  }
+  .col-lg-8 {
+    width: 66.66666667%;
+  }
+  .col-lg-7 {
+    width: 58.33333333%;
+  }
+  .col-lg-6 {
+    width: 50%;
+  }
+  .col-lg-5 {
+    width: 41.66666667%;
+  }
+  .col-lg-4 {
+    width: 33.33333333%;
+  }
+  .col-lg-3 {
+    width: 25%;
+  }
+  .col-lg-2 {
+    width: 16.66666667%;
+  }
+  .col-lg-1 {
+    width: 8.33333333%;
+  }
+  .hide-lg {
+    display: none !important;
+  }
+  .show-lg {
+    display: block !important;
+  }
+}
+@media (max-width: 840px) {
+  .col-md-12,
+  .col-md-11,
+  .col-md-10,
+  .col-md-9,
+  .col-md-8,
+  .col-md-7,
+  .col-md-6,
+  .col-md-5,
+  .col-md-4,
+  .col-md-3,
+  .col-md-2,
+  .col-md-1 {
+    flex: none;
+  }
+  .col-md-12 {
+    width: 100%;
+  }
+  .col-md-11 {
+    width: 91.66666667%;
+  }
+  .col-md-10 {
+    width: 83.33333333%;
+  }
+  .col-md-9 {
+    width: 75%;
+  }
+  .col-md-8 {
+    width: 66.66666667%;
+  }
+  .col-md-7 {
+    width: 58.33333333%;
+  }
+  .col-md-6 {
+    width: 50%;
+  }
+  .col-md-5 {
+    width: 41.66666667%;
+  }
+  .col-md-4 {
+    width: 33.33333333%;
+  }
+  .col-md-3 {
+    width: 25%;
+  }
+  .col-md-2 {
+    width: 16.66666667%;
+  }
+  .col-md-1 {
+    width: 8.33333333%;
+  }
+  .hide-md {
+    display: none !important;
+  }
+  .show-md {
+    display: block !important;
+  }
+}
+@media (max-width: 600px) {
+  .col-sm-12,
+  .col-sm-11,
+  .col-sm-10,
+  .col-sm-9,
+  .col-sm-8,
+  .col-sm-7,
+  .col-sm-6,
+  .col-sm-5,
+  .col-sm-4,
+  .col-sm-3,
+  .col-sm-2,
+  .col-sm-1 {
+    flex: none;
+  }
+  .col-sm-12 {
+    width: 100%;
+  }
+  .col-sm-11 {
+    width: 91.66666667%;
+  }
+  .col-sm-10 {
+    width: 83.33333333%;
+  }
+  .col-sm-9 {
+    width: 75%;
+  }
+  .col-sm-8 {
+    width: 66.66666667%;
+  }
+  .col-sm-7 {
+    width: 58.33333333%;
+  }
+  .col-sm-6 {
+    width: 50%;
+  }
+  .col-sm-5 {
+    width: 41.66666667%;
+  }
+  .col-sm-4 {
+    width: 33.33333333%;
+  }
+  .col-sm-3 {
+    width: 25%;
+  }
+  .col-sm-2 {
+    width: 16.66666667%;
+  }
+  .col-sm-1 {
+    width: 8.33333333%;
+  }
+  .hide-sm {
+    display: none !important;
+  }
+  .show-sm {
+    display: block !important;
+  }
+}
+@media (max-width: 480px) {
+  .col-xs-12,
+  .col-xs-11,
+  .col-xs-10,
+  .col-xs-9,
+  .col-xs-8,
+  .col-xs-7,
+  .col-xs-6,
+  .col-xs-5,
+  .col-xs-4,
+  .col-xs-3,
+  .col-xs-2,
+  .col-xs-1 {
+    flex: none;
+  }
+  .col-xs-12 {
+    width: 100%;
+  }
+  .col-xs-11 {
+    width: 91.66666667%;
+  }
+  .col-xs-10 {
+    width: 83.33333333%;
+  }
+  .col-xs-9 {
+    width: 75%;
+  }
+  .col-xs-8 {
+    width: 66.66666667%;
+  }
+  .col-xs-7 {
+    width: 58.33333333%;
+  }
+  .col-xs-6 {
+    width: 50%;
+  }
+  .col-xs-5 {
+    width: 41.66666667%;
+  }
+  .col-xs-4 {
+    width: 33.33333333%;
+  }
+  .col-xs-3 {
+    width: 25%;
+  }
+  .col-xs-2 {
+    width: 16.66666667%;
+  }
+  .col-xs-1 {
+    width: 8.33333333%;
+  }
+  .hide-xs {
+    display: none !important;
+  }
+  .show-xs {
+    display: block !important;
+  }
+}
+.navbar {
+  align-items: stretch;
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+}
+.navbar .navbar-section {
+  align-items: center;
+  display: flex;
+  flex: 1 0 0;
+}
+.navbar .navbar-section:not(:first-child):last-child {
+  justify-content: flex-end;
+}
+.navbar .navbar-center {
+  align-items: center;
+  display: flex;
+  flex: 0 0 auto;
+}
+.navbar .navbar-brand {
+  font-size: 0.9rem;
+  font-weight: 500;
+  text-decoration: none;
+}
+
+.accordion input:checked ~ .accordion-header .icon, .accordion[open] .accordion-header .icon {
+  transform: rotate(90deg);
+}
+.accordion input:checked ~ .accordion-body, .accordion[open] .accordion-body {
+  max-height: 50rem;
+}
+.accordion .accordion-header {
+  display: block;
+  padding: 0.2rem 0.4rem;
+}
+.accordion .accordion-header .icon {
+  transition: all 0.2s ease;
+}
+.accordion .accordion-body {
+  margin-bottom: 0.4rem;
+  max-height: 0;
+  overflow: hidden;
+  transition: max-height 0.2s ease;
+}
+
+summary.accordion-header::-webkit-details-marker {
+  display: none;
+}
+
+.badge {
+  position: relative;
+  white-space: nowrap;
+}
+.badge[data-badge]::after, .badge:not([data-badge])::after {
+  background: #5755d9;
+  background-clip: padding-box;
+  border-radius: 0.5rem;
+  box-shadow: 0 0 0 0.1rem #fff;
+  color: #fff;
+  content: attr(data-badge);
+  display: inline-block;
+  transform: translate(-0.05rem, -0.5rem);
+}
+.badge[data-badge]::after {
+  font-size: 0.7rem;
+  height: 0.9rem;
+  line-height: 1;
+  min-width: 0.9rem;
+  padding: 0.1rem 0.2rem;
+  text-align: center;
+  white-space: nowrap;
+}
+.badge:not([data-badge])::after, .badge[data-badge=""]::after {
+  height: 6px;
+  min-width: 6px;
+  padding: 0;
+  width: 6px;
+}
+.badge.btn::after {
+  position: absolute;
+  top: 0;
+  right: 0;
+  transform: translate(50%, -50%);
+}
+.badge.avatar::after {
+  position: absolute;
+  top: 14.64%;
+  right: 14.64%;
+  transform: translate(50%, -50%);
+  z-index: 100;
+}
+
+.breadcrumb {
+  list-style: none;
+  margin: 0.2rem 0;
+  padding: 0.2rem 0;
+}
+.breadcrumb .breadcrumb-item {
+  color: rgb(101.5833333333, 113.3611111111, 136.9166666667);
+  display: inline-block;
+  margin: 0;
+  padding: 0.2rem 0;
+}
+.breadcrumb .breadcrumb-item:not(:last-child) {
+  margin-right: 0.2rem;
+}
+.breadcrumb .breadcrumb-item:not(:last-child) a {
+  color: rgb(101.5833333333, 113.3611111111, 136.9166666667);
+}
+.breadcrumb .breadcrumb-item:not(:first-child)::before {
+  color: rgb(230.8888888889, 232.962962963, 237.1111111111);
+  content: "/";
+  padding-right: 0.4rem;
+}
+
+.bar {
+  background: rgb(239.6722222222, 240.9907407407, 243.6277777778);
+  border-radius: 0.1rem;
+  display: flex;
+  flex-wrap: nowrap;
+  height: 0.8rem;
+  width: 100%;
+}
+.bar.bar-sm {
+  height: 0.2rem;
+}
+.bar .bar-item {
+  background: #5755d9;
+  color: #fff;
+  display: block;
+  font-size: 0.7rem;
+  flex-shrink: 0;
+  line-height: 0.8rem;
+  height: 100%;
+  position: relative;
+  text-align: center;
+  width: 0;
+}
+.bar .bar-item:first-child {
+  border-bottom-left-radius: 0.1rem;
+  border-top-left-radius: 0.1rem;
+}
+.bar .bar-item:last-child {
+  border-bottom-right-radius: 0.1rem;
+  border-top-right-radius: 0.1rem;
+  flex-shrink: 1;
+}
+
+.bar-slider {
+  height: 0.1rem;
+  margin: 0.4rem 0;
+  position: relative;
+}
+.bar-slider .bar-item {
+  left: 0;
+  padding: 0;
+  position: absolute;
+}
+.bar-slider .bar-item:not(:last-child):first-child {
+  background: rgb(239.6722222222, 240.9907407407, 243.6277777778);
+  z-index: 1;
+}
+.bar-slider .bar-slider-btn {
+  background: #5755d9;
+  border: 0;
+  border-radius: 50%;
+  height: 0.6rem;
+  padding: 0;
+  position: absolute;
+  right: 0;
+  top: 50%;
+  transform: translate(50%, -50%);
+  width: 0.6rem;
+}
+.bar-slider .bar-slider-btn:active {
+  box-shadow: 0 0 0 0.1rem #5755d9;
+}
+
+.card {
+  background: #fff;
+  border: 0.05rem solid rgb(230.8888888889, 232.962962963, 237.1111111111);
+  border-radius: 0.1rem;
+  display: flex;
+  flex-direction: column;
+}
+.card .card-header,
+.card .card-body,
+.card .card-footer {
+  padding: 0.8rem;
+  padding-bottom: 0;
+}
+.card .card-header:last-child,
+.card .card-body:last-child,
+.card .card-footer:last-child {
+  padding-bottom: 0.8rem;
+}
+.card .card-body {
+  flex: 1 1 auto;
+}
+.card .card-image {
+  padding-top: 0.8rem;
+}
+.card .card-image:first-child {
+  padding-top: 0;
+}
+.card .card-image:first-child img {
+  border-top-left-radius: 0.1rem;
+  border-top-right-radius: 0.1rem;
+}
+.card .card-image:last-child img {
+  border-bottom-left-radius: 0.1rem;
+  border-bottom-right-radius: 0.1rem;
+}
+
+.chip {
+  align-items: center;
+  background: rgb(239.6722222222, 240.9907407407, 243.6277777778);
+  border-radius: 5rem;
+  color: rgb(101.5833333333, 113.3611111111, 136.9166666667);
+  display: inline-flex;
+  font-size: 90%;
+  height: 1.2rem;
+  line-height: 0.8rem;
+  margin: 0.1rem;
+  max-width: 100%;
+  padding: 0.2rem 0.4rem;
+  text-decoration: none;
+  vertical-align: middle;
+}
+.chip.active {
+  background: #5755d9;
+  color: #fff;
+}
+.chip .avatar {
+  margin-left: -0.4rem;
+  margin-right: 0.2rem;
+}
+.chip .btn-clear {
+  transform: scale(0.75);
+}
+
+.dropdown {
+  display: inline-block;
+  position: relative;
+}
+.dropdown .menu {
+  animation: slide-down 0.15s ease 1;
+  display: none;
+  left: 0;
+  max-height: 50vh;
+  overflow-y: auto;
+  position: absolute;
+  top: 100%;
+}
+.dropdown.dropdown-right .menu {
+  left: auto;
+  right: 0;
+}
+.dropdown.active .menu,
+.dropdown .dropdown-toggle:focus + .menu,
+.dropdown .menu:hover {
+  display: block;
+}
+.dropdown .btn-group .dropdown-toggle:nth-last-child(2) {
+  border-bottom-right-radius: 0.1rem;
+  border-top-right-radius: 0.1rem;
+}
+
+.empty {
+  background: rgb(248.4555555556, 249.0185185185, 250.1444444444);
+  border-radius: 0.1rem;
+  color: rgb(101.5833333333, 113.3611111111, 136.9166666667);
+  text-align: center;
+  padding: 3.2rem 1.6rem;
+}
+.empty .empty-icon {
+  margin-bottom: 0.8rem;
+}
+.empty .empty-title,
+.empty .empty-subtitle {
+  margin: 0.4rem auto;
+}
+.empty .empty-action {
+  margin-top: 0.8rem;
+}
+
+.modal {
+  align-items: center;
+  bottom: 0;
+  display: none;
+  justify-content: center;
+  left: 0;
+  opacity: 0;
+  overflow: hidden;
+  padding: 0.4rem;
+  position: fixed;
+  right: 0;
+  top: 0;
+}
+.modal:target, .modal.active {
+  display: flex;
+  opacity: 1;
+  z-index: 400;
+}
+.modal:target .modal-overlay, .modal.active .modal-overlay {
+  background: rgba(248.4555555556, 249.0185185185, 250.1444444444, 0.75);
+  bottom: 0;
+  cursor: default;
+  display: block;
+  left: 0;
+  position: absolute;
+  right: 0;
+  top: 0;
+}
+.modal:target .modal-container, .modal.active .modal-container {
+  animation: slide-down 0.2s ease 1;
+  z-index: 1;
+}
+.modal.modal-sm .modal-container {
+  max-width: 320px;
+  padding: 0 0.4rem;
+}
+.modal.modal-lg .modal-overlay {
+  background: #fff;
+}
+.modal.modal-lg .modal-container {
+  box-shadow: none;
+  max-width: 960px;
+}
+
+.modal-container {
+  box-shadow: 0 0.2rem 0.5rem rgba(69, 77, 93, 0.3);
+  background: #fff;
+  border-radius: 0.1rem;
+  display: flex;
+  flex-direction: column;
+  max-height: 75vh;
+  max-width: 640px;
+  padding: 0 0.8rem;
+  width: 100%;
+}
+.modal-container.modal-fullheight {
+  max-height: 100vh;
+}
+.modal-container .modal-header {
+  color: #454d5d;
+  padding: 0.8rem;
+}
+.modal-container .modal-body {
+  overflow-y: auto;
+  padding: 0.8rem;
+  position: relative;
+}
+.modal-container .modal-footer {
+  padding: 0.8rem;
+  text-align: right;
+}
+
+.nav {
+  display: flex;
+  flex-direction: column;
+  list-style: none;
+  margin: 0.2rem 0;
+}
+.nav .nav-item a {
+  color: rgb(101.5833333333, 113.3611111111, 136.9166666667);
+  padding: 0.2rem 0.4rem;
+  text-decoration: none;
+}
+.nav .nav-item a:focus, .nav .nav-item a:hover {
+  color: #5755d9;
+}
+.nav .nav-item.active > a {
+  color: rgb(79.8611111111, 89.1203703704, 107.6388888889);
+  font-weight: bold;
+}
+.nav .nav-item.active > a:focus, .nav .nav-item.active > a:hover {
+  color: #5755d9;
+}
+.nav .nav {
+  margin-bottom: 0.4rem;
+  margin-left: 0.8rem;
+}
+
+.pagination {
+  display: flex;
+  list-style: none;
+  margin: 0.2rem 0;
+  padding: 0.2rem 0;
+}
+.pagination .page-item {
+  margin: 0.2rem 0.05rem;
+}
+.pagination .page-item span {
+  display: inline-block;
+  padding: 0.2rem 0.2rem;
+}
+.pagination .page-item a {
+  border-radius: 0.1rem;
+  color: rgb(101.5833333333, 113.3611111111, 136.9166666667);
+  display: inline-block;
+  padding: 0.2rem 0.4rem;
+  text-decoration: none;
+}
+.pagination .page-item a:focus, .pagination .page-item a:hover {
+  color: #5755d9;
+}
+.pagination .page-item.disabled a {
+  cursor: default;
+  opacity: 0.5;
+  pointer-events: none;
+}
+.pagination .page-item.active a {
+  background: #5755d9;
+  color: #fff;
+}
+.pagination .page-item.page-prev, .pagination .page-item.page-next {
+  flex: 1 0 50%;
+}
+.pagination .page-item.page-next {
+  text-align: right;
+}
+.pagination .page-item .page-item-title {
+  margin: 0;
+}
+.pagination .page-item .page-item-subtitle {
+  margin: 0;
+  opacity: 0.5;
+}
+
+.panel {
+  border: 0.05rem solid rgb(230.8888888889, 232.962962963, 237.1111111111);
+  border-radius: 0.1rem;
+  display: flex;
+  flex-direction: column;
+}
+.panel .panel-header,
+.panel .panel-footer {
+  flex: 0 0 auto;
+  padding: 0.8rem;
+}
+.panel .panel-nav {
+  flex: 0 0 auto;
+}
+.panel .panel-body {
+  flex: 1 1 auto;
+  overflow-y: auto;
+  padding: 0 0.8rem;
+}
+
+.popover {
+  display: inline-block;
+  position: relative;
+}
+.popover .popover-container {
+  left: 50%;
+  opacity: 0;
+  padding: 0.4rem;
+  position: absolute;
+  top: 0;
+  transform: translate(-50%, -50%) scale(0);
+  transition: transform 0.2s ease;
+  width: 320px;
+  z-index: 300;
+}
+.popover *:focus + .popover-container, .popover:hover .popover-container {
+  display: block;
+  opacity: 1;
+  transform: translate(-50%, -100%);
+}
+.popover.popover-right .popover-container {
+  left: 100%;
+  top: 50%;
+}
+.popover.popover-right *:focus + .popover-container, .popover.popover-right:hover .popover-container {
+  transform: translate(0, -50%);
+}
+.popover.popover-bottom .popover-container {
+  left: 50%;
+  top: 100%;
+}
+.popover.popover-bottom *:focus + .popover-container, .popover.popover-bottom:hover .popover-container {
+  transform: translate(-50%, 0);
+}
+.popover.popover-left .popover-container {
+  left: 0;
+  top: 50%;
+}
+.popover.popover-left *:focus + .popover-container, .popover.popover-left:hover .popover-container {
+  transform: translate(-100%, -50%);
+}
+.popover .card {
+  box-shadow: 0 0.2rem 0.5rem rgba(69, 77, 93, 0.3);
+  border: 0;
+}
+
+.step {
+  display: flex;
+  flex-wrap: nowrap;
+  list-style: none;
+  margin: 0.2rem 0;
+  width: 100%;
+}
+.step .step-item {
+  flex: 1 1 0;
+  margin-top: 0;
+  min-height: 1rem;
+  text-align: center;
+  position: relative;
+}
+.step .step-item:not(:first-child)::before {
+  background: #5755d9;
+  content: "";
+  height: 2px;
+  left: -50%;
+  position: absolute;
+  top: 9px;
+  width: 100%;
+}
+.step .step-item a {
+  color: rgb(172.3333333333, 179.4444444444, 193.6666666667);
+  display: inline-block;
+  padding: 20px 10px 0;
+  text-decoration: none;
+}
+.step .step-item a::before {
+  background: #5755d9;
+  border: 0.1rem solid #fff;
+  border-radius: 50%;
+  content: "";
+  display: block;
+  height: 0.6rem;
+  left: 50%;
+  position: absolute;
+  top: 0.2rem;
+  transform: translateX(-50%);
+  width: 0.6rem;
+  z-index: 1;
+}
+.step .step-item.active a::before {
+  background: #fff;
+  border: 0.1rem solid #5755d9;
+}
+.step .step-item.active ~ .step-item::before {
+  background: rgb(230.8888888889, 232.962962963, 237.1111111111);
+}
+.step .step-item.active ~ .step-item a::before {
+  background: rgb(230.8888888889, 232.962962963, 237.1111111111);
+}
+
+.tab {
+  align-items: center;
+  border-bottom: 0.05rem solid rgb(230.8888888889, 232.962962963, 237.1111111111);
+  display: flex;
+  flex-wrap: wrap;
+  list-style: none;
+  margin: 0.2rem 0 0.15rem 0;
+}
+.tab .tab-item {
+  margin-top: 0;
+}
+.tab .tab-item a {
+  border-bottom: 0.1rem solid transparent;
+  color: inherit;
+  display: block;
+  margin: 0 0.4rem 0 0;
+  padding: 0.4rem 0.2rem 0.3rem 0.2rem;
+  text-decoration: none;
+}
+.tab .tab-item a:focus, .tab .tab-item a:hover {
+  color: #5755d9;
+}
+.tab .tab-item.active a,
+.tab .tab-item a.active {
+  border-bottom-color: #5755d9;
+  color: #5755d9;
+}
+.tab .tab-item.tab-action {
+  flex: 1 0 auto;
+  text-align: right;
+}
+.tab .tab-item .btn-clear {
+  margin-top: -0.2rem;
+}
+.tab.tab-block .tab-item {
+  flex: 1 0 0;
+  text-align: center;
+}
+.tab.tab-block .tab-item a {
+  margin: 0;
+}
+.tab.tab-block .tab-item .badge[data-badge]::after {
+  position: absolute;
+  right: 0.1rem;
+  top: 0.1rem;
+  transform: translate(0, 0);
+}
+.tab:not(.tab-block) .badge {
+  padding-right: 0;
+}
+
+.tile {
+  align-content: space-between;
+  align-items: flex-start;
+  display: flex;
+}
+.tile .tile-icon,
+.tile .tile-action {
+  flex: 0 0 auto;
+}
+.tile .tile-content {
+  flex: 1 1 auto;
+}
+.tile .tile-content:not(:first-child) {
+  padding-left: 0.4rem;
+}
+.tile .tile-content:not(:last-child) {
+  padding-right: 0.4rem;
+}
+.tile .tile-title,
+.tile .tile-subtitle {
+  line-height: 1.2rem;
+}
+.tile.tile-centered {
+  align-items: center;
+}
+.tile.tile-centered .tile-content {
+  overflow: hidden;
+}
+.tile.tile-centered .tile-title,
+.tile.tile-centered .tile-subtitle {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  margin-bottom: 0;
+}
+
+.toast {
+  background: rgba(69, 77, 93, 0.9);
+  border-color: #454d5d;
+  border: 0.05rem solid #454d5d;
+  border-radius: 0.1rem;
+  color: #fff;
+  display: block;
+  padding: 0.4rem;
+  width: 100%;
+}
+.toast.toast-primary {
+  background: rgba(87, 85, 217, 0.9);
+  border-color: #5755d9;
+}
+.toast.toast-success {
+  background: rgba(50, 182, 67, 0.9);
+  border-color: #32b643;
+}
+.toast.toast-warning {
+  background: rgba(255, 183, 0, 0.9);
+  border-color: #ffb700;
+}
+.toast.toast-error {
+  background: rgba(232, 86, 0, 0.9);
+  border-color: #e85600;
+}
+.toast a {
+  color: #fff;
+  text-decoration: underline;
+}
+.toast a:focus, .toast a:hover, .toast a:active, .toast a.active {
+  opacity: 0.75;
+}
+.toast .btn-clear {
+  margin: 4px -2px 4px 4px;
+}
+
+.tooltip {
+  position: relative;
+}
+.tooltip::after {
+  background: rgba(69, 77, 93, 0.9);
+  border-radius: 0.1rem;
+  bottom: 100%;
+  color: #fff;
+  content: attr(data-tooltip);
+  display: block;
+  font-size: 0.7rem;
+  left: 50%;
+  max-width: 320px;
+  opacity: 0;
+  overflow: hidden;
+  padding: 0.2rem 0.4rem;
+  pointer-events: none;
+  position: absolute;
+  text-overflow: ellipsis;
+  transform: translate(-50%, 0.4rem);
+  transition: all 0.2s ease;
+  white-space: pre;
+  z-index: 300;
+}
+.tooltip:focus::after, .tooltip:hover::after {
+  opacity: 1;
+  transform: translate(-50%, -0.2rem);
+}
+.tooltip[disabled], .tooltip.disabled {
+  pointer-events: auto;
+}
+.tooltip.tooltip-right::after {
+  bottom: 50%;
+  left: 100%;
+  transform: translate(-0.2rem, 50%);
+}
+.tooltip.tooltip-right:focus::after, .tooltip.tooltip-right:hover::after {
+  transform: translate(0.2rem, 50%);
+}
+.tooltip.tooltip-bottom::after {
+  bottom: auto;
+  top: 100%;
+  transform: translate(-50%, -0.4rem);
+}
+.tooltip.tooltip-bottom:focus::after, .tooltip.tooltip-bottom:hover::after {
+  transform: translate(-50%, 0.2rem);
+}
+.tooltip.tooltip-left::after {
+  bottom: 50%;
+  left: auto;
+  right: 100%;
+  transform: translate(0.4rem, 50%);
+}
+.tooltip.tooltip-left:focus::after, .tooltip.tooltip-left:hover::after {
+  transform: translate(-0.2rem, 50%);
+}
+
+@keyframes loading {
+  0% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(360deg);
+  }
+}
+@keyframes slide-down {
+  0% {
+    opacity: 0;
+    transform: translateY(-1.6rem);
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+.text-primary {
+  color: #5755d9;
+}
+
+a.text-primary:focus, a.text-primary:hover {
+  color: rgb(66.4038461538, 64.1586538462, 212.3413461538);
+}
+a.text-primary:visited {
+  color: rgb(107.5961538462, 105.8413461538, 221.6586538462);
+}
+
+.text-secondary {
+  color: rgb(229.1134615385, 228.8052884615, 249.1447115385);
+}
+
+a.text-secondary:focus, a.text-secondary:hover {
+  color: rgb(208.5173076923, 207.9639423077, 244.4860576923);
+}
+a.text-secondary:visited {
+  color: rgb(249.7096153846, 249.6466346154, 253.8033653846);
+}
+
+.text-gray {
+  color: rgb(172.3333333333, 179.4444444444, 193.6666666667);
+}
+
+a.text-gray:focus, a.text-gray:hover {
+  color: rgb(157.6944444444, 166.0648148148, 182.8055555556);
+}
+a.text-gray:visited {
+  color: rgb(186.9722222222, 192.8240740741, 204.5277777778);
+}
+
+.text-light {
+  color: #fff;
+}
+
+a.text-light:focus, a.text-light:hover {
+  color: rgb(242.25, 242.25, 242.25);
+}
+a.text-light:visited {
+  color: white;
+}
+
+.text-dark {
+  color: rgb(79.8611111111, 89.1203703704, 107.6388888889);
+}
+
+a.text-dark:focus, a.text-dark:hover {
+  color: #454d5d;
+}
+a.text-dark:visited {
+  color: rgb(90.7222222222, 101.2407407407, 122.2777777778);
+}
+
+.text-success {
+  color: #32b643;
+}
+
+a.text-success:focus, a.text-success:hover {
+  color: rgb(44.5043103448, 161.9956896552, 59.6357758621);
+}
+a.text-success:visited {
+  color: rgb(56.9181034483, 200.5818965517, 75.4202586207);
+}
+
+.text-warning {
+  color: #ffb700;
+}
+
+a.text-warning:focus, a.text-warning:hover {
+  color: rgb(229.5, 164.7, 0);
+}
+a.text-warning:visited {
+  color: rgb(255, 190.2, 25.5);
+}
+
+.text-error {
+  color: #e85600;
+}
+
+a.text-error:focus, a.text-error:hover {
+  color: rgb(206.5, 76.5474137931, 0);
+}
+a.text-error:visited {
+  color: rgb(255, 96.099137931, 2.5);
+}
+
+.bg-primary {
+  background: #5755d9;
+  color: #fff;
+}
+
+.bg-secondary {
+  background: rgb(241.4711538462, 241.3100961538, 251.9399038462);
+}
+
+.bg-dark {
+  background: #454d5d;
+  color: #fff;
+}
+
+.bg-gray {
+  background: rgb(248.4555555556, 249.0185185185, 250.1444444444);
+}
+
+.bg-success {
+  background: #32b643;
+  color: #fff;
+}
+
+.bg-warning {
+  background: #ffb700;
+  color: #fff;
+}
+
+.bg-error {
+  background: #e85600;
+  color: #fff;
+}
+
+.c-hand {
+  cursor: pointer;
+}
+
+.c-move {
+  cursor: move;
+}
+
+.c-zoom-in {
+  cursor: zoom-in;
+}
+
+.c-zoom-out {
+  cursor: zoom-out;
+}
+
+.c-not-allowed {
+  cursor: not-allowed;
+}
+
+.c-auto {
+  cursor: auto;
+}
+
+.d-block {
+  display: block;
+}
+
+.d-inline {
+  display: inline;
+}
+
+.d-inline-block {
+  display: inline-block;
+}
+
+.d-flex {
+  display: flex;
+}
+
+.d-inline-flex {
+  display: inline-flex;
+}
+
+.d-none,
+.d-hide {
+  display: none !important;
+}
+
+.d-visible {
+  visibility: visible;
+}
+
+.d-invisible {
+  visibility: hidden;
+}
+
+.text-hide {
+  background: transparent;
+  border: 0;
+  color: transparent;
+  font-size: 0;
+  line-height: 0;
+  text-shadow: none;
+}
+
+.text-assistive {
+  border: 0;
+  clip: rect(0, 0, 0, 0);
+  height: 1px;
+  margin: -1px;
+  overflow: hidden;
+  padding: 0;
+  position: absolute;
+  width: 1px;
+}
+
+.divider,
+.divider-vert {
+  display: block;
+  position: relative;
+}
+.divider[data-content]::after,
+.divider-vert[data-content]::after {
+  background: #fff;
+  color: rgb(172.3333333333, 179.4444444444, 193.6666666667);
+  content: attr(data-content);
+  display: inline-block;
+  font-size: 0.7rem;
+  padding: 0 0.4rem;
+  transform: translateY(-0.65rem);
+}
+
+.divider {
+  border-top: 0.05rem solid rgb(230.8888888889, 232.962962963, 237.1111111111);
+  height: 0.05rem;
+  margin: 0.4rem 0;
+}
+.divider[data-content] {
+  margin: 0.8rem 0;
+}
+
+.divider-vert {
+  display: block;
+  padding: 0.8rem;
+}
+.divider-vert::before {
+  border-left: 0.05rem solid rgb(230.8888888889, 232.962962963, 237.1111111111);
+  bottom: 0.4rem;
+  content: "";
+  display: block;
+  left: 50%;
+  position: absolute;
+  top: 0.4rem;
+  transform: translateX(-50%);
+}
+.divider-vert[data-content]::after {
+  left: 50%;
+  padding: 0.2rem 0;
+  position: absolute;
+  top: 50%;
+  transform: translate(-50%, -50%);
+}
+
+.loading {
+  color: transparent !important;
+  min-height: 0.8rem;
+  pointer-events: none;
+  position: relative;
+}
+.loading::after {
+  animation: loading 500ms infinite linear;
+  border: 0.1rem solid #5755d9;
+  border-radius: 50%;
+  border-right-color: transparent;
+  border-top-color: transparent;
+  content: "";
+  display: block;
+  height: 0.8rem;
+  left: 50%;
+  margin-left: -0.4rem;
+  margin-top: -0.4rem;
+  position: absolute;
+  top: 50%;
+  width: 0.8rem;
+  z-index: 1;
+}
+.loading.loading-lg {
+  min-height: 2rem;
+}
+.loading.loading-lg::after {
+  height: 1.6rem;
+  margin-left: -0.8rem;
+  margin-top: -0.8rem;
+  width: 1.6rem;
+}
+
+.clearfix::after, .container::after {
+  clear: both;
+  content: "";
+  display: table;
+}
+
+.float-left {
+  float: left !important;
+}
+
+.float-right {
+  float: right !important;
+}
+
+.relative {
+  position: relative !important;
+}
+
+.absolute {
+  position: absolute !important;
+}
+
+.fixed {
+  position: fixed !important;
+}
+
+.centered {
+  display: block;
+  float: none;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.flex-centered {
+  align-items: center;
+  display: flex;
+  justify-content: center;
+}
+
+.m-0 {
+  margin: 0 !important;
+}
+
+.mb-0 {
+  margin-bottom: 0 !important;
+}
+
+.ml-0 {
+  margin-left: 0 !important;
+}
+
+.mr-0 {
+  margin-right: 0 !important;
+}
+
+.mt-0 {
+  margin-top: 0 !important;
+}
+
+.mx-0 {
+  margin-left: 0 !important;
+  margin-right: 0 !important;
+}
+
+.my-0 {
+  margin-bottom: 0 !important;
+  margin-top: 0 !important;
+}
+
+.m-1 {
+  margin: 0.2rem !important;
+}
+
+.mb-1 {
+  margin-bottom: 0.2rem !important;
+}
+
+.ml-1 {
+  margin-left: 0.2rem !important;
+}
+
+.mr-1 {
+  margin-right: 0.2rem !important;
+}
+
+.mt-1 {
+  margin-top: 0.2rem !important;
+}
+
+.mx-1 {
+  margin-left: 0.2rem !important;
+  margin-right: 0.2rem !important;
+}
+
+.my-1 {
+  margin-bottom: 0.2rem !important;
+  margin-top: 0.2rem !important;
+}
+
+.m-2 {
+  margin: 0.4rem !important;
+}
+
+.mb-2 {
+  margin-bottom: 0.4rem !important;
+}
+
+.ml-2 {
+  margin-left: 0.4rem !important;
+}
+
+.mr-2 {
+  margin-right: 0.4rem !important;
+}
+
+.mt-2 {
+  margin-top: 0.4rem !important;
+}
+
+.mx-2 {
+  margin-left: 0.4rem !important;
+  margin-right: 0.4rem !important;
+}
+
+.my-2 {
+  margin-bottom: 0.4rem !important;
+  margin-top: 0.4rem !important;
+}
+
+.p-0 {
+  padding: 0 !important;
+}
+
+.pb-0 {
+  padding-bottom: 0 !important;
+}
+
+.pl-0 {
+  padding-left: 0 !important;
+}
+
+.pr-0 {
+  padding-right: 0 !important;
+}
+
+.pt-0 {
+  padding-top: 0 !important;
+}
+
+.px-0 {
+  padding-left: 0 !important;
+  padding-right: 0 !important;
+}
+
+.py-0 {
+  padding-bottom: 0 !important;
+  padding-top: 0 !important;
+}
+
+.p-1 {
+  padding: 0.2rem !important;
+}
+
+.pb-1 {
+  padding-bottom: 0.2rem !important;
+}
+
+.pl-1 {
+  padding-left: 0.2rem !important;
+}
+
+.pr-1 {
+  padding-right: 0.2rem !important;
+}
+
+.pt-1 {
+  padding-top: 0.2rem !important;
+}
+
+.px-1 {
+  padding-left: 0.2rem !important;
+  padding-right: 0.2rem !important;
+}
+
+.py-1 {
+  padding-bottom: 0.2rem !important;
+  padding-top: 0.2rem !important;
+}
+
+.p-2 {
+  padding: 0.4rem !important;
+}
+
+.pb-2 {
+  padding-bottom: 0.4rem !important;
+}
+
+.pl-2 {
+  padding-left: 0.4rem !important;
+}
+
+.pr-2 {
+  padding-right: 0.4rem !important;
+}
+
+.pt-2 {
+  padding-top: 0.4rem !important;
+}
+
+.px-2 {
+  padding-left: 0.4rem !important;
+  padding-right: 0.4rem !important;
+}
+
+.py-2 {
+  padding-bottom: 0.4rem !important;
+  padding-top: 0.4rem !important;
+}
+
+.s-rounded {
+  border-radius: 0.1rem;
+}
+
+.s-circle {
+  border-radius: 50%;
+}
+
+.text-left {
+  text-align: left;
+}
+
+.text-right {
+  text-align: right;
+}
+
+.text-center {
+  text-align: center;
+}
+
+.text-justify {
+  text-align: justify;
+}
+
+.text-lowercase {
+  text-transform: lowercase;
+}
+
+.text-uppercase {
+  text-transform: uppercase;
+}
+
+.text-capitalize {
+  text-transform: capitalize;
+}
+
+.text-normal {
+  font-weight: normal;
+}
+
+.text-bold {
+  font-weight: bold;
+}
+
+.text-italic {
+  font-style: italic;
+}
+
+.text-large {
+  font-size: 1.2em;
+}
+
+.text-ellipsis {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.text-clip {
+  overflow: hidden;
+  text-overflow: clip;
+  white-space: nowrap;
+}
+
+.text-break {
+  hyphens: auto;
+  word-break: break-word;
+  word-wrap: break-word;
+}
+
+body {
+  background-color: #f7f7f7;
+  color: #1c1c1c;
+}
+
+img {
+  max-width: 100%;
+  height: auto;
+}
+
+a img {
+  vertical-align: top;
+}
+
+pre {
+  display: block;
+  font-family: monospace;
+  white-space: normal;
+  margin: 0.7rem 0;
+}
+
+figure {
+  margin: 0 0 0.7rem;
+}
+
+.aligncenter {
+  clear: both;
+  display: block;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.pull-left,
+.pull-left-responsive {
+  float: left;
+}
+
+.pull-right,
+.pull-right-responsive {
+  float: right;
+}
+
+a:visited {
+  color: #5755d9;
+}
+
+.text-small {
+  font-size: 0.7rem;
+}
+
+.column {
+  padding: 0.4rem;
+}
+
+#colophon {
+  background-color: #1c1c1c;
+  color: #fff;
+  font-size: 0.7rem;
+  padding: 0.7rem;
+  padding-bottom: calc(0.7rem + 100px);
+}
+
+h2, .h2 {
+  font-size: 1.35rem;
+  line-height: 1.2em;
+}
+
+h3,
+.h3 {
+  font-size: 1.15rem;
+  line-height: 1.2em;
+}
+
+h4,
+.h4 {
+  font-size: 1rem;
+  font-weight: bold;
+  line-height: 1.2em;
+}
+
+.featured-posts {
+  background-color: #fff;
+  padding: 0.7rem;
+}
+
+.content-wrap {
+  padding: 0.5rem;
+}
+
+.single-post-cat {
+  text-transform: uppercase;
+  font-size: 0.8rem;
+  font-weight: bold;
+  margin-bottom: 0.5rem;
+}
+
+h1.entry-title, .entry-content h1, .entry-content .h1, h1.page-title {
+  font-size: 1.75rem;
+  font-weight: bold;
+  line-height: 1.1em;
+}
+
+.loop-small h2.entry-title {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+}
+
+.entry-content h2, .entry-content .h2 {
+  border-bottom: 1px solid #d8d8d8;
+  padding-bottom: 0.7rem;
+}
+
+.entry-content h3,
+.entry-content .h3 {
+  margin-bottom: 0.7rem;
+}
+
+.entry-content h2 + h3,
+.entry-content .h2 + .h3 {
+  margin-top: 1rem;
+}
+
+.entry-content h4,
+.entry-content .h4 {
+  margin-bottom: 0.7rem;
+}
+
+.entry-content p {
+  font-size: 0.8rem;
+  margin: 0 0 0.7rem;
+}
+
+.entry-content .lwptoc {
+  margin: 0 0 0.7rem;
+}
+
+ul,
+ul ul {
+  list-style: square;
+}
+
+ol,
+ol ol {
+  list-style: decimal outside;
+}
+
+.meta-box {
+  padding: 0.8rem;
+  border: 1px solid #d8d8d8;
+}
+
+.meta-box.half-pad {
+  padding: 0.4rem;
+}
+
+.meta-box.bg-full {
+  background-color: #f5f5f5;
+  border: none;
+}
+
+.meta-box.no-border-sides {
+  border-left: none;
+  border-right: none;
+}
+
+.meta-box ul:last-child {
+  margin-bottom: 0;
+}
+
+.flex-video {
+  position: relative;
+  padding-top: 25px;
+  padding-bottom: 67.5%;
+  height: 0;
+  margin-bottom: 16px;
+  overflow: hidden;
+}
+
+.flex-video.widescreen {
+  margin: 0 auto 1.4rem;
+  text-align: center;
+  padding-bottom: 56%;
+}
+
+.flex-video.vimeo {
+  padding-top: 0;
+}
+
+.flex-video iframe,
+.flex-video object,
+.flex-video embed {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+}
+
+.m-top-full {
+  margin-top: 1.4rem !important;
+}
+
+.m-btm-full {
+  margin-bottom: 1.4rem !important;
+}
+
+.m-top-half {
+  margin-top: 0.7rem !important;
+}
+
+.m-btm-half {
+  margin-bottom: 0.7rem !important;
+}
+
+.m-top-none {
+  margin-top: 0px !important;
+}
+
+.m-btm-none {
+  margin-bottom: 0px !important;
+}
+
+.entry-meta {
+  align-items: center;
+  border-top: none;
+  border-bottom: none;
+  display: flex;
+  gap: 0.25rem;
+  margin: -0.5rem 0 0.25rem;
+  padding: 0;
+}
+
+#breadcrumbs {
+  margin-bottom: 0.1rem;
+  padding-top: 0;
+  border: none;
+}
+
+h2.block-header {
+  padding: 0.7rem;
+  background-color: #1c1c1c;
+  margin-bottom: 0.5rem;
+  color: #fff;
+}
+
+.content-loop .featured-image {
+  margin-bottom: 0.5rem;
+}
+
+.meta-box.loop-small {
+  padding: 0.2rem 0.6rem;
+}
+
+.loop-small h2 {
+  font-size: 0.9rem;
+}
+
+.loop-small .entry-footer {
+  border-bottom: none;
+  padding-bottom: 0;
+}
+
+.more-posts-link {
+  border: 1px solid #d8d8d8;
+  padding: 2px;
+  text-align: center;
+  margin: 0.25rem 0 0.7rem;
+  text-transform: uppercase;
+  font-weight: bold;
+}
+
+.entry-footer {
+  border-top: 1px solid #d8d8d8;
+  border-bottom: 1px solid #d8d8d8;
+  margin-bottom: 0;
+}
+
+.summary,
+.archive-description {
+  font-size: 0.8rem;
+  margin-bottom: 0.7rem;
+}
+
+.summary p:last-child,
+.archive-description p:last-child {
+  margin-bottom: 0;
+}
+
+.summary h2 {
+  font-size: 1rem;
+  font-weight: 400;
+  text-transform: none;
+  border-bottom: 0;
+  padding-bottom: 0;
+  margin-bottom: 0;
+}
+
+blockquote,
+.wp-block-quote {
+  background-color: #f5f5f5;
+  border-left: 5px solid #5755d9;
+  padding: 0.7rem;
+  margin-right: 0;
+  word-break: break-word;
+}
+
+blockquote ul:last-child,
+ul.wp-block-quote:last-child {
+  margin-bottom: 0;
+}
+
+.alignright {
+  float: right;
+  margin-left: 0.5rem;
+}
+
+.alignleft {
+  float: left;
+  margin-right: 0.5rem;
+}
+
+.side-box {
+  color: #fff;
+  background-color: #333;
+  padding: 0;
+  border: none;
+}
+
+.side-box-head {
+  background-color: #1c1c1c;
+  padding: 0.7rem;
+}
+
+.side-box-head h3 {
+  margin-bottom: 0;
+}
+
+.side-box ul {
+  padding: 0 0.7rem 0.7rem;
+  margin: 0;
+  border-top: 1px solid #4a4a4a;
+}
+
+.side-box li {
+  font-size: 0.7rem;
+  list-style-type: none;
+  padding: 0.25rem 0;
+  margin: 0;
+  border-bottom: 1px solid #4a4a4a;
+}
+
+.side-box a {
+  color: #fff;
+}
+
+.side-box a:hover {
+  color: #5755d9;
+}
+
+.box-fill {
+  background-color: #fff;
+}
+
+.about-author {
+  overflow: auto;
+}
+
+.about-author h4,
+.side-box h3 {
+  font-size: 0.8rem;
+}
+
+.author-description {
+  font-size: 0.7rem;
+}
+
+.toast {
+  padding: 0.7rem;
+}
+
+.toast.toast-primary a:visited {
+  color: #fff;
+}
+
+.content-feature {
+  border-top: 1px solid #d8d8d8;
+  border-bottom: 1px solid #d8d8d8;
+  padding: 0.7rem 0;
+  margin: 0.7rem 0;
+}
+
+.content-feature h3 {
+  border-bottom: none;
+  padding-bottom: 0;
+}
+
+.content-feature ul {
+  margin-bottom: 0;
+}
+
+.swp_social_panel {
+  margin-top: -0.2rem !important;
+  margin-bottom: 0.5rem !important;
+}
+
+.twitter-tweet {
+  margin: 0 auto;
+}
+
+.wpcf7-text,
+.wpcf7-select {
+  width: 50%;
+}
+
+.wpcf7-textarea {
+  width: 75%;
+}
+
+.toc-horiz ul {
+  margin: 0 0 0.7rem;
+  padding: 0;
+  text-align: center;
+}
+
+.toc-horiz ul li {
+  list-style-type: none;
+  display: inline;
+  margin-left: 0;
+}
+
+.toc-horiz ul li a {
+  font-weight: bold;
+}
+
+.toc-horiz li:not(:first-child):before {
+  content: " - ";
+}
+
+.wp-video {
+  margin-bottom: 0.7rem;
+}
+
+.published {
+  display: none;
+}
+
+.span.wpcf7-list-item {
+  margin-left: 0;
+}
+
+.gallery {
+  margin: 0 -1.1666667%;
+  clear: both;
+  overflow: auto;
+}
+
+.gallery-item {
+  display: inline-block;
+  max-width: 33.33%;
+  padding: 0 1.1400652% 2.2801304%;
+  margin-bottom: 0.7rem;
+  text-align: center;
+  vertical-align: top;
+  width: 100%;
+  float: left;
+}
+
+.wp-caption {
+  max-width: 100%;
+}
+
+.wp-caption-text {
+  font-size: 0.8rem;
+  font-weight: bold;
+  text-transform: uppercase;
+  text-align: center;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  display: -webkit-box;
+  -webkit-line-clamp: 1;
+  -webkit-box-orient: vertical;
+}
+
+ul.pagination {
+  justify-content: center;
+}
+
+.nav-links {
+  overflow: auto;
+}
+
+.nav-previous {
+  float: right;
+  border: 1px solid #d8d8d8;
+  padding: 0.2rem 0.4rem;
+  font-weight: bold;
+}
+
+.nav-next {
+  float: left;
+  border: 1px solid #d8d8d8;
+  padding: 0.2rem 0.4rem;
+  font-weight: bold;
+}
+
+.schema-how-to-steps {
+  margin: 0 0 0 0.2rem;
+}
+
+li.schema-how-to-step {
+  font-size: 1rem;
+  margin-top: 0.2rem;
+}
+
+li.schema-how-to-step img {
+  margin: 1rem auto 0;
+}
+
+.grecaptcha-badge {
+  visibility: hidden;
+}
+
+.gallery-columns-1 .gallery-item {
+  max-width: 100%;
+}
+
+.gallery-columns-2 .gallery-item {
+  max-width: 50%;
+}
+
+.gallery-columns-4 .gallery-item {
+  max-width: 25%;
+}
+
+.gallery-columns-5 .gallery-item {
+  max-width: 20%;
+}
+
+.gallery-columns-6 .gallery-item {
+  max-width: 16.66%;
+}
+
+.gallery-columns-7 .gallery-item {
+  max-width: 14.28%;
+}
+
+.gallery-columns-8 .gallery-item {
+  max-width: 12.5%;
+}
+
+.gallery-columns-9 .gallery-item {
+  max-width: 11.11%;
+}
+
+.pagination .page-item span.current {
+  background: #5755d9;
+  color: #fff;
+  border-radius: 0.1rem;
+  display: inline-block;
+  padding: 0.2rem 0.4rem;
+  text-decoration: none;
+}
+
+pre {
+  display: block;
+  padding: 9.5px;
+  margin: 0 0 10px;
+  font-size: 13px;
+  line-height: 1.42857143;
+  color: #333;
+  word-break: break-all;
+  word-wrap: break-word;
+  background-color: #f5f5f5;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  white-space: pre;
+}
+
+@media (max-width: 500px) {
+  .featured-posts {
+    font-size: 0.7rem;
+    padding: 0.7rem;
+  }
+  .content-wrap {
+    border: none;
+    padding: 0;
+  }
+  h1.entry-title,
+  .entry-content h1,
+  #main h1 {
+    font-size: 1.5rem;
+  }
+  h2,
+  .h2 {
+    font-size: 1.25rem;
+  }
+  h3,
+  .h3 {
+    font-size: 1rem;
+  }
+  .entry-meta {
+    padding: 0;
+    margin-bottom: 0.25rem;
+    border-top: none;
+    border-bottom: none;
+  }
+  .single-post-cat {
+    font-size: 0.7rem;
+  }
+  .loop-small h2.entry-title {
+    overflow: visible;
+    text-overflow: string;
+    display: block;
+  }
+  .summary,
+  .archive-description {
+    border-left: 0;
+    padding-left: 0;
+    font-size: 0.6rem;
+  }
+  .summary {
+    margin-bottom: 0.2rem;
+  }
+  .schema-how-to-steps {
+    margin: 0 0 0 0.7rem;
+  }
+  .loop-small {
+    min-height: 0;
+  }
+  .wp-caption-text {
+    font-size: 0.6rem;
+  }
+  /* .gallery-columns-2 .gallery-item {
+     max-width: 100%;
+   } */
+  /* .gallery-columns-4 .gallery-item {
+     max-width: 50%;
+   } */
+  .pull-left-responsive,
+  .pull-right-responsive {
+    float: none;
+    text-align: center;
+    display: block;
+  }
+}
+.fortnite-cosmetic h1,
+.genshin-impact-item h1 {
+  font-size: 1.5rem;
+  margin-bottom: 0.5rem;
+}
+
+.fortnite-cosmetic #breadcrumbs,
+.genshin-impact-item #breadcrumbs {
+  margin-bottom: 0;
+}
+
+.fortnite-cosmetic h1,
+.genshin-impact-item h1,
+.genshin-impact-item-content h2,
+.fortnite-cosmetic-content h2 {
+  border-bottom: 1px solid #d8d8d8;
+  padding-bottom: 0.5rem;
+}
+
+.genshin-impact-item-content p,
+.fortnite-cosmetic-content p {
+  margin-bottom: 0.7rem;
+}
+
+.fortnite-skins-page .entry-header h1,
+.genshin-impact-characters .entry-header h1,
+.genshin-impact-materials .entry-header h1 {
+  font-size: 1.6rem;
+  padding: 0.5rem 0 0.7rem;
+  margin-top: 0;
+  border-bottom: 1px solid #d8d8d8;
+}
+
+.genshin-impact-materials .skin-gallery img,
+.genshin-impact-characters .skin-gallery img {
+  display: block;
+  margin: 0 auto;
+}
+
+.genshin-impact-characters-form .form-label,
+.genshin-impact-materials-form .form-label,
+.fortnite-skins-form .form-label {
+  padding-top: 0;
+  font-weight: bold;
+  text-transform: uppercase;
+  font-size: 0.7rem;
+}
+
+.skin-caption {
+  padding: 0.3rem;
+  border: 1px solid #d8d8d8;
+  margin-top: 0.5rem;
+}
+
+.skin-caption-info {
+  overflow: auto;
+  clear: both;
+  margin-bottom: 0;
+}
+
+.genshin-impact-character-sw-frame,
+.fortnite-shop-history-frame {
+  overflow-y: scroll;
+  max-height: 275px;
+}
+
+.genshin-impact-character-sw-frame table thead th,
+.fortnite-shop-history-frame table thead th {
+  padding-top: 0;
+}
+
+.skin-rating .gdrts-rating-block {
+  margin-top: 0.3rem;
+}
+
+.gdrts-rating-block {
+  margin-bottom: 0 !important;
+}
+
+.gdrts-rating-block .gdrts-inner-wrapper {
+  text-align: center !important;
+}
+
+.skin-rating .gdrts-inner-wrapper {
+  text-align: center;
+  border-top: 1px solid #d8d8d8;
+  padding-top: 0.5rem;
+}
+
+.skin-rating .gdrts-inner-wrapper .gdrts-rating-text {
+  font-size: 0.6rem;
+  text-transform: uppercase;
+}
+
+.tax-fortnite-set h1.entry-title {
+  font-size: 1.6rem;
+  border-bottom: 1px solid #d8d8d8;
+  padding: 0.2rem 0 0.8rem;
+}
+
+@media (max-width: 1000px) {
+  .skin-caption .pull-left-responsive,
+  .skin-caption .pull-right-responsive {
+    float: none;
+    text-align: center;
+    display: block;
+  }
+}
+@media (max-width: 500px) {
+  .fortnite-skins-page .entry-header h1,
+  .genshin-impact-materials .entry-header h1,
+  .genshin-impact-characters .entry-header h1 {
+    font-size: 1.2rem;
+  }
+}
+.hs-card-link {
+  font-weight: bold;
+}
+
+.hs-card-link.legendary {
+  color: #f68d09;
+}
+
+.hs-card-link.epic {
+  color: #9b37c1;
+}
+
+.hs-card-link.rare {
+  color: #2c63bf;
+}
+
+.hs-card-link.common {
+  color: #106f43;
+}
+
+.hs-card-link.free {
+  color: #666;
+}
+
+.hs-card-link:hover,
+.hs-card-link.legendary:hover,
+.hs-card-link.epic:hover,
+.hs-card-link.rare:hover,
+.hs-card-link.common:hover {
+  cursor: pointer;
+  color: #1c1c1c;
+}
+
+.card-image {
+  height: 382px;
+  position: absolute;
+  z-index: 9999;
+}
+
+.hs-deck-wrap {
+  background-color: #f5f5f5;
+  padding: 0 0.6rem 0.6rem;
+  margin-bottom: 1rem;
+  border-top: 5px solid #1c1c1c;
+}
+
+.hs-deck-wrap.druid {
+  border-color: #732e00;
+}
+
+.hs-deck-wrap.hunter {
+  border-color: #1d7844;
+}
+
+.hs-deck-wrap.mage {
+  border-color: #00a4b7;
+}
+
+.hs-deck-wrap.paladin {
+  border-color: #d68a12;
+}
+
+.hs-deck-wrap.priest {
+  border-color: #d36bd9;
+}
+
+.hs-deck-wrap.rogue {
+  border-color: #000;
+}
+
+.hs-deck-wrap.shaman {
+  border-color: #245193;
+}
+
+.hs-deck-wrap.warlock {
+  border-color: #7344ad;
+}
+
+.hs-deck-wrap.warrior {
+  border-color: #a92113;
+}
+
+.hs-deck-wrap.demonhunter {
+  border-color: #235950;
+}
+
+.hs-deck-table {
+  margin-bottom: 1rem;
+}
+
+.hs-deck-table td {
+  padding: 0.2rem 0.1rem;
+  width: 50%;
+}
+
+.hs-deck-code {
+  padding: 0.8rem;
+  background-color: #fff;
+  word-wrap: break-word;
+}
+
+@media (max-width: 1250px) {
+  .hs-card-gallery .gallery-columns-5 .gallery-item {
+    max-width: 25%;
+  }
+}
+@media (max-width: 980px) {
+  .hs-card-gallery .gallery-columns-5 .gallery-item,
+  .hs-card-gallery .gallery-columns-3 .gallery-item {
+    max-width: 50%;
+  }
+}
+@media (max-width: 500px) {
+  .hs-card-gallery .gallery-columns-5 .gallery-item,
+  .hs-card-gallery .gallery-columns-3 .gallery-item {
+    max-width: 100%;
+  }
+}
+.ror {
+  min-height: 300px;
+}
+
+.ror-item {
+  margin-bottom: 0.2rem;
+  border: 2px solid #1c1c1c;
+  overflow: auto;
+  background-color: #fff;
+}
+
+.ror-item:last-child {
+  margin-bottom: 0;
+}
+
+.ror-item .columns {
+  margin: 0;
+  grid-auto-rows: 200px;
+}
+
+.ror-item .columns .column {
+  padding: 0.3rem;
+}
+
+.ror-item-col {
+  padding: 0 0.1rem 0.1rem;
+}
+
+.ror-item.ror-common {
+  border-color: #d8d8d8;
+}
+
+.ror-item.ror-uncommon {
+  border-color: #66b039;
+}
+
+.ror-item.ror-rare {
+  border-color: #de574a;
+}
+
+.ror-item.ror-boss {
+  border-color: #c4d323;
+}
+
+.ror-item.ror-lunar {
+  border-color: #2195b0;
+}
+
+.ror-item.ror-equipment {
+  border-color: #e19630;
+}
+
+.ror-item-img img {
+  display: block;
+}
+
+.ror-item-text h3 {
+  font-size: 0.7rem;
+  font-weight: bold;
+  text-transform: uppercase;
+  margin-bottom: 0;
+}
+
+.ror-item-text p {
+  font-size: 0.6rem;
+}
+
+.ror-item-text p:last-child {
+  margin-bottom: 0;
+}
+
+.temtem-sm-img {
+  border-radius: 100px;
+  border: 5px solid #5755d9;
+  width: 150px;
+  height: 150px;
+}
+
+#cdm-zone-01,
+#cdm-zone-04 {
+  position: relative;
+}
+
+#cdm-zone-02 {
+  position: relative;
+}
+
+.clearfix::after,
+.container::after {
+  content: "";
+  display: table;
+  clear: both;
+}
+
+body .fs-sticky-footer {
+  z-index: 1073741823;
+}
+
+.comments-icon {
+  color: #5755d9 !important;
+  filter: brightness(0) saturate(100%) invert(35%) sepia(42%) saturate(3545%) hue-rotate(228deg) brightness(86%) contrast(98%) !important;
+}
+
+#socialLinks a {
+  border-radius: 50%;
+  width: 50px;
+  height: 50px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin: 0 auto;
+}
+
+.entry-content blockquote p, .entry-content blockquote cite {
+  margin: 0 0 5px 0;
+  line-height: 1.2;
+}
+
+#masthead {
+  padding: 0;
+  background-color: #fff;
+}
+
+body.menu-open {
+  overflow: hidden;
+}
+
+h2#logo {
+  float: left;
+  margin-bottom: 0;
+  line-height: 0;
+}
+
+#main-navigation ul {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+@media (max-width: 1114px) {
+  #main-navigation ul {
+    overflow: hidden;
+  }
+}
+
+#main-navigation li a {
+  display: block;
+  color: #5755d9;
+  padding: 0.8rem 0.8rem 0;
+  font-size: 0.8rem;
+  font-weight: bold;
+  text-transform: uppercase;
+  margin: 0;
+}
+
+/* menu */
+#main-navigation .menu-nav {
+  clear: both;
+  max-height: 0;
+  padding: 0;
+  transition: max-height 0.2s ease-out;
+}
+#main-navigation .menu-nav li {
+  position: relative;
+}
+#main-navigation .menu-nav li ul {
+  display: none;
+  flex-direction: column;
+  position: absolute;
+  top: 40px;
+  padding-top: 14px;
+  padding-bottom: 0.5rem;
+  background: white;
+}
+#main-navigation .menu-nav li ul ul {
+  display: none !important;
+}
+#main-navigation .menu-nav li ul:hover {
+  display: flex;
+}
+@media (max-width: 1114px) {
+  #main-navigation .menu-nav li ul {
+    display: block;
+    position: relative;
+    top: 0;
+  }
+}
+#main-navigation .menu-nav li:hover ul {
+  display: flex;
+}
+
+/* menu icon */
+#main-navigation .menu-icon,
+#nav-search {
+  cursor: pointer;
+  display: inline-block;
+  float: right;
+  padding: 0.7rem;
+  margin: 0.68rem 0 0;
+  position: relative;
+  user-select: none;
+}
+
+#main-navigation .menu-icon .navicon {
+  background: #333;
+  display: block;
+  height: 2px;
+  position: relative;
+  transition: background 0.2s ease-out;
+  width: 18px;
+}
+
+#main-navigation .menu-icon .navicon:before,
+#main-navigation .menu-icon .navicon:after {
+  background: #333;
+  content: "";
+  display: block;
+  height: 100%;
+  position: absolute;
+  transition: all 0.2s ease-out;
+  width: 100%;
+}
+
+#main-navigation .menu-icon .navicon:before {
+  top: 5px;
+}
+
+#main-navigation .menu-icon .navicon:after {
+  top: -5px;
+}
+
+#nav-search-form-wrap {
+  display: none;
+}
+@media (min-width: 1115px) {
+  #nav-search-form-wrap {
+    top: 56px;
+    left: 0px;
+    right: 0px;
+    position: absolute;
+  }
+}
+
+.nav-search-form {
+  padding: 0.6rem;
+  clear: both;
+  background-color: #fff;
+  box-shadow: 1px 1px 4px 0 rgba(0, 0, 0, 0.1);
+}
+
+/* menu btn */
+#main-navigation .menu-btn {
+  display: none;
+}
+
+#main-navigation .menu-btn:checked ~ div .menu-nav {
+  overflow: scroll;
+  --header-height: 56px;
+  --pushdown-height: 0px;
+  --wp-adminbar-height: 0px;
+  --search-height: 0px;
+  height: calc(100vh - var(--header-height) - var(--pushdown-height) - var(--wp-adminbar-height) - var(--search-height));
+  max-height: 2340px;
+}
+
+#progameguidescom_pushdown[data-google-query-id] ~ #masthead #main-navigation .menu-btn:checked ~ div .menu-nav {
+  --pushdown-height: 50px !important;
+}
+
+#masthead #main-navigation .menu-btn:checked ~ [style="display: block;"] ~ div .menu-nav {
+  --search-height: 50px !important;
+}
+
+@media (max-width: 782px) {
+  body.admin-bar #main-navigation .menu-btn:checked ~ div .menu-nav {
+    --wp-adminbar-height: 46px !important;
+  }
+}
+@media (min-width: 783px) {
+  body.admin-bar #main-navigation .menu-btn:checked ~ div .menu-nav {
+    --wp-adminbar-height: 32px !important;
+  }
+}
+#main-navigation .menu-btn:checked ~ .menu-icon .navicon {
+  background: transparent;
+}
+
+#main-navigation .menu-btn:checked ~ .menu-icon .navicon:before {
+  transform: rotate(-45deg);
+}
+
+#main-navigation .menu-btn:checked ~ .menu-icon .navicon:after {
+  transform: rotate(45deg);
+}
+
+#main-navigation .menu-btn:checked ~ .menu-icon:not(.steps) .navicon:before,
+#main-navigation .menu-btn:checked ~ .menu-icon:not(.steps) .navicon:after {
+  top: 0;
+}
+
+#nav-search {
+  margin-top: 0.2rem;
+}
+
+@media (min-width: 1115px) {
+  #main-navigation li {
+    float: left;
+    margin: 0;
+  }
+  #main-navigation li a {
+    padding: 0.8rem 0.8rem 0;
+  }
+  #main-navigation .menu-nav {
+    padding: 0;
+    clear: none;
+    float: right;
+    margin-top: 0;
+    max-height: none;
+  }
+  #main-navigation .menu-icon {
+    display: none;
+  }
+}
+@media (max-width: 800px) {
+  h2#logo {
+    width: 250px;
+  }
+  #main-navigation .menu-icon {
+    margin-top: 0.7rem;
+  }
+  #nav-search {
+    margin-top: 0.2rem;
+  }
+}
+@media (max-width: 350px) {
+  h2#logo {
+    width: 250px;
+  }
+  #main-navigation .menu-icon {
+    margin-top: 0.7rem;
+  }
+  #nav-search {
+    margin-top: 0.2rem;
+  }
+}
+#llc_comments_button {
+  width: 100%;
+  margin: 1rem 0 0.75rem;
+  background-color: #5755d9;
+  color: #fff;
+  padding: 1rem 0.8rem;
+  line-height: 0.5rem;
+  height: auto;
+}
+
+#llc_comments_button:hover {
+  background-color: #fff;
+  color: #5755d9;
+}
+
+.tablesorter-default .header,
+.tablesorter-default .tablesorter-header {
+  background-image: url(data:image/gif;base64,R0lGODlhFQAJAIAAACMtMP///yH5BAEAAAEALAAAAAAVAAkAAAIXjI+AywnaYnhUMoqt3gZXPmVg94yJVQAAOw==);
+  background-position: center right;
+  background-repeat: no-repeat;
+  cursor: pointer;
+  white-space: normal;
+  padding: 4px 20px 4px 4px;
+}
+
+.tablesorter-default thead .headerSortUp,
+.tablesorter-default thead .tablesorter-headerSortUp,
+.tablesorter-default thead .tablesorter-headerAsc {
+  background-image: url(data:image/gif;base64,R0lGODlhFQAEAIAAACMtMP///yH5BAEAAAEALAAAAAAVAAQAAAINjI8Bya2wnINUMopZAQA7);
+}
+
+.tablesorter-default thead .headerSortDown,
+.tablesorter-default thead .tablesorter-headerSortDown,
+.tablesorter-default thead .tablesorter-headerDesc {
+  background-image: url(data:image/gif;base64,R0lGODlhFQAEAIAAACMtMP///yH5BAEAAAEALAAAAAAVAAQAAAINjB+gC+jP2ptn0WskLQA7);
+}
+
+.tablesorter-default thead .sorter-false {
+  background-image: none;
+  cursor: default;
+  padding: 4px;
+}
+
+.tablesorter-default .tablesorter-processing {
+  background-position: center center !important;
+  background-repeat: no-repeat !important;
+  background-image: url("data:image/gif;base64,R0lGODlhFAAUAKEAAO7u7lpaWgAAAAAAACH/C05FVFNDQVBFMi4wAwEAAAAh+QQBCgACACwAAAAAFAAUAAACQZRvoIDtu1wLQUAlqKTVxqwhXIiBnDg6Y4eyx4lKW5XK7wrLeK3vbq8J2W4T4e1nMhpWrZCTt3xKZ8kgsggdJmUFACH5BAEKAAIALAcAAAALAAcAAAIUVB6ii7jajgCAuUmtovxtXnmdUAAAIfkEAQoAAgAsDQACAAcACwAAAhRUIpmHy/3gUVQAQO9NetuugCFWAAAh+QQBCgACACwNAAcABwALAAACE5QVcZjKbVo6ck2AF95m5/6BSwEAIfkEAQoAAgAsBwANAAsABwAAAhOUH3kr6QaAcSrGWe1VQl+mMUIBACH5BAEKAAIALAIADQALAAcAAAIUlICmh7ncTAgqijkruDiv7n2YUAAAIfkEAQoAAgAsAAAHAAcACwAAAhQUIGmHyedehIoqFXLKfPOAaZdWAAAh+QQFCgACACwAAAIABwALAAACFJQFcJiXb15zLYRl7cla8OtlGGgUADs=") !important;
+}
+
+.tablesorter .filtered {
+  display: none;
+}
+
+header#masthead,
+#content {
+  position: relative;
+  z-index: 1;
+}
+
+@media (min-width: 1115px) {
+  header#masthead {
+    position: sticky;
+    top: 0;
+    z-index: 2;
+  }
+}
+#logo img {
+  height: 48px;
+  margin-top: 0.2rem;
+  transform: translateZ(0);
+}
+
+@media (max-width: 800px) {
+  #logo img {
+    margin-top: 0.2rem;
+  }
+}
+.star-ratings-sprite {
+  background: url("images/star-rating-sprite.png") repeat-x;
+  font-size: 0;
+  height: 21px;
+  line-height: 0;
+  overflow: hidden;
+  text-indent: -999em;
+  width: 110px;
+  margin: 0 auto;
+  display: inline-block;
+  vertical-align: middle;
+}
+
+.star-ratings-sprite-rating {
+  background: url("images/star-rating-sprite.png") repeat-x;
+  background-position: 0 100%;
+  float: left;
+  height: 21px;
+  display: block;
+}
+
+.ascension a:hover img,
+.talent a:hover img {
+  background: rgba(103, 102, 221, 0.9019607843);
+}
+
+.genshin-impact--material--details {
+  list-style: none;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+}
+
+.genshin-anchor-menu {
+  background-color: #f5f5f5;
+  border-left: 5px solid #5755d9;
+  padding: 0.7rem;
+  margin-right: 0;
+  word-break: break-word;
+  text-align: center;
+  margin-bottom: 1rem;
+}
+
+.genshin-impact--material--details {
+  list-style: none;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+}
+
+.genshin-anchor-menu {
+  background-color: #f5f5f5;
+  border-left: 5px solid #5755d9;
+  padding: 0.7rem;
+  margin-right: 0;
+  word-break: break-word;
+  text-align: center;
+  margin-bottom: 1rem;
+}
+
+/* End Affiliate button */
+/* CSS fix for Youtube and other iframe video embed full width */
+figure.wp-block-embed {
+  margin-left: 0;
+  margin-right: 0;
+  margin-bottom: 30px;
+}
+
+figure.wp-block-embed .wp-block-embed__wrapper {
+  position: relative;
+  display: flex;
+  justify-content: center;
+}
+
+figure.wp-block-embed.wp-embed-aspect-16-9 .wp-block-embed__wrapper::before {
+  padding-top: 56.25%;
+}
+
+figure.wp-block-embed.wp-has-aspect-ratio .wp-block-embed__wrapper::before {
+  content: "";
+  display: block;
+  padding-top: 50%;
+}
+
+figure.wp-block-embed.wp-has-aspect-ratio iframe {
+  position: absolute;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  height: 100%;
+  width: 100%;
+}
+
+/* End of CSS fix for Youtube and other iframe video embed full width */
+/* Search box for */
+#search-input {
+  background-image: url("images/search-icon.png"); /* Add a search icon to input */
+  background-position: 10px 12px; /* Position the search icon */
+  background-repeat: no-repeat; /* Do not repeat the icon image */
+  width: 100%; /* Full-width */
+  font-size: 16px; /* Increase font-size */
+  padding: 12px 20px 12px 40px; /* Add some padding */
+  border: 1px solid #ddd; /* Add a grey border */
+  margin-bottom: 12px; /* Add some space below the input */
+}
+
+.featured-image .caption {
+  font-size: 0.7rem;
+  text-align: center;
+}
+
+/* featured video */
+.single .post-video-wrapper {
+  position: relative;
+  padding-bottom: 56.25%;
+  padding-top: 25px;
+  height: 0;
+  margin-bottom: 20px;
+}
+
+.single .post-video-wrapper iframe {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+}
+
+/* gallery */
+.wp-block-gallery.has-nested-images figure.wp-block-image > a {
+  display: flex;
+}
+
+.wp-block-gallery.has-nested-images figure.wp-block-image {
+  flex-grow: 0;
+}
+
+.wp-block-image figcaption {
+  font-size: 0.7rem;
+  text-align: center;
+}
+
+.comments-icon {
+  align-items: center;
+  background: none;
+  border: 0;
+  cursor: pointer;
+  display: flex;
+  gap: 0.25rem;
+  margin-left: auto;
+  padding: 0;
+}
+
+.wp-block-gallery.has-nested-images .figure.wp-block-image.size-thumbnail {
+  max-width: 150px !important;
+  max-height: 150px !important;
+}
+
+.author-box {
+  background: #fff;
+  box-shadow: 0 1px 5px rgba(0, 0, 1, 0.05);
+  display: flex;
+  flex-direction: row;
+  margin: 0 0 2rem 0;
+  min-height: 160px;
+  padding: 1.5rem 2rem;
+}
+.author-box .avatar {
+  border-radius: 50%;
+  height: 100px;
+  margin-right: 2rem;
+  max-width: 100px;
+}
+.author-box .author-box-right {
+  flex: 2;
+}
+.author-box h3 {
+  margin-top: 0;
+}
+.author-box .author-box-socials {
+  margin-top: 1rem;
+  font-size: 24px;
+}
+.author-box .author-box-socials a {
+  color: #333;
+}
+.author-box .author-box-socials a img {
+  width: 16px;
+}
+.author-box .author-box-socials a:not(:last-child) {
+  margin-right: 1rem;
+}
+.author-box .author-box-socials a:hover, .author-box .author-box-socials a:active {
+  color: #777;
+}
+.author-box .author-box-socials a:hover, .author-box .author-box-socials a img {
+  width: 16px;
+}
+
+.author-bio-footer {
+  margin-top: 1rem;
+}
+
+.author-bio-link {
+  color: #111;
+  text-decoration: none;
+}
+.author-bio-link:visited {
+  color: #111;
+  margin-top: 1rem;
+  text-decoration: none;
+}
+.author-bio-link:hover {
+  cursor: pointer;
+  text-decoration: none;
+}
+
+.author-description {
+  display: grid;
+  grid-template-columns: 1fr 4fr;
+  column-gap: 0.5rem;
+}
+.author-description > .avatar {
+  position: relative;
+  width: 150px;
+  height: 150px;
+  border-radius: 50%;
+  object-fit: cover;
+  grid-column: 1;
+  grid-row: 1/span 99;
+  align-self: start;
+}
+@media screen and (max-width: 800px) {
+  .author-description > .avatar {
+    display: block;
+    margin-left: auto;
+    margin-right: auto;
+    grid-column: 1;
+    grid-row: auto;
+  }
+}
+.author-description > *:not(.avatar) {
+  grid-column: 2;
+}
+@media screen and (max-width: 800px) {
+  .author-description {
+    grid-template-columns: 1fr;
+    row-gap: 0.5rem;
+  }
+  .author-description > *:not(.avatar) {
+    grid-column: 1;
+  }
+}
+
+/* Multi-author footer: shared section + auto-fit card grid (Phase 2.5) */
+.about-authors {
+  margin-bottom: 1.5rem;
+  padding: 1.25rem;
+}
+.about-authors .about-authors-heading {
+  font-size: 1.1rem;
+  margin: 0 0 1rem;
+}
+.about-authors .about-authors-grid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 1.25rem;
+}
+.about-authors .author-card {
+  display: grid;
+  grid-template-columns: 88px 1fr;
+  column-gap: 0.85rem;
+  align-items: start;
+  padding: 0.85rem;
+  background: #fff;
+  border: 1px solid #e7e7e7;
+  border-radius: 8px;
+  min-width: 0;
+}
+.about-authors .author-card-avatar {
+  width: 88px;
+  aspect-ratio: 1;
+}
+.about-authors .author-card-avatar .avatar {
+  width: 88px;
+  height: 88px;
+  border-radius: 50%;
+  object-fit: cover;
+  display: block;
+}
+.about-authors .author-card-body {
+  min-width: 0;
+}
+.about-authors .author-card-body .author-bio-title {
+  margin: 0 0 0.15rem;
+  font-size: 1rem;
+  line-height: 1.25;
+}
+.about-authors .author-card-body .author-job {
+  margin: 0 0 0.5rem;
+}
+.about-authors .author-card-body .author-bio-text {
+  margin: 0 0 0.5rem;
+  font-size: 0.85rem;
+  line-height: 1.45;
+}
+.about-authors .author-card-body .author-topics {
+  margin: 0 0 0.5rem;
+  font-size: 0.8rem;
+}
+.about-authors .author-card-body .author-socials {
+  margin: 0 0 0.5rem;
+  font-size: 0.8rem;
+}
+.about-authors .author-card-body .author-card-footer {
+  margin: 0.4rem 0 0;
+  font-size: 0.85rem;
+}
+.about-authors .author-card-body .author-card-footer .author-bio-link {
+  font-weight: 600;
+}
+@media screen and (max-width: 800px) {
+  .about-authors {
+    padding: 0.85rem;
+  }
+  .about-authors .about-authors-grid {
+    grid-template-columns: 1fr;
+    gap: 0.85rem;
+  }
+  .about-authors .author-card {
+    grid-template-columns: 64px 1fr;
+    column-gap: 0.7rem;
+    padding: 0.7rem;
+  }
+  .about-authors .author-card-avatar {
+    width: 64px;
+  }
+  .about-authors .author-card-avatar .avatar {
+    width: 64px;
+    height: 64px;
+  }
+}
+
+@media screen and (max-widtht: 800px) {
+  .author-bio-title h4 {
+    text-align: center;
+  }
+}
+
+/* GAMURS author E-E-A-T (Phase 2) */
+.author-description .author-bio-title {
+  margin: 0 0 0.15rem;
+}
+
+.author-description .author-bio-footer {
+  margin-top: 0.4rem;
+}
+
+.author-description .small {
+  margin-top: 0.4rem;
+}
+
+.author-job {
+  font-style: italic;
+  margin: 0 0 0.35rem;
+  color: #555;
+  font-size: 0.95em;
+}
+
+.author-bio-text {
+  margin: 0 0 0.35rem;
+}
+
+.author-topics {
+  margin: 0 0 0.35rem;
+  font-size: 0.95em;
+  color: #555;
+}
+.author-topics strong {
+  color: #222;
+}
+
+.author-avatar-inline {
+  border-radius: 50%;
+  vertical-align: middle;
+  margin-right: 0.4em;
+  width: 24px;
+  height: 24px;
+}
+
+.author-job-inline {
+  color: #666;
+  font-size: 0.9em;
+  font-style: italic;
+  margin-left: 0.3em;
+}
+
+.entry-meta {
+  display: grid;
+  grid-template-columns: 1fr auto auto;
+  grid-template-areas: "byline   byline  byline" "date     icon    counter";
+  column-gap: 0.5rem;
+  row-gap: 0.65rem;
+  align-items: center;
+  line-height: 1.4;
+  margin-top: 0.5rem;
+}
+.entry-meta .entry-meta-text {
+  display: contents;
+}
+.entry-meta .byline {
+  grid-area: byline;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  column-gap: 0.5rem;
+  row-gap: 0.2rem;
+  min-width: 0;
+  max-width: 100%;
+}
+.entry-meta .posted-on {
+  grid-area: date;
+  font-size: 0.9em;
+  color: #555;
+  min-width: 0;
+}
+.entry-meta .comments-icon {
+  grid-area: icon;
+  flex-shrink: 0;
+}
+.entry-meta [id^=comment-counter] {
+  grid-area: counter;
+  flex-shrink: 0;
+}
+
+.gamurs-ad-slot {
+    margin: 1rem 0;
+}
+
+/* In-content ad slots: subtle tint + "ADVERTISEMENT" label. The wrapper is client-injected
+   by BigCrunch only when a slot is FILLED (class carries the slot name), so [class*="incontent"]
+   never frames empty space and covers both desktop (_dt_) and mobile (_m_) units. */
+.gamurs-ad-slot[class*="incontent"] {
+    background: rgba(128, 128, 128, 0.06);
+    border-radius: 8px;
+    padding: 8px 0 12px;
+}
+.gamurs-ad-slot[class*="incontent"]::before {
+    content: "ADVERTISEMENT";
+    display: block;
+    margin-bottom: 6px;
+    text-align: center;
+    font-size: 10px;
+    line-height: 1;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: #9aa0a6;
+}
+
+/* "Recommended Videos" player chrome â ported from Destructoid (style-single.css
+   .video-player-container/.video-player-title). The .video-player-title markup + text is
+   ALREADY emitted on PGG by the shared gamurs/ad block (videoAdTitle default "Recommended
+   Videos"); this only supplies the missing frame + label styling. Destructoid's #ffffff10
+   white tint reads on its dark theme â the grey tint here is the light-theme equivalent and
+   matches the in-content ad slots above. The .video-player-title selector is scoped through
+   .wp-block-gamurs-ad.is-video-ad so it out-specifies the mu-plugin's inline #gamurs-connatix-css
+   rule (.wp-block-gamurs-ad.is-video-ad .video-player-title, 0,3,0) which otherwise resets
+   font-size/text-transform to inherit. */
+.single .video-player-container {
+    background: rgba(128, 128, 128, 0.06);
+    border-radius: 8px;
+    padding: 12px 16px 16px;
+    margin: 1rem 0;
+}
+.single .wp-block-gamurs-ad.is-video-ad .video-player-title {
+    margin: 0 0 10px 0;
+    text-align: center;
+    font-size: 12px;
+    line-height: 1;
+    font-weight: 600;
+    letter-spacing: 0.07em;
+    text-transform: uppercase;
+    color: #6b7280;
+}
+
+/* Data-driven dynamic rail. FILLED boxes flex-distribute down the column (each gets a
+   share of the article-height sidebar -> BC's per-unit position:sticky;top:80px wrapper
+   travels within its own share and hands off, no overlap). UNFILLED boxes collapse to
+   zero so we never reserve blank space (the old min-height:90vh-per-box bug). */
+@media (min-width: 1024px) {
+  .right-rail-column { display: flex; flex-direction: column; height: 100%; }
+  .right-rail-column .right-rail-btf:not(:empty) {
+    flex: 1 1 0;
+    min-height: 50vh;          /* travel floor so a filled box sticks even on a short column */
+    display: flex;
+    justify-content: center;
+    align-items: flex-start;
+    margin-bottom: 24px;
+  }
+  .right-rail-column .right-rail-btf:empty {  /* not yet / never filled -> reserve nothing */
+    flex: 0 0 0;
+    min-height: 0;
+    height: 0;
+    margin: 0;
+  }
+}
+
+/* In-table ad slots (tier-list / ranking tables). A full-width <tr> the mu-plugin
+   injects inside big tables so deep readers don't hit a long ad-free void. Matches
+   the .gamurs-ad-slot[class*="incontent"] convention above. */
+tr.gamurs-ad-slot-row,
+tr.gamurs-ad-slot-row > td {
+    background: none !important;
+    border: 0 !important;
+    padding: 0 !important;
+}
+/* Framed + labelled ONLY when Big Crunch fills the slot (it adds the *incontent* slot
+   name to the class), so an UNFILLED in-table slot collapses on production â never an
+   empty labelled box mid-table. */
+.gamurs-ad-slot--table[class*="incontent"] {
+    display: block;
+    margin: 4px auto;
+    padding: 8px 0 12px;
+    background: rgba(128, 128, 128, 0.06);
+    border-radius: 8px;
+    text-align: center;
+}
+/* Non-production only (body.gamurs-ad-debug from the mu-plugin): also frame + reserve
+   height for UNFILLED slots so the cadence is inspectable on develop/preprod. */
+body.gamurs-ad-debug .gamurs-ad-slot--table {
+    display: block;
+    margin: 4px auto;
+    padding: 8px 0 12px;
+    background: rgba(128, 128, 128, 0.06);
+    border-radius: 8px;
+    min-height: 90px;
+    text-align: center;
+}
+.gamurs-ad-slot--table[class*="incontent"]::before,
+body.gamurs-ad-debug .gamurs-ad-slot--table::before {
+    content: "ADVERTISEMENT";
+    display: block;
+    margin-bottom: 6px;
+    text-align: center;
+    font-size: 10px !important;
+    line-height: 1;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: #9aa0a6;
+}
+
+/* In-tier ad slots â full-width band injected between tier rows of the
+   gamurs-game-tables tier-list grid (a div-grid, not a <table>). The grid has a
+   dark background, so the frame/label use a light tint for contrast. */
+.gamurs-ad-slot--tier {
+    display: block;
+    width: 100%;
+    margin: 8px auto;
+    padding: 8px 0 12px;
+    box-sizing: border-box;
+    text-align: center;
+}
+.gamurs-ad-slot--tier[class*="incontent"],
+body.gamurs-ad-debug .gamurs-ad-slot--tier {
+    background: rgba(255, 255, 255, 0.06);
+    border-radius: 8px;
+}
+body.gamurs-ad-debug .gamurs-ad-slot--tier {
+    min-height: 90px;
+}
+.gamurs-ad-slot--tier[class*="incontent"]::before,
+body.gamurs-ad-debug .gamurs-ad-slot--tier::before {
+    content: "ADVERTISEMENT";
+    display: block;
+    margin-bottom: 6px;
+    text-align: center;
+    font-size: 10px !important;
+    line-height: 1;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: #cfd3d8;
+}
+
+/* UTD unit/stat containers: vertical breathing room. */
+.utd-tier-container {
+    margin: 2rem auto;
+}
+
+/* Detail/stat tables: clear the drop shadow so it isn't clipped against
+   neighbouring content (and against injected in-table ad rows). */
+.utdx-evo-table-wrap,
+.utdx-evo-table,
+.utdx-role-table,
+.utd-table {
+    margin: 2rem auto;
+}
+</style>
+<!-- Google Tag Manager for WordPress by gtm4wp.com -->
+<script data-cfasync="false" data-pagespeed-no-defer>
+	var gtm4wp_datalayer_name = "dataLayer";
+	var dataLayer = dataLayer || [];
+</script>
+<!-- End Google Tag Manager for WordPress by gtm4wp.com --><link fetchpriority="high" rel="preload" as="image" href="https://progameguides.com/wp-content/themes/proguides-lw/images/pgg-logo.jpg">
+	<!-- This site is optimized with the Yoast SEO Premium plugin v24.5 (Yoast SEO v25.0) - https://yoast.com/wordpress/plugins/seo/ -->
+	<title>Page not found | Pro Game Guides</title>
+	<meta property="og:locale" content="en_US" />
+	<meta property="og:title" content="Page not found | Pro Game Guides" />
+	<meta property="og:site_name" content="Pro Game Guides" />
+	<script type="application/ld+json" class="yoast-schema-graph">{"@context":"https://schema.org","@graph":[{"@type":"WebSite","@id":"https://progameguides.com/#website","url":"https://progameguides.com/","name":"Pro Game Guides","description":"Codes, Tier Lists &amp; Walkthroughs","publisher":{"@id":"https://progameguides.com/#organization"},"potentialAction":[{"@type":"SearchAction","target":{"@type":"EntryPoint","urlTemplate":"https://progameguides.com/?s={search_term_string}"},"query-input":{"@type":"PropertyValueSpecification","valueRequired":true,"valueName":"search_term_string"}}],"inLanguage":"en-US"},{"@type":"Organization","@id":"https://progameguides.com/#organization","name":"Pro Game Guides","alternateName":"PGG","url":"https://progameguides.com/","logo":{"@type":"ImageObject","inLanguage":"en-US","@id":"https://progameguides.com/#/schema/logo/image/","url":"https://progameguides.com/wp-content/uploads/2020/07/pgg-logo.jpg?fit=344%2C78","contentUrl":"https://progameguides.com/wp-content/uploads/2020/07/pgg-logo.jpg?fit=344%2C78","width":344,"height":78,"caption":"Pro Game Guides"},"image":{"@id":"https://progameguides.com/#/schema/logo/image/"},"sameAs":["https://www.facebook.com/progameguides/","https://x.com/progamerguides","https://www.youtube.com/channel/UC9LhXd5Ubbsao0HfIFYUmaA","https://www.instagram.com/progameguides/","https://www.wikidata.org/wiki/Q130791040"],"description":"Pro Game Guides is a gaming guide site covering Roblox, Fortnite, Genshin Impact, Minecraft, and hundreds of other games with regularly updated codes, tier lists, and expert walkthroughs. Founded in 2017, it is part of GAMURS Group.","foundingDate":"2017-12-05","parentOrganization":{"@type":"Organization","name":"GAMURS Group"}}]}</script>
+	<!-- / Yoast SEO Premium plugin. -->
+
+
+<script data-api-url="https://progameguides.com/wp-json/wordpress-popular-posts" data-debug="0" data-lang="0" data-post-id="0" data-sampling-rate="100" data-sampling="1" data-token="d8d2a3b127" defer="true" id="wpp-js" src="https://progameguides.com/wp-content/plugins/wordpress-popular-posts/assets/js/wpp.min.js?ver=7.3.1"></script>
+<link rel="preload" as="fetch" href="https://geo.bigcrunch.com/" crossorigin="anonymous"><link rel="preload" as="fetch" href="https://cdn.bigcrunch.com/cmp/config/e6c2064e-f3c7-429f-9b78-ff57f238e4f8.json" crossorigin="anonymous"><script async src="https://dist.bigcrunch.com/cmp/cmp.js" data-property-id="e6c2064e-f3c7-429f-9b78-ff57f238e4f8" crossorigin="anonymous" fetchpriority="high"></script><link rel="preload" as="script" href="https://cdn.bigcrunch.com/prebid/e6c2064e-f3c7-429f-9b78-ff57f238e4f8.js" crossorigin="anonymous"><link rel="preload" as="fetch" href="https://cdn.bigcrunch.com/config/e6c2064e-f3c7-429f-9b78-ff57f238e4f8.json" crossorigin="anonymous"><script async src="https://dist.bigcrunch.com/lighthouse/main.js" id="bigcrunchtag" data-property-id="e6c2064e-f3c7-429f-9b78-ff57f238e4f8" crossorigin="anonymous" fetchpriority="high"></script><style id="wp-img-auto-sizes-contain-inline-css">
+img:is([sizes=auto i],[sizes^="auto," i]){contain-intrinsic-size:3000px 1500px}
+/*# sourceURL=wp-img-auto-sizes-contain-inline-css */
+</style>
+<style id="wp-block-library-inline-css">
+:root{--wp-block-synced-color:#7a00df;--wp-block-synced-color--rgb:122,0,223;--wp-bound-block-color:var(--wp-block-synced-color);--wp-editor-canvas-background:#ddd;--wp-admin-theme-color:#007cba;--wp-admin-theme-color--rgb:0,124,186;--wp-admin-theme-color-darker-10:#006ba1;--wp-admin-theme-color-darker-10--rgb:0,107,160.5;--wp-admin-theme-color-darker-20:#005a87;--wp-admin-theme-color-darker-20--rgb:0,90,135;--wp-admin-border-width-focus:2px}@media (min-resolution:192dpi){:root{--wp-admin-border-width-focus:1.5px}}.wp-element-button{cursor:pointer}:root .has-very-light-gray-background-color{background-color:#eee}:root .has-very-dark-gray-background-color{background-color:#313131}:root .has-very-light-gray-color{color:#eee}:root .has-very-dark-gray-color{color:#313131}:root .has-vivid-green-cyan-to-vivid-cyan-blue-gradient-background{background:linear-gradient(135deg,#00d084,#0693e3)}:root .has-purple-crush-gradient-background{background:linear-gradient(135deg,#34e2e4,#4721fb 50%,#ab1dfe)}:root .has-hazy-dawn-gradient-background{background:linear-gradient(135deg,#faaca8,#dad0ec)}:root .has-subdued-olive-gradient-background{background:linear-gradient(135deg,#fafae1,#67a671)}:root .has-atomic-cream-gradient-background{background:linear-gradient(135deg,#fdd79a,#004a59)}:root .has-nightshade-gradient-background{background:linear-gradient(135deg,#330968,#31cdcf)}:root .has-midnight-gradient-background{background:linear-gradient(135deg,#020381,#2874fc)}:root{--wp--preset--font-size--normal:16px;--wp--preset--font-size--huge:42px}.has-regular-font-size{font-size:1em}.has-larger-font-size{font-size:2.625em}.has-normal-font-size{font-size:var(--wp--preset--font-size--normal)}.has-huge-font-size{font-size:var(--wp--preset--font-size--huge)}:root .has-text-align-center{text-align:center}:root .has-text-align-left{text-align:left}:root .has-text-align-right{text-align:right}.has-fit-text{white-space:nowrap!important}#end-resizable-editor-section{display:none}.aligncenter{clear:both}.items-justified-left{justify-content:flex-start}.items-justified-center{justify-content:center}.items-justified-right{justify-content:flex-end}.items-justified-space-between{justify-content:space-between}.screen-reader-text{word-wrap:normal!important;border:0;clip-path:inset(50%);height:1px;margin:-1px;overflow:hidden;padding:0;position:absolute;width:1px}.screen-reader-text:focus{background-color:#ddd;clip-path:none;color:#444;display:block;font-size:1em;height:auto;left:5px;line-height:normal;padding:15px 23px 14px;text-decoration:none;top:5px;width:auto;z-index:100000}html :where(.has-border-color){border-style:solid}html :where([style*=border-color]){border-style:solid}html :where([style*=border-top-color]){border-top-style:solid}html :where([style*=border-right-color]){border-right-style:solid}html :where([style*=border-bottom-color]){border-bottom-style:solid}html :where([style*=border-left-color]){border-left-style:solid}html :where([style*=border-width]){border-style:solid}html :where([style*=border-top-width]){border-top-style:solid}html :where([style*=border-right-width]){border-right-style:solid}html :where([style*=border-bottom-width]){border-bottom-style:solid}html :where([style*=border-left-width]){border-left-style:solid}html :where(img[class*=wp-image-]){height:auto;max-width:100%}:where(figure){margin:0 0 1em}html :where(.is-position-sticky){--wp-admin--admin-bar--position-offset:var(--wp-admin--admin-bar--height,0px)}@media screen and (max-width:600px){html :where(.is-position-sticky){--wp-admin--admin-bar--position-offset:0px}}
+
+/*# sourceURL=/wp-includes/css/dist/block-library/common.min.css */
+</style>
+
+<style id="global-styles-inline-css">
+:root{--wp--preset--aspect-ratio--square: 1;--wp--preset--aspect-ratio--4-3: 4/3;--wp--preset--aspect-ratio--3-4: 3/4;--wp--preset--aspect-ratio--3-2: 3/2;--wp--preset--aspect-ratio--2-3: 2/3;--wp--preset--aspect-ratio--16-9: 16/9;--wp--preset--aspect-ratio--9-16: 9/16;--wp--preset--color--black: #000000;--wp--preset--color--cyan-bluish-gray: #abb8c3;--wp--preset--color--white: #ffffff;--wp--preset--color--pale-pink: #f78da7;--wp--preset--color--vivid-red: #cf2e2e;--wp--preset--color--luminous-vivid-orange: #ff6900;--wp--preset--color--luminous-vivid-amber: #fcb900;--wp--preset--color--light-green-cyan: #7bdcb5;--wp--preset--color--vivid-green-cyan: #00d084;--wp--preset--color--pale-cyan-blue: #8ed1fc;--wp--preset--color--vivid-cyan-blue: #0693e3;--wp--preset--color--vivid-purple: #9b51e0;--wp--preset--gradient--vivid-cyan-blue-to-vivid-purple: linear-gradient(135deg,rgb(6,147,227) 0%,rgb(155,81,224) 100%);--wp--preset--gradient--light-green-cyan-to-vivid-green-cyan: linear-gradient(135deg,rgb(122,220,180) 0%,rgb(0,208,130) 100%);--wp--preset--gradient--luminous-vivid-amber-to-luminous-vivid-orange: linear-gradient(135deg,rgb(252,185,0) 0%,rgb(255,105,0) 100%);--wp--preset--gradient--luminous-vivid-orange-to-vivid-red: linear-gradient(135deg,rgb(255,105,0) 0%,rgb(207,46,46) 100%);--wp--preset--gradient--very-light-gray-to-cyan-bluish-gray: linear-gradient(135deg,rgb(238,238,238) 0%,rgb(169,184,195) 100%);--wp--preset--gradient--cool-to-warm-spectrum: linear-gradient(135deg,rgb(74,234,220) 0%,rgb(151,120,209) 20%,rgb(207,42,186) 40%,rgb(238,44,130) 60%,rgb(251,105,98) 80%,rgb(254,248,76) 100%);--wp--preset--gradient--blush-light-purple: linear-gradient(135deg,rgb(255,206,236) 0%,rgb(152,150,240) 100%);--wp--preset--gradient--blush-bordeaux: linear-gradient(135deg,rgb(254,205,165) 0%,rgb(254,45,45) 50%,rgb(107,0,62) 100%);--wp--preset--gradient--luminous-dusk: linear-gradient(135deg,rgb(255,203,112) 0%,rgb(199,81,192) 50%,rgb(65,88,208) 100%);--wp--preset--gradient--pale-ocean: linear-gradient(135deg,rgb(255,245,203) 0%,rgb(182,227,212) 50%,rgb(51,167,181) 100%);--wp--preset--gradient--electric-grass: linear-gradient(135deg,rgb(202,248,128) 0%,rgb(113,206,126) 100%);--wp--preset--gradient--midnight: linear-gradient(135deg,rgb(2,3,129) 0%,rgb(40,116,252) 100%);--wp--preset--font-size--small: 13px;--wp--preset--font-size--medium: 20px;--wp--preset--font-size--large: 36px;--wp--preset--font-size--x-large: 42px;--wp--preset--spacing--20: 0.44rem;--wp--preset--spacing--30: 0.67rem;--wp--preset--spacing--40: 1rem;--wp--preset--spacing--50: 1.5rem;--wp--preset--spacing--60: 2.25rem;--wp--preset--spacing--70: 3.38rem;--wp--preset--spacing--80: 5.06rem;--wp--preset--shadow--natural: 6px 6px 9px rgba(0, 0, 0, 0.2);--wp--preset--shadow--deep: 12px 12px 50px rgba(0, 0, 0, 0.4);--wp--preset--shadow--sharp: 6px 6px 0px rgba(0, 0, 0, 0.2);--wp--preset--shadow--outlined: 6px 6px 0px -3px rgb(255, 255, 255), 6px 6px rgb(0, 0, 0);--wp--preset--shadow--crisp: 6px 6px 0px rgb(0, 0, 0);}:root { --wp--style--global--content-size: 840px;--wp--style--global--wide-size: 840px; }:where(body) { margin: 0; }.wp-site-blocks > .alignleft { float: left; margin-right: 2em; }.wp-site-blocks > .alignright { float: right; margin-left: 2em; }.wp-site-blocks > .aligncenter { justify-content: center; margin-left: auto; margin-right: auto; }:where(.is-layout-flex){gap: 0.5em;}:where(.is-layout-grid){gap: 0.5em;}.is-layout-flow > .alignleft{float: left;margin-inline-start: 0;margin-inline-end: 2em;}.is-layout-flow > .alignright{float: right;margin-inline-start: 2em;margin-inline-end: 0;}.is-layout-flow > .aligncenter{margin-left: auto !important;margin-right: auto !important;}.is-layout-constrained > .alignleft{float: left;margin-inline-start: 0;margin-inline-end: 2em;}.is-layout-constrained > .alignright{float: right;margin-inline-start: 2em;margin-inline-end: 0;}.is-layout-constrained > .aligncenter{margin-left: auto !important;margin-right: auto !important;}.is-layout-constrained > :where(:not(.alignleft):not(.alignright):not(.alignfull)){max-width: var(--wp--style--global--content-size);margin-left: auto !important;margin-right: auto !important;}.is-layout-constrained > .alignwide{max-width: var(--wp--style--global--wide-size);}body .is-layout-flex{display: flex;}.is-layout-flex{flex-wrap: wrap;align-items: center;}.is-layout-flex > :is(*, div){margin: 0;}body .is-layout-grid{display: grid;}.is-layout-grid > :is(*, div){margin: 0;}body{padding-top: 0px;padding-right: 0px;padding-bottom: 0px;padding-left: 0px;}:root :where(.wp-element-button, .wp-block-button__link){background-color: #32373c;border-width: 0;color: #fff;font-family: inherit;font-size: inherit;font-style: inherit;font-weight: inherit;letter-spacing: inherit;line-height: inherit;padding-top: calc(0.667em + 2px);padding-right: calc(1.333em + 2px);padding-bottom: calc(0.667em + 2px);padding-left: calc(1.333em + 2px);text-decoration: none;text-transform: inherit;}.has-black-color{color: var(--wp--preset--color--black) !important;}.has-cyan-bluish-gray-color{color: var(--wp--preset--color--cyan-bluish-gray) !important;}.has-white-color{color: var(--wp--preset--color--white) !important;}.has-pale-pink-color{color: var(--wp--preset--color--pale-pink) !important;}.has-vivid-red-color{color: var(--wp--preset--color--vivid-red) !important;}.has-luminous-vivid-orange-color{color: var(--wp--preset--color--luminous-vivid-orange) !important;}.has-luminous-vivid-amber-color{color: var(--wp--preset--color--luminous-vivid-amber) !important;}.has-light-green-cyan-color{color: var(--wp--preset--color--light-green-cyan) !important;}.has-vivid-green-cyan-color{color: var(--wp--preset--color--vivid-green-cyan) !important;}.has-pale-cyan-blue-color{color: var(--wp--preset--color--pale-cyan-blue) !important;}.has-vivid-cyan-blue-color{color: var(--wp--preset--color--vivid-cyan-blue) !important;}.has-vivid-purple-color{color: var(--wp--preset--color--vivid-purple) !important;}.has-black-background-color{background-color: var(--wp--preset--color--black) !important;}.has-cyan-bluish-gray-background-color{background-color: var(--wp--preset--color--cyan-bluish-gray) !important;}.has-white-background-color{background-color: var(--wp--preset--color--white) !important;}.has-pale-pink-background-color{background-color: var(--wp--preset--color--pale-pink) !important;}.has-vivid-red-background-color{background-color: var(--wp--preset--color--vivid-red) !important;}.has-luminous-vivid-orange-background-color{background-color: var(--wp--preset--color--luminous-vivid-orange) !important;}.has-luminous-vivid-amber-background-color{background-color: var(--wp--preset--color--luminous-vivid-amber) !important;}.has-light-green-cyan-background-color{background-color: var(--wp--preset--color--light-green-cyan) !important;}.has-vivid-green-cyan-background-color{background-color: var(--wp--preset--color--vivid-green-cyan) !important;}.has-pale-cyan-blue-background-color{background-color: var(--wp--preset--color--pale-cyan-blue) !important;}.has-vivid-cyan-blue-background-color{background-color: var(--wp--preset--color--vivid-cyan-blue) !important;}.has-vivid-purple-background-color{background-color: var(--wp--preset--color--vivid-purple) !important;}.has-black-border-color{border-color: var(--wp--preset--color--black) !important;}.has-cyan-bluish-gray-border-color{border-color: var(--wp--preset--color--cyan-bluish-gray) !important;}.has-white-border-color{border-color: var(--wp--preset--color--white) !important;}.has-pale-pink-border-color{border-color: var(--wp--preset--color--pale-pink) !important;}.has-vivid-red-border-color{border-color: var(--wp--preset--color--vivid-red) !important;}.has-luminous-vivid-orange-border-color{border-color: var(--wp--preset--color--luminous-vivid-orange) !important;}.has-luminous-vivid-amber-border-color{border-color: var(--wp--preset--color--luminous-vivid-amber) !important;}.has-light-green-cyan-border-color{border-color: var(--wp--preset--color--light-green-cyan) !important;}.has-vivid-green-cyan-border-color{border-color: var(--wp--preset--color--vivid-green-cyan) !important;}.has-pale-cyan-blue-border-color{border-color: var(--wp--preset--color--pale-cyan-blue) !important;}.has-vivid-cyan-blue-border-color{border-color: var(--wp--preset--color--vivid-cyan-blue) !important;}.has-vivid-purple-border-color{border-color: var(--wp--preset--color--vivid-purple) !important;}.has-vivid-cyan-blue-to-vivid-purple-gradient-background{background: var(--wp--preset--gradient--vivid-cyan-blue-to-vivid-purple) !important;}.has-light-green-cyan-to-vivid-green-cyan-gradient-background{background: var(--wp--preset--gradient--light-green-cyan-to-vivid-green-cyan) !important;}.has-luminous-vivid-amber-to-luminous-vivid-orange-gradient-background{background: var(--wp--preset--gradient--luminous-vivid-amber-to-luminous-vivid-orange) !important;}.has-luminous-vivid-orange-to-vivid-red-gradient-background{background: var(--wp--preset--gradient--luminous-vivid-orange-to-vivid-red) !important;}.has-very-light-gray-to-cyan-bluish-gray-gradient-background{background: var(--wp--preset--gradient--very-light-gray-to-cyan-bluish-gray) !important;}.has-cool-to-warm-spectrum-gradient-background{background: var(--wp--preset--gradient--cool-to-warm-spectrum) !important;}.has-blush-light-purple-gradient-background{background: var(--wp--preset--gradient--blush-light-purple) !important;}.has-blush-bordeaux-gradient-background{background: var(--wp--preset--gradient--blush-bordeaux) !important;}.has-luminous-dusk-gradient-background{background: var(--wp--preset--gradient--luminous-dusk) !important;}.has-pale-ocean-gradient-background{background: var(--wp--preset--gradient--pale-ocean) !important;}.has-electric-grass-gradient-background{background: var(--wp--preset--gradient--electric-grass) !important;}.has-midnight-gradient-background{background: var(--wp--preset--gradient--midnight) !important;}.has-small-font-size{font-size: var(--wp--preset--font-size--small) !important;}.has-medium-font-size{font-size: var(--wp--preset--font-size--medium) !important;}.has-large-font-size{font-size: var(--wp--preset--font-size--large) !important;}.has-x-large-font-size{font-size: var(--wp--preset--font-size--x-large) !important;}
+/*# sourceURL=global-styles-inline-css */
+</style>
+
+<style id="tablepress-default-inline-css">
+.tablepress .column-1{font-weight:700;text-align:center;vertical-align:middle;width:300px}.tablepress .column-2,.tablepress .column-3,.tablepress .column-4,.tablepress .column-5,.tablepress .column-6,.tablepress .column-7,.tablepress .column-8,.tablepress .column-9,.tablepress .column-10,.tablepress .column-11,.tablepress .column-12{text-align:center;vertical-align:middle;width:150px}.tablepress thead th{font-size:14px}.tablepress-id-128 .column-1,.tablepress-id-128 .column-2,.tablepress-id-128 .column-3,.tablepress-id-128 .column-4{vertical-align:middle}.tablepress-id-119 .column-1,.tablepress-id-119 .column-2,.tablepress-id-119 .column-3,.tablepress-id-119 .column-4{vertical-align:middle}.tablepress-id-120 .column-1,.tablepress-id-120 .column-2,.tablepress-id-120 .column-3,.tablepress-id-120 .column-4{vertical-align:middle}.tablepress-id-130 .column-1,.tablepress-id-130 .column-2,.tablepress-id-130 .column-3,.tablepress-id-130 .column-4{vertical-align:middle}.tablepress-id-163 .column-1,.tablepress-id-163 .column-2,.tablepress-id-163 .column-3,.tablepress-id-163 .column-4{vertical-align:middle}.tablepress-id-167 .column-1,.tablepress-id-167 .column-2,.tablepress-id-167 .column-3,.tablepress-id-167 .column-4,.tablepress-id-167 .column-5,.tablepress-id-167 .column-6,.tablepress-id-167 .column-7,.tablepress-id-167 .column-8,.tablepress-id-167 .column-9,.tablepress-id-167 .column-10{text-align:center,;vertical-align:middle}.tablepress-id-256 .column-3{max-width:150px}.tablepress-id-257 .column-3{max-width:150px}.tablepress-id-258 .column-3{max-width:150px}.tablepress-id-259 .column-3{max-width:150px}.tablepress-id-260 .column-3{max-width:150px}
+/*# sourceURL=tablepress-default-inline-css */
+</style>
+<script data-wp-strategy="defer" id="jquery-js" src="https://progameguides.com/wp-includes/js/jquery/jquery.min.js"></script>
+<script data-wp-strategy="defer" defer id="GAMURSGroup_LazyLoad_Embeds-js" src="https://progameguides.com/wp-content/plugins/gamurs-group-lazy-load-embeds/gamurs-group-lazy-load-embeds.js?ver=1.1.0"></script>
+<script data-wp-strategy="defer" defer id="proguides-js-js" src="https://progameguides.com/wp-content/themes/proguides-lw/js/proguides.min.js?ver=1.1.6"></script>
+<script data-wp-strategy="defer" defer id="proguides-sidebar-affix-js" src="https://progameguides.com/wp-content/themes/proguides-lw/js/pgg-affix.min.js?ver=1.0.52"></script>
+<script data-wp-strategy="defer" defer id="header-nav-js" src="https://progameguides.com/wp-content/themes/proguides-lw/js/header-nav.js?ver=2023-10-23"></script>
+<script id="gdrts-events-js" src="https://progameguides.com/wp-content/plugins/gd-rating-system/js/rating/events.min.js?ver=3.6.2.996" defer></script>
+<script data-wp-strategy="defer" defer id="jquery-migrate-js" src="https://progameguides.com/wp-includes/js/jquery/jquery-migrate.min.js?ver=3.4.1"></script>
+<link rel="https://api.w.org/" href="https://progameguides.com/wp-json/" /><link rel="EditURI" type="application/rsd+xml" title="RSD" href="https://progameguides.com/xmlrpc.php?rsd" />
+<meta name="generator" content="WordPress 7.0.2" />
+<style type="text/css">.aawp .aawp-tb__row--highlight{background-color:#256aaf;}.aawp .aawp-tb__row--highlight{color:#fff;}.aawp .aawp-tb__row--highlight a{color:#fff;}</style>      <script type="text/javascript">
+        (function() {
+          /** CONFIGURATION START **/
+          var _sf_async_config = window._sf_async_config = (window._sf_async_config || {});
+          _sf_async_config.uid = 66987;
+          _sf_async_config.domain = 'progameguides.com'; //CHANGE THIS TO THE ROOT DOMAIN
+          _sf_async_config.flickerControl = false;
+          _sf_async_config.useCanonical = true;
+          _sf_async_config.useCanonicalDomain = true;
+                    /** CONFIGURATION END **/
+          function loadChartbeat() {
+              var e = document.createElement('script');
+              var n = document.getElementsByTagName('script')[0];
+              e.type = 'text/javascript';
+              e.async = true;
+              e.src = '//static.chartbeat.com/js/chartbeat.js';
+              n.parentNode.insertBefore(e, n);
+          }
+          loadChartbeat();
+        })();
+      </script>
+      <script async src="//static.chartbeat.com/js/chartbeat_mab.js"></script>
+          <script type="text/javascript" async>
+        ;(function(p,l,o,w,i,n,g){if(!p[i]){p.GlobalSnowplowNamespace=p.GlobalSnowplowNamespace||[]; p.GlobalSnowplowNamespace.push(i);p[i]=function(){(p[i].q=p[i].q||[]).push(arguments) };p[i].q=p[i].q||[];n=l.createElement(o);g=l.getElementsByTagName(o)[0];n.async=1; n.src=w;g.parentNode.insertBefore(n,g)}}(window,document,"script","https://progameguides.com/plow.lite.js","snowplow"));
+      </script>
+      <script>
+        window.snowplow('newTracker', 'sp1', 'https://spc.progameguides.com/', { 
+          appId: 'progameguides-web',
+        });
+
+        
+        let siteTheme = window.localStorage.getItem("GAMURS_Wordpress-theme");
+        let colorScheme = 'Unknown';
+        if (window.matchMedia) {
+            if (window.matchMedia('(prefers-color-scheme: dark)').matches) {
+              colorScheme = 'Dark';
+            } else if (window.matchMedia('(prefers-color-scheme: light)').matches) {
+              colorScheme = 'Light';
+            }
+        }
+        window.snowplow('addGlobalContexts', [{
+          schema: 'iglu:group.gamurs/site_theme_context/jsonschema/1-1-0',
+          data: {
+            siteTheme: siteTheme,
+            preferredTheme: colorScheme,
+          }
+        }]);
+
+        snowplow('enableActivityTracking', { 
+          minimumVisitLength: 5,
+          heartbeatDelay: 10,
+        });
+
+        var proxyActiveFeatures = window.gg_cfproxy_active_features || [];    
+        console.log("gb active features from proxy:", proxyActiveFeatures); 
+        proxyActiveFeatures.forEach(function(feature) {
+          if (feature.experiment && feature.experimentResult) {
+            window.snowplow('trackStructEvent', {
+              category: 'Experiments',
+              action: 'GrowthBook Experiment Viewed',
+              label: feature.experiment.key,
+              property: feature.experimentResult.key,
+            });
+          }
+        });
+
+        setTimeout(function() {
+          window.snowplow('trackPageView');
+        }, 100);
+
+        window.top.addEventListener('primisPlayerInit', function (e) {
+          if (e.detail.playerApiId == 'primisPlayer') {
+            var player = e.detail;
+            player.addEventListener('adStarted', function (val) {
+              window.snowplow('trackSelfDescribingEvent', {
+                event: {
+                  schema: 'iglu:group.gamurs/primis_ad_impression/jsonschema/1-0-0',
+                  data: {
+                    impressionValue: val.impValue,
+                    servingFee: val.servingFee,
+                  }
+                },
+              });
+            });
+          }
+        });
+      </script>
+    	<style>img#wpstats{display:none}</style>
+		
+<!-- Google Tag Manager for WordPress by gtm4wp.com -->
+<!-- GTM Container placement set to automatic -->
+<script data-cfasync="false" data-pagespeed-no-defer type="text/javascript">
+	var dataLayer_content = {"siteID":0,"siteName":"","pageTitle":"Page not found | Pro Game Guides","pagePostType":"404-error","siteUrl":"https:\/\/progameguides.com"};
+	dataLayer.push( dataLayer_content );
+</script>
+<script data-cfasync="false">
+(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
+new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],
+j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
+'//www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);
+})(window,document,'script','dataLayer','GTM-NWJQJXJ');
+</script>
+<!-- End Google Tag Manager for WordPress by gtm4wp.com -->            <style id="wpp-loading-animation-styles">@-webkit-keyframes bgslide{from{background-position-x:0}to{background-position-x:-200%}}@keyframes bgslide{from{background-position-x:0}to{background-position-x:-200%}}.wpp-widget-block-placeholder,.wpp-shortcode-placeholder{margin:0 auto;width:60px;height:3px;background:#dd3737;background:linear-gradient(90deg,#dd3737 0%,#571313 10%,#dd3737 100%);background-size:200% auto;border-radius:3px;-webkit-animation:bgslide 1s infinite linear;animation:bgslide 1s infinite linear}</style>
+            <script>
+    var PushlySDK = window.PushlySDK || [];
+    function pushly() { PushlySDK.push(arguments) }
+    pushly('load', {
+        domainKey: decodeURIComponent("Na1NE60oQf0YAYpgYwckgmHqq22dHgS8Lyj7"),
+        sw: "https://progameguides.com/wp-content/plugins/pushly/assets/js/pushly-sdk-worker.js.php",
+        swScope: "https://progameguides.com/wp-content/plugins/pushly/"    });
+</script>
+
+<link rel="icon" href="https://progameguides.com/wp-content/uploads/2026/06/favicon.png?fit=32%2C32" sizes="32x32" />
+<link rel="icon" href="https://progameguides.com/wp-content/uploads/2026/06/favicon.png?fit=192%2C192" sizes="192x192" />
+<link rel="apple-touch-icon" href="https://progameguides.com/wp-content/uploads/2026/06/favicon.png?fit=180%2C180" />
+<meta name="msapplication-TileImage" content="https://progameguides.com/wp-content/uploads/2026/06/favicon.png?fit=270%2C270" />
+<link rel="icon" href="https://progameguides.com/wp-content/uploads/2026/06/favicon.png?fit=48%2C48" sizes="48x48" />
+<link rel="icon" href="https://progameguides.com/wp-content/uploads/2026/06/favicon.png?fit=96%2C96" sizes="96x96" />
+<style id="wp-custom-css">
+#content>.columns {
+    background: white;
+}
+/* âââââââââââ  PGG Codes Table ââââââââââââââââââââ */
+.pgg-codes{
+  width:100%;
+  border-collapse:collapse;
+  margin:1.25rem 0;
+  font:inherit;
+  color:inherit;
+}
+.pgg-codes td{
+  padding:.25rem .5rem;
+  vertical-align:top;
+}
+.pgg-codes tr:not(:last-child) td{
+  border-bottom:1px solid var(--wp--preset--color--contrast-2,
+                              color-mix(in srgb, currentColor 10%, transparent));
+}
+.pgg-codes td:first-child{
+  font-weight:700;
+  white-space:nowrap;
+}
+.pgg-codes td:nth-child(2){width:72px;}
+.pgg-copy{
+  font:inherit;
+  line-height:1;
+  color:var(--wp--preset--color--primary,currentColor);
+  background:transparent;
+  border:1px solid currentColor;
+  border-radius:.25rem;
+  padding:.15rem .6rem;
+  cursor:pointer;
+  transition:background .15s ease-in-out,color .15s;
+}
+.pgg-copy:hover{
+  background:color-mix(in srgb,currentColor 12%,transparent);
+}
+/* ---- PGG Accordion Styles ---- */
+.pgg-accordion {margin: 1.5em 0;}
+.pgg-accordion h3 {
+  display: inline;
+  font-size: 1.15em;
+  font-weight: 600;
+  margin: 0;
+  padding: 0;
+}
+.pgg-accordion-btn {
+  display: inline-block;
+  font: inherit;
+  font-size: 1em;
+  color: var(--wp--preset--color--primary, currentColor);
+  background: transparent;
+  border: 1px solid currentColor;
+  border-radius: .3em;
+  padding: .3em 1em;
+  cursor: pointer;
+  margin-bottom: .75em;
+  margin-left: 0.4em;
+  transition: background .15s, color .15s;
+}
+.pgg-accordion-btn:hover,
+.pgg-accordion-btn[aria-expanded="true"] {
+  background: color-mix(in srgb, currentColor 10%, transparent);
+}
+.pgg-accordion-list {
+  display: none;
+  margin: 0;
+  padding-left: 1.25em;
+  animation: fadeIn .5s;
+  list-style: disc;
+}
+.pgg-accordion-list[aria-hidden="false"] { display: block; }
+.pgg-accordion-list li { margin: .3em 0; font-weight: 700; font-size: 1em; }
+@keyframes fadeIn {from{opacity:.3;} to{opacity:1;}}
+
+
+</style>
+
+  <script src="//geniuslinkcdn.com/snippet.min.js" defer></script>
+  <script>
+    if (document.readyState === "loading") {
+      // Loading hasn't finished yet
+      document.addEventListener("DOMContentLoaded", function() {
+        var ale_on_click_checkbox_is_checked="1";
+        if (typeof Georiot !== "undefined") {
+          if (ale_on_click_checkbox_is_checked) {
+            Georiot.amazon.addOnClickRedirect(367872, true);
+          } else {
+            Georiot.amazon.convertToGeoRiotLinks(367872, true);
+          }
+        }
+      });
+    } else {
+      var ale_on_click_checkbox_is_checked="1";
+      if (typeof Georiot !== "undefined") {
+        if (ale_on_click_checkbox_is_checked) {
+          Georiot.amazon.addOnClickRedirect(367872, true);
+        } else {
+          Georiot.amazon.convertToGeoRiotLinks(367872, true);
+        }
+      }
+    }
+  </script>
+
+	<!-- Global site tag (gtag.js) - Google Analytics -->
+	<script async src="https://www.googletagmanager.com/gtag/js?id=UA-293830-43"></script>
+	<script>
+		window.dataLayer = window.dataLayer || [];
+
+		function gtag() {
+			dataLayer.push(arguments);
+		}
+		gtag('js', new Date());
+		gtag('set', 'anonymizeIp', true);
+					gtag('config', 'UA-293830-43');
+				</script>
+
+	<script>
+		gtag('event', window.haveWeGotAds === undefined ? "Blocked" : "Allowed", {
+			'event_category': 'Ad Block',
+			'non_interaction': true,
+		});
+	</script>
+
+	<script>
+		var _comscore = _comscore || [];
+		_comscore.push({
+			c1: "2",
+			c2: "36750692"
+		});
+		(function () {
+			var s = document.createElement("script"),
+				el = document.getElementsByTagName("script")[0];
+			s.async = true;
+			s.src = "https://sb.scorecardresearch.com/cs/36750692/beacon.js";
+			el.parentNode.insertBefore(s, el);
+		})();
+	</script>
+
+		<script>
+		(async function () {
+			try {
+				const response = await fetch('/wp-json/navy/v1/tag?pid=A-6154B898BBD8E7536A775AC9-5&environment=production');
+				const tag = await response.text();
+				const script = document.createElement('script');
+				script.type = 'text/javascript';
+				script.innerHTML = tag;
+				script.id = 'navy';
+				document.head.appendChild(script);
+			} catch (e) {
+				console.error('navy error', e);
+			}
+		})();
+	</script>
+
+</head>
+
+<body class="error404 wp-theme-proguides-lw theme-light aawp-custom" itemscope="itemscope" itemtype="https://schema.org/WebPage">
+	<style>
+		a:hover,
+		a:active,
+		a:focus {
+			color: #5755d9;
+			text-decoration: underline;
+			box-shadow: none;
+		}
+	</style>
+	<div id="page" class="site">
+		<style>
+			.pushdown-placeholder {
+				@media (max-width: 841px) {
+					min-height: 50px;
+					position: sticky;
+					text-align: center;
+					top: 0;
+					z-index: 999;
+				}
+			}
+		</style>
+		<div class="pushdown-placeholder">
+			<div id="mobile-pushdown-unit"></div>
+		</div>
+		<script>
+			(function () {
+				if (window.innerWidth < 841) {
+					if (document.querySelector(".pushdown-placeholder")) {
+						document.querySelector(".pushdown-placeholder").classList.add('active');
+					}
+				}
+			})();
+		</script>
+		<header id="masthead">
+			<div class="container grid-xl">
+				<h2 id="logo">
+					<a href="https://progameguides.com" rel="home">
+						<img height="48" src="https://progameguides.com/wp-content/themes/proguides-lw/images/pgg-logo.jpg" alt="Pro Game Guides Logo" />
+					</a>
+				</h2>
+				<div id="main-navigation">
+					<span id="nav-search">
+						<span class="nav-search-icon">
+							<img width="15" height="15" src="https://progameguides.com/wp-content/themes/proguides-lw/images/search-icon.png" alt="Search Icon" />
+						</span>
+					</span>
+					<input class="menu-btn" type="checkbox" id="menu-btn" />
+					<label class="menu-icon" for="menu-btn"><span class="navicon"></span></label>
+					<div id="nav-search-form-wrap">
+						<div class="container grid-xl">
+							<div class="nav-search-form">
+								<form role="search" method="get" action="https://progameguides.com/">
+									<div class="input-group">
+										<input id="nav-search-input" type="search" class="form-input" placeholder="Enter Your Search Terms..." name="s">
+										<button class="btn btn-primary input-group-btn">Search</button>
+									</div>
+								</form>
+							</div>
+						</div>
+					</div>
+					<div class="menu-header-2023-10-25-container"><ul id="menu-header-2023-10-25" class="menu-nav"><li id="menu-item-681761" class="menu-item menu-item-type-taxonomy menu-item-object-category menu-item-has-children menu-item-681761"><a href="https://progameguides.com/guides/">Guides</a>
+<ul class="sub-menu">
+	<li id="menu-item-681760" class="menu-item menu-item-type-taxonomy menu-item-object-category menu-item-681760"><a href="https://progameguides.com/guides/">All Game Guides</a></li>
+	<li id="menu-item-681771" class="menu-item menu-item-type-taxonomy menu-item-object-category menu-item-681771"><a href="https://progameguides.com/fortnite/">Fortnite</a></li>
+	<li id="menu-item-681770" class="menu-item menu-item-type-taxonomy menu-item-object-category menu-item-681770"><a href="https://progameguides.com/roblox/">Roblox</a></li>
+	<li id="menu-item-681772" class="menu-item menu-item-type-taxonomy menu-item-object-category menu-item-681772"><a href="https://progameguides.com/minecraft/">Minecraft</a></li>
+	<li id="menu-item-681773" class="menu-item menu-item-type-taxonomy menu-item-object-category menu-item-681773"><a href="https://progameguides.com/genshin-impact/">Genshin Impact</a></li>
+	<li id="menu-item-681779" class="menu-item menu-item-type-taxonomy menu-item-object-category menu-item-681779"><a href="https://progameguides.com/pokemon/">Pokemon</a></li>
+	<li id="menu-item-681776" class="menu-item menu-item-type-taxonomy menu-item-object-category menu-item-681776"><a href="https://progameguides.com/wordle/">Wordle</a></li>
+	<li id="menu-item-681777" class="menu-item menu-item-type-taxonomy menu-item-object-category menu-item-681777"><a href="https://progameguides.com/bitlife/">BitLife</a></li>
+</ul>
+</li>
+<li id="menu-item-681762" class="menu-item menu-item-type-taxonomy menu-item-object-category menu-item-has-children menu-item-681762"><a href="https://progameguides.com/codes/">Codes</a>
+<ul class="sub-menu">
+	<li id="menu-item-681763" class="menu-item menu-item-type-taxonomy menu-item-object-category menu-item-681763"><a href="https://progameguides.com/codes/">All Codes</a></li>
+	<li id="menu-item-1075534" class="menu-item menu-item-type-post_type menu-item-object-post menu-item-1075534"><a href="https://progameguides.com/roblox/roblox-game-codes/">Roblox Game Codes</a></li>
+	<li id="menu-item-1108035" class="menu-item menu-item-type-post_type menu-item-object-post menu-item-1108035"><a href="https://progameguides.com/roblox/anime-expeditions-codes/">Anime Expeditions Codes</a></li>
+	<li id="menu-item-1109762" class="menu-item menu-item-type-post_type menu-item-object-post menu-item-1109762"><a href="https://progameguides.com/roblox/untitled-boxing-game-codes/">Untitled Boxing Game Codes</a></li>
+	<li id="menu-item-1075535" class="menu-item menu-item-type-post_type menu-item-object-post menu-item-1075535"><a href="https://progameguides.com/roblox/sailor-piece-codes/">Sailor Piece Codes</a></li>
+	<li id="menu-item-681780" class="menu-item menu-item-type-post_type menu-item-object-post menu-item-681780"><a href="https://progameguides.com/roblox/roblox-blox-fruits-codes/">Blox Fruits Codes</a></li>
+	<li id="menu-item-1075536" class="menu-item menu-item-type-post_type menu-item-object-post menu-item-1075536"><a href="https://progameguides.com/roblox/anime-rangers-x-codes/">Re:Rangers X Codes</a></li>
+	<li id="menu-item-681784" class="menu-item menu-item-type-post_type menu-item-object-post menu-item-681784"><a href="https://progameguides.com/roblox/roblox-king-legacy-codes/">King Legacy Codes</a></li>
+	<li id="menu-item-1075537" class="menu-item menu-item-type-post_type menu-item-object-post menu-item-1075537"><a href="https://progameguides.com/roblox/universal-tower-defense-codes/">Universal Tower Defense Codes</a></li>
+</ul>
+</li>
+<li id="menu-item-681765" class="menu-item menu-item-type-taxonomy menu-item-object-category menu-item-681765"><a href="https://progameguides.com/roblox/">Roblox</a></li>
+<li id="menu-item-681766" class="menu-item menu-item-type-taxonomy menu-item-object-category menu-item-has-children menu-item-681766"><a href="https://progameguides.com/fortnite/">Fortnite</a>
+<ul class="sub-menu">
+	<li id="menu-item-681769" class="menu-item menu-item-type-taxonomy menu-item-object-category menu-item-681769"><a href="https://progameguides.com/fortnite/">All Fortnite Guides and Cosmetics</a></li>
+	<li id="menu-item-681792" class="menu-item menu-item-type-post_type menu-item-object-page menu-item-681792"><a href="https://progameguides.com/fortnite-skins-list/">Fortnite Skins List</a></li>
+	<li id="menu-item-681793" class="menu-item menu-item-type-post_type menu-item-object-page menu-item-681793"><a href="https://progameguides.com/fortnite-shop/">Fortnite Item Shop</a></li>
+	<li id="menu-item-681794" class="menu-item menu-item-type-post_type menu-item-object-post menu-item-681794"><a href="https://progameguides.com/fortnite/fortnite-features/fortnite-leaked-skins/">Fortnite Leaked Skins &#038; Cosmetics List</a></li>
+	<li id="menu-item-681795" class="menu-item menu-item-type-post_type menu-item-object-post menu-item-681795"><a href="https://progameguides.com/fortnite/fortnite-rarest-skins/">Fortnite Rarest Skins</a></li>
+	<li id="menu-item-681796" class="menu-item menu-item-type-post_type menu-item-object-post menu-item-681796"><a href="https://progameguides.com/fortnite/fortnite-rarest-emotes/">Fortnite Rarest Emotes</a></li>
+</ul>
+</li>
+<li id="menu-item-1003750" class="menu-item menu-item-type-taxonomy menu-item-object-category menu-item-1003750"><a href="https://progameguides.com/minecraft/">Minecraft</a></li>
+<li id="menu-item-681764" class="menu-item menu-item-type-taxonomy menu-item-object-category menu-item-681764"><a href="https://progameguides.com/news/">News</a></li>
+<li id="menu-item-681768" class="menu-item menu-item-type-post_type menu-item-object-page menu-item-681768"><a href="https://progameguides.com/about-us/">About Us</a></li>
+</ul></div>				</div>
+			</div>
+		</header><!-- #masthead -->
+
+		<div class="container grid-xl">
+			<div id="content" class="site-content">
+	<div class="columns">
+		<div id="primary" class="column col-8 col-md-12">
+			<main id="main" class="site-main">
+
+				<section class="error-404 not-found">
+					<header class="page-header">
+						<h1 class="page-title">Oops! That page can&rsquo;t be found.</h1>
+					</header><!-- .page-header -->
+
+					<div class="page-content meta-box">
+						<p>It looks like nothing was found at this location.</p>
+
+						
+		<div class="widget widget_recent_entries">
+		<h2 class="widgettitle">Recent Posts</h2>
+		<ul>
+											<li>
+					<a href="https://progameguides.com/roblox/roblox-slime-card-collection-codes/">Roblox Slime Card Collection Codes () â Free Plerts Potions and Hatch Tokens</a>
+									</li>
+											<li>
+					<a href="https://progameguides.com/roblox/fisch-chapel-guide-location-rod-skin-quest-more/">Fisch Chapel Guide &#8211; Location, Rod Skin Quest &amp; more</a>
+									</li>
+											<li>
+					<a href="https://progameguides.com/roblox/throw-a-coin-codes/">Throw a Coin Codes () [W3] â Free Items and Boosts</a>
+									</li>
+											<li>
+					<a href="https://progameguides.com/codes/fortnite-brainrot-card-tycoon-codes/">Fortnite Brainrot Card Tycoon Codes () â Free Gems and more!</a>
+									</li>
+											<li>
+					<a href="https://progameguides.com/roblox/roblox-charisma-hospital-codes/">Roblox Charisma Hospital Codes () â Free Cash and XP</a>
+									</li>
+					</ul>
+
+		</div>
+						<div class="widget widget_categories">
+							<h2 class="widget-title">Most Used Categories</h2>
+							<ul>
+								<li class="cat-item cat-item-664"><a href="https://progameguides.com/guides/">Guides</a> (41,753)
+</li>
+	<li class="cat-item cat-item-364"><a href="https://progameguides.com/roblox/">Roblox</a> (11,703)
+</li>
+	<li class="cat-item cat-item-2073"><a href="https://progameguides.com/tier-2/">Tier 2</a> (10,206)
+</li>
+	<li class="cat-item cat-item-660"><a href="https://progameguides.com/genshin-impact/">Genshin Impact</a> (2,370)
+</li>
+	<li class="cat-item cat-item-2"><a href="https://progameguides.com/fortnite/">Fortnite</a> (2,420)
+</li>
+	<li class="cat-item cat-item-193"><a href="https://progameguides.com/news/">News</a> (2,307)
+</li>
+	<li class="cat-item cat-item-16"><a href="https://progameguides.com/call-of-duty/">Call of Duty</a> (1,847)
+</li>
+	<li class="cat-item cat-item-2072"><a href="https://progameguides.com/tier-1/">Tier 1</a> (1,715)
+</li>
+	<li class="cat-item cat-item-161"><a href="https://progameguides.com/lists/">Lists</a> (1,515)
+</li>
+	<li class="cat-item cat-item-102"><a href="https://progameguides.com/destiny/">Destiny</a> (1,237)
+</li>
+							</ul>
+						</div><!-- .widget -->
+
+					</div><!-- .page-content -->
+				</section><!-- .error-404 -->
+
+			</main><!-- #main -->
+		</div><!-- #primary -->
+
+		<div class="column col-4 col-md-12"><aside id="secondary" class="widget-area hide-md" style="height:100%">
+	<div id="nonsticky-sidebar" style="text-align: center">
+		<div class="gamurs-inf-scroll-post">
+			<div class="is-sidebar-container wp-block-gamurs-container" style="width: 100%">
+				
+			</div>
+		</div>
+	</div>
+
+	<div id="secondaryAdContainer">
+		<div class="container">
+			<br>
+			<h2 class="block-header">Follow PGG</h2>
+			<div id="socialLinks" class="columns">
+				<div class="column col-3">
+					<a href="//www.instagram.com/progameguides/" class="btn" onclick="gtag('event', 'click', { 'event_category': 'Sidebar', 'event_label': 'Instagram Button' });" title="Instagram">
+						<svg width="24px" height=" 24px" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
+							<path d="M5.85848 0.0698162C4.79447 0.120017 4.06786 0.289818 3.43265 0.539421C2.77524 0.795624 2.21804 1.13943 1.66363 1.69583C1.10923 2.25224 0.767824 2.80984 0.513421 3.46825C0.267219 4.10486 0.100417 4.83206 0.0534168 5.89667C0.00641629 6.96129 -0.00398383 7.30349 0.00121623 10.0191C0.00641628 12.7347 0.0184164 13.0751 0.0700169 14.142C0.120817 15.2058 0.290019 15.9322 0.539622 16.5676C0.796224 17.225 1.13963 17.782 1.69623 18.3366C2.25284 18.8912 2.81004 19.2318 3.47005 19.4866C4.10606 19.7324 4.83347 19.9 5.89788 19.9466C6.96229 19.9932 7.30489 20.004 10.0197 19.9988C12.7345 19.9936 13.0763 19.9816 14.143 19.931C15.2096 19.8804 15.9322 19.71 16.5678 19.4616C17.2252 19.2044 17.7826 18.8616 18.3368 18.3048C18.891 17.748 19.2322 17.19 19.4864 16.5312C19.7328 15.8952 19.9002 15.1678 19.9464 14.1042C19.993 13.0367 20.004 12.6959 19.9988 9.98072C19.9936 7.26549 19.9814 6.92509 19.9308 5.85867C19.8802 4.79226 19.7108 4.06806 19.4614 3.43225C19.2044 2.77484 18.8614 2.21824 18.305 1.66323C17.7486 1.10823 17.1902 0.767223 16.5316 0.513621C15.8952 0.267418 15.1682 0.0996165 14.1038 0.0536161C13.0393 0.00761562 12.6967 -0.0041845 9.98092 0.00101555C7.26509 0.0062156 6.92509 0.0178157 5.85848 0.0698162ZM5.97528 18.1476C5.00027 18.1052 4.47086 17.9432 4.11806 17.8076C3.65085 17.6276 3.31805 17.41 2.96645 17.0618C2.61484 16.7136 2.39884 16.3796 2.21644 15.9134C2.07944 15.5606 1.91444 15.0318 1.86884 14.0568C1.81923 13.0029 1.80883 12.6865 1.80303 10.0167C1.79723 7.34689 1.80743 7.03089 1.85363 5.97668C1.89524 5.00247 2.05824 4.47246 2.19364 4.11986C2.37364 3.65205 2.59044 3.31985 2.93945 2.96845C3.28845 2.61704 3.62145 2.40064 4.08806 2.21824C4.44046 2.08064 4.96927 1.91703 5.94388 1.87063C6.99849 1.82063 7.31449 1.81063 9.98392 1.80483C12.6533 1.79903 12.9701 1.80903 14.0252 1.85543C14.9994 1.89783 15.5296 2.05924 15.8818 2.19544C16.3492 2.37544 16.6818 2.59164 17.0332 2.94125C17.3846 3.29085 17.6012 3.62265 17.7836 4.09026C17.9214 4.44166 18.085 4.97027 18.131 5.94548C18.1812 7.00009 18.1926 7.31629 18.1974 9.98552C18.2022 12.6547 18.1928 12.9717 18.1466 14.0256C18.104 15.0006 17.9424 15.5302 17.8066 15.8834C17.6266 16.3504 17.4096 16.6834 17.0604 17.0346C16.7112 17.3858 16.3786 17.6022 15.9118 17.7846C15.5598 17.922 15.0304 18.086 14.0566 18.1324C13.0019 18.182 12.6859 18.1924 10.0155 18.1982C7.34509 18.204 7.03009 18.1932 5.97548 18.1476M14.1276 4.65526C14.128 4.89262 14.1987 5.12453 14.3309 5.32166C14.4631 5.51879 14.6508 5.67228 14.8703 5.76273C15.0897 5.85318 15.3311 5.87652 15.5638 5.82979C15.7965 5.78307 16.0101 5.66838 16.1777 5.50024C16.3452 5.3321 16.4591 5.11805 16.505 4.88516C16.5508 4.65228 16.5266 4.41103 16.4354 4.19191C16.3441 3.9728 16.1899 3.78567 15.9923 3.65418C15.7947 3.5227 15.5625 3.45278 15.3252 3.45325C15.007 3.45389 14.7021 3.58087 14.4775 3.80628C14.2529 4.03169 14.127 4.33707 14.1276 4.65526ZM4.86547 10.0099C4.87107 12.8459 7.17429 15.1398 10.0097 15.1344C12.8451 15.129 15.1406 12.8259 15.1352 9.98992C15.1298 7.15389 12.8259 4.85946 9.99012 4.86506C7.15429 4.87066 4.86007 7.17429 4.86547 10.0099ZM6.66668 10.0063C6.66538 9.34703 6.85961 8.70216 7.2248 8.15325C7.59 7.60435 8.10976 7.17607 8.71837 6.92256C9.32697 6.66906 9.99708 6.60172 10.644 6.72906C11.2908 6.8564 11.8854 7.1727 12.3525 7.63797C12.8196 8.10323 13.1383 8.69656 13.2682 9.34293C13.3981 9.98929 13.3334 10.6597 13.0823 11.2693C12.8312 11.8789 12.405 12.4003 11.8576 12.7677C11.3101 13.1351 10.666 13.3318 10.0067 13.3331C9.56895 13.3341 9.13529 13.2487 8.7305 13.082C8.32572 12.9153 7.95773 12.6705 7.64757 12.3616C7.33741 12.0527 7.09115 11.6856 6.92284 11.2815C6.75454 10.8774 6.6675 10.4441 6.66668 10.0063Z" fill="currentColor"></path>
+						</svg>
+					</a>
+				</div>
+				<div class="column col-3">
+					<a href="//twitter.com/progamerguides" class="btn" onclick="gtag('event', 'click', { 'event_category': 'Sidebar', 'event_label': 'Twitter Button' });" title="X">
+						<svg width="24px" height=" 24px" xmlns="http://www.w3.org/2000/svg" shape-rendering="geometricPrecision" text-rendering="geometricPrecision" image-rendering="optimizeQuality" fill-rule="evenodd" clip-rule="evenodd" viewBox="0 0 512 462.799">
+							<path fill-rule="nonzero" d="M403.229 0h78.506L310.219 196.04 512 462.799H354.002L230.261 301.007 88.669 462.799h-78.56l183.455-209.683L0 0h161.999l111.856 147.88L403.229 0zm-27.556 415.805h43.505L138.363 44.527h-46.68l283.99 371.278z" fill="currentColor" />
+						</svg>
+					</a>
+				</div>
+				<div class="column col-3">
+					<a href="//www.facebook.com/progameguides/" class="btn" onclick="gtag('event', 'click', { 'event_category': 'Sidebar', 'event_label': 'Facebook Button' });" title="Facebook">
+						<svg width="24px" height=" 24px" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
+							<path d="M20 10.0605C20 4.53711 15.5234 0.0605469 10 0.0605469C4.47656 0.0605469 0 4.53711 0 10.0605C0 15.0527 3.65625 19.1895 8.4375 19.9395V12.9512H5.89844V10.0605H8.4375V7.85742C8.4375 5.35156 9.92969 3.9668 12.2148 3.9668C13.3086 3.9668 14.4531 4.16211 14.4531 4.16211V6.62305H13.1914C11.9492 6.62305 11.5625 7.39453 11.5625 8.18555V10.0605H14.3359L13.8926 12.9512H11.5625V19.9395C16.3438 19.1895 20 15.0527 20 10.0605Z" fill="currentColor"></path>
+						</svg>
+					</a>
+				</div>
+				<div class="column col-3">
+					<a href="//www.youtube.com/channel/UC9LhXd5Ubbsao0HfIFYUmaA" class="btn" onclick="gtag('event', 'click', { 'event_category': 'Sidebar', 'event_label': 'YouTube Button' });" title="YouTube">
+						<svg width="24px" height=" 24px" viewBox="0 0 21 14" fill="none" xmlns="http://www.w3.org/2000/svg">
+							<path d="M19.7647 2.18952C19.534 1.33285 18.8586 0.657397 18.0019 0.426754C16.4368 0.0148926 10.1765 0.0148926 10.1765 0.0148926C10.1765 0.0148926 3.91622 0.0148926 2.35114 0.426754C1.49447 0.657397 0.819018 1.33285 0.588375 2.18952C0.176514 3.7546 0.176514 7.00007 0.176514 7.00007C0.176514 7.00007 0.176514 10.262 0.588375 11.8106C0.819018 12.6673 1.49447 13.3427 2.35114 13.5734C3.91622 13.9852 10.1765 13.9852 10.1765 13.9852C10.1765 13.9852 16.4368 13.9852 18.0019 13.5734C18.8586 13.3427 19.534 12.6673 19.7647 11.8106C20.1765 10.2455 20.1765 7.00007 20.1765 7.00007C20.1765 7.00007 20.1765 3.7546 19.7647 2.18952ZM8.16663 10.0149V4.00171L13.3726 7.01654L8.16663 10.0149Z" fill="currentColor"></path>
+						</svg>
+					</a>
+				</div>
+			</div>
+		</div>
+	</div>
+
+	
+			<div class="wp-block-gamurs-column">
+			<div class="is-sidebar-container" style="width: 100%">
+							</div>
+		</div>
+	
+	<div class="right-rail-column">
+		<div class="right-rail-btf" id="right-rail-btf"></div><!-- seed rail unit; rail-fill.js appends up to 3 more -->
+	</div>
+	
+	</div>
+
+</aside><!-- #secondary -->
+</div>
+	</div><!-- .columns -->
+		</div><!-- /.containter -->
+	</div><!-- #content -->
+	<footer id="colophon" class="site-footer m-top-half">
+		<div class="container grid-xl">
+			<div class="columns">
+				<div class="column col-12">
+					<h3>Our Network</h3>
+					<a href="https://twinfinite.net/" target="_blank" rel="noopener" onclick="gtag('event', 'click', { 'event_category': 'Footer', 'event_label': 'Twinfinite' });">Twinfinite</a> -
+					<a href="https://www.gamepur.com/" target="_blank" rel="noopener" onclick="gtag('event', 'click', { 'event_category': 'Footer', 'event_label': 'Gamepur' });">Gamepur</a> -
+					<a href="https://attackofthefanboy.com/" target="_blank" rel="noopener" onclick="gtag('event', 'click', { 'event_category': 'Footer', 'event_label': 'Attack Of The Fanboy' });">Attack Of The Fanboy</a> -
+					<a href="https://primagames.com/" target="_blank" rel="noopener" onclick="gtag('event', 'click', { 'event_category': 'Footer', 'event_label': 'Prima Games' });">Prima Games</a> -
+					<a href="https://www.siliconera.com/" target="_blank" rel="noopener" onclick="gtag('event', 'click', { 'event_category': 'Footer', 'event_label': 'Siliconera' });">Siliconera</a> -
+					<a href="https://wegotthiscovered.com/" target="_blank" rel="noopener" onclick="gtag('event', 'click', { 'event_category': 'Footer', 'event_label': 'We Got This Covered' });">We Got This Covered</a> -
+					<a href="https://www.destructoid.com/" target="_blank" rel="noopener" onclick="gtag('event', 'click', { 'event_category': 'Footer', 'event_label': 'Destructoid' });">Destructoid</a> -
+					<a href="https://gamerjournalist.com/" target="_blank" rel="noopener" onclick="gtag('event', 'click', { 'event_category': 'Footer', 'event_label': 'Gamer Journalist' });">Gamer Journalist</a> -
+					<a href="https://www.gameskinny.com/" target="_blank" rel="noopener" onclick="gtag('event', 'click', { 'event_category': 'Footer', 'event_label': 'GameSkinny' });">GameSkinny</a> -
+					<a href="https://www.operationsports.com/" target="_blank" rel="noopener" onclick="gtag('event', 'click', { 'event_category': 'Footer', 'event_label': 'Operation Sports' });">Operation Sports</a> -
+					<a href="https://www.themarysue.com/" target="_blank" rel="noopener" onclick="gtag('event', 'click', { 'event_category': 'Footer', 'event_label': 'The Mary Sue' });">The Mary Sue</a> -
+					<a href="https://www.touchtapplay.com/" target="_blank" rel="noopener" onclick="gtag('event', 'click', { 'event_category': 'Footer', 'event_label': 'Touch, Tap, Play' });">Touch, Tap, Play</a> -
+					<a href="https://fruityblox.com/" target="_blank" rel="noopener" onclick="gtag('event', 'click', { 'event_category': 'Footer', 'event_label': 'FruityBlox' });">FruityBlox</a> -
+					<a href="https://bloxinformer.com/" target="_blank" rel="noopener" onclick="gtag('event', 'click', { 'event_category': 'Footer', 'event_label': 'Bloxinformer' });">Bloxinformer</a> -
+					<a href="https://gta6bible.com/" target="_blank" rel="noopener" onclick="gtag('event', 'click', { 'event_category': 'Footer', 'event_label': 'GTA6Bible' });">GTA6Bible</a>
+					<div class="m-top-half"></div>
+					<a href="https://progameguides.com/about-us/" onclick="gtag('event', 'click', { 'event_category': 'Footer', 'event_label': 'About Us' });">About Us</a> -
+					<a href="https://progameguides.com/contact-us/" onclick="gtag('event', 'click', { 'event_category': 'Footer', 'event_label': 'Contact Us' });">Contact Us</a> - <a href="https://progameguides.com/cookie-policy/" onclick="gtag('event', 'click', { 'event_category': 'Footer', 'event_label': 'Cookie Policy' });">Cookie Policy</a> - <a href="https://gamurs.group/privacy-policy" onclick="gtag('event', 'click', { 'event_category': 'Footer', 'event_label': 'Privacy Policy' });">Privacy Policy</a> - <a href="https://gamurs.group/terms/" onclick="gtag('event', 'click', { 'event_category': 'Footer', 'event_label': 'Terms of Use' });">Terms of Use</a> - <a href="https://progameguides.com/pro-game-guide-writers/" onclick="gtag('event', 'click', { 'event_category': 'Footer', 'event_label': 'Writer Application' });">Apply to be a Writer!</a><div id="ccpa-link"></div>
+					<div>Copyright Â© 2026 Pro Game Guides. All rights reserved.</div>
+				</div>
+			</div>
+		</div><!-- .site-info -->
+		<div id="us-nat-optout"></div>
+	</footer><!-- #colophon -->
+</div><!-- #page -->
+
+
+<script type="text/javascript">
+    var skimlinks_settings = {
+        skimlinks_custom_rel: "sponsored nofollow",
+        skimlinks_target: "_blank",
+    };
+</script>
+<script defer type="text/javascript" src="https://s.skimresources.com/js/114526X1659067.skimlinks.js"></script>
+
+
+
+
+
+
+<noscript>
+    <img src="https://sb.scorecardresearch.com/p?c1=2&amp;c2=36750692&amp;cv=3.6.0&amp;cj=1">
+</noscript>
+
+					<script>
+					(function() {
+						window.GAMURS_wordpress_blocks = window.GAMURS_wordpress_blocks || {};
+						window.GAMURS_wordpress_blocks.auth = window.GAMURS_wordpress_blocks.auth || {};
+						// Store config separately so view.js check for auth.firebase fails until scripts load
+						window.GAMURS_wordpress_blocks.auth._firebaseConfig = {"apiKey":"AIzaSyARIuRualA_MFE_j23iHMl_vEzNygnDS2s","authDomain":"id.gamurs.group","projectId":"gamurs-login-system---prod","storageBucket":"gamurs-login-system---prod.appspot.com","messagingSenderId":"935113567352","appId":"1:935113567352:web:7a12824fe59abe9a4bd18d","recaptchaEnterpriseKey":"6Ld48pYpAAAAADOk1Xvx_tGyh4zVv2Rwe179ZVgq"};
+												window.GAMURS_wordpress_blocks.auth.site = "progameguides";
+																		window.GAMURS_wordpress_blocks.auth.ow = window.GAMURS_wordpress_blocks.auth.ow || {};
+						window.GAMURS_wordpress_blocks.auth.ow.site = "progameguides";
+						
+						var authLoaded = false;
+						var authLoadingPromise = null;
+
+						// Auth view scripts to load after Firebase
+						var authViewScripts = ["https:\/\/progameguides.com\/wp-content\/plugins\/gamurs-id\/build\/auth\/view.js","https:\/\/progameguides.com\/wp-content\/plugins\/gamurs-id\/build\/auth-forgot\/view.js","https:\/\/progameguides.com\/wp-content\/plugins\/gamurs-id\/build\/auth-login\/view.js","https:\/\/progameguides.com\/wp-content\/plugins\/gamurs-id\/build\/auth-signup\/view.js","https:\/\/progameguides.com\/wp-content\/plugins\/gamurs-id\/build\/auth-manage\/view.js"];
+
+						function loadAuthScripts() {
+							if (authLoaded) return Promise.resolve();
+							if (authLoadingPromise) return authLoadingPromise;
+
+							authLoadingPromise = new Promise(function(resolve) {
+								// First load Firebase scripts sequentially
+								var firebaseScripts = [
+									'https://www.gstatic.com/firebasejs/10.8.1/firebase-app-compat.js',
+									'https://www.gstatic.com/firebasejs/10.8.1/firebase-app-check-compat.js',
+									'https://www.gstatic.com/firebasejs/10.8.1/firebase-auth-compat.js',
+									'https://www.gstatic.com/firebasejs/10.8.1/firebase-functions-compat.js'
+								];
+
+								function loadScriptSequentially(scripts, index, callback) {
+									if (index >= scripts.length) {
+										callback();
+										return;
+									}
+									var s = document.createElement('script');
+									s.src = scripts[index];
+									s.onload = function() { loadScriptSequentially(scripts, index + 1, callback); };
+									s.onerror = function() { loadScriptSequentially(scripts, index + 1, callback); };
+									document.head.appendChild(s);
+								}
+
+								// Load Firebase first
+								loadScriptSequentially(firebaseScripts, 0, function() {
+									// Initialize Firebase
+																		var config = window.GAMURS_wordpress_blocks.auth._firebaseConfig;
+									window.GAMURS_wordpress_blocks.auth.firebase = {};
+									window.GAMURS_wordpress_blocks.auth.firebase.config = config;
+									window.GAMURS_wordpress_blocks.auth.firebase.app = firebase.initializeApp(config);
+									window.GAMURS_wordpress_blocks.auth.firebase.auth = window.GAMURS_wordpress_blocks.auth.firebase.app.auth();
+									window.GAMURS_wordpress_blocks.auth.firebase.functions = window.GAMURS_wordpress_blocks.auth.firebase.app.functions();
+
+									// Now load auth view scripts
+									loadScriptSequentially(authViewScripts, 0, function() {
+										authLoaded = true;
+										resolve();
+									});
+								});
+							});
+
+							return authLoadingPromise;
+						}
+
+						// Expose for external use
+						window.GAMURS_wordpress_blocks.auth.loadAuthScripts = loadAuthScripts;
+
+						// Intercept OpenWeb login/signup events to load Firebase + auth scripts first.
+						// Use capture phase to run before any other handlers.
+						document.addEventListener('spot-im-login-start', function(e) {
+							e.stopImmediatePropagation();
+							loadAuthScripts().then(function() {
+								window.GAMURS_wordpress_blocks.auth.ui.open('login');
+							});
+						}, true);
+						document.addEventListener('spot-im-signup-start', function(e) {
+							e.stopImmediatePropagation();
+							loadAuthScripts().then(function() {
+								window.GAMURS_wordpress_blocks.auth.ui.open('signup');
+							});
+						}, true);
+					})();
+					</script>
+					
+
+<div class="wp-block-gamurs-id-auth" id="wp-block-gamurs-auth-popup">
+	<div class="wp-block-gamurs-id-auth__content-wrapper">
+		<div class="wp-block-gamurs-id-auth__content">
+			
+<button	class="has-color-minimal has-prominence-tertiary has-icon wp-block-gamurs-id-button" id="wp-block-gamurs-auth-close" type="button"	>
+				
+<span class="icon-close is-size-md is-color-minimal wp-block-gamurs-icon">
+				<svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox=" 0 -960 960 960" width="24px">
+				<path d=" m256-200-56-56 224-224-224-224 56-56 224 224 224-224 56 56-224 224 224 224-56 56-224-224-224 224Z" />
+			</svg>
+			</span>
+			</button>
+			<div id="wp-block-gamurs-auth-login" >
+				
+
+<div class="wp-block-gamurs-id-auth-login">
+	<div class="wp-block-gamurs-id-auth-login__logo">
+		<div class="logo-light">
+			<img src="/wp-content/images/logomark-dark.svg" width="48" height="48">		</div>
+		<div class="logo-dark" style="display: none">
+			<img src="/wp-content/images/logomark-light.svg" width="48" height="48">		</div>
+	</div>
+	<div class="wp-block-gamurs-id-auth-login__title">Log in</div>
+	<div class="wp-block-gamurs-id-auth-login__buttons-socials">
+		
+<button	class="has-prominence-primary has-icon wp-block-gamurs-id-button" id="wp-block-gamurs-auth-login-google" type="button"	>
+			<span class="screen-reader-text">Login with Google</span>
+						
+<span class="icon-google-account is-size-md is-color-minimal wp-block-gamurs-icon">
+				<svg width="24px" height=" 24px" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
+				<path d="M1.08572 5.51C1.9347 3.85324 3.23712 2.46051 4.84738 1.48747C6.45764 0.514427 8.31231 -0.000583569 10.2041 4.96231e-07C12.9541 4.96231e-07 15.2643 0.991001 17.0306 2.605L14.1051 5.473C13.0469 4.482 11.702 3.977 10.2041 3.977C7.54592 3.977 5.29592 5.737 4.4949 8.1C4.29082 8.7 4.17449 9.34 4.17449 10C4.17449 10.66 4.29082 11.3 4.4949 11.9C5.29694 14.264 7.54592 16.023 10.2041 16.023C11.5765 16.023 12.7449 15.668 13.6592 15.068C14.1892 14.726 14.643 14.2822 14.9931 13.7635C15.3431 13.2448 15.5822 12.6619 15.6959 12.05H10.2041V8.182H19.8143C19.9347 8.836 20 9.518 20 10.227C20 13.273 18.8878 15.837 16.9571 17.577C15.2694 19.105 12.9592 20 10.2041 20C8.86391 20.0005 7.53677 19.7422 6.29851 19.2399C5.06026 18.7375 3.93515 18.0009 2.98751 17.0722C2.03987 16.1436 1.28826 15.041 0.775648 13.8275C0.263035 12.614 -0.000535573 11.3134 8.17055e-07 10C8.17055e-07 8.386 0.393878 6.86 1.08572 5.51Z" fill="currentColor" />
+			</svg>
+			</span>
+	</button>
+		
+<button	class="has-prominence-primary has-icon wp-block-gamurs-id-button" id="wp-block-gamurs-auth-login-apple" type="button"	>
+			<span class="screen-reader-text">Login with Apple</span>
+						
+<span class="icon-apple is-size-md is-color-minimal wp-block-gamurs-icon">
+				<svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="2 3 20 20" width="24px">
+				<path d="M17.6643 21.1976C16.5658 22.253 15.3665 22.0864 14.212 21.5864C12.9903 21.0754 11.8695 21.0532 10.5805 21.5864C8.96647 22.2752 8.11462 22.0752 7.15069 21.1976C1.68095 15.6094 2.48796 7.09936 8.69746 6.78828C10.2106 6.86605 11.2642 7.6104 12.1497 7.67706C13.4723 7.41043 14.7388 6.64386 16.1511 6.74385C17.8436 6.87716 19.1214 7.54374 19.962 8.74359C16.4649 10.8211 17.2944 15.3872 20.5 16.6648C19.8611 18.3313 19.0317 19.9866 17.653 21.2087L17.6643 21.1976ZM12.0376 6.72163C11.8695 4.24416 13.8982 2.19997 16.2296 2C16.5546 4.8663 13.6068 6.99937 12.0376 6.72163Z" />
+			</svg>
+			</span>
+	</button>
+	</div>
+	<div class="position-horizontal style-thin wp-block-gamurs-id-tile-divider">
+</div>
+	<form class="wp-block-gamurs-id-auth-login__form" id="wp-block-gamurs-auth-login-form">
+		
+
+<label class="is-enabled-state is-text-type wp-block-gamurs-id-input">
+			
+		<span class="wp-block-gamurs-id-input__label">Email</span>
+
+					<div class="wp-block-gamurs-id-input__field">
+								<input class="wp-block-gamurs-id-input__text"
+								name="email"
+				type="email"
+				placeholder="" />
+							</div>
+						</label>
+		
+
+<label class="is-enabled-state is-text-type wp-block-gamurs-id-input">
+			
+		<span class="wp-block-gamurs-id-input__label">Password</span>
+
+					<div class="wp-block-gamurs-id-input__field">
+								<input class="wp-block-gamurs-id-input__text"
+								name="password"
+				type="password"
+				placeholder="" />
+									
+<span class="icon-visibility-off is-size-md is-color-minimal wp-block-gamurs-icon">
+				<svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox=" 0 -960 960 960" width="24px">
+				<path d=" M792-56 624-222q-35 11-70.5 16.5T480-200q-151 0-269-83.5T40-500q21-53 53-98.5t73-81.5L56-792l56-56 736 736-56 56ZM480-320q11 0 20.5-1t20.5-4L305-541q-3 11-4 20.5t-1 20.5q0 75 52.5 127.5T480-320Zm292 18L645-428q7-17 11-34.5t4-37.5q0-75-52.5-127.5T480-680q-20 0-37.5 4T408-664L306-766q41-17 84-25.5t90-8.5q151 0 269 83.5T920-500q-23 59-60.5 109.5T772-302ZM587-486 467-606q28-5 51.5 4.5T559-574q17 18 24.5 41.5T587-486Z" />
+			</svg>
+			</span>
+							</div>
+						</label>
+		
+<button	class="has-color-minimal has-prominence-tertiary has-text wp-block-gamurs-id-button" id="wp-block-gamurs-auth-login-forgot-password" type="button"	>
+					<div>Forgot password?</div>
+		</button>
+		<div class="wp-block-gamurs-id-auth-login__message" id="wp-block-gamurs-auth-login-generic-error">
+			
+	
+	<div
+		class="is-type-error wp-block-gamurs-id-status-message"	>
+				<span>
+			Something went wrong. Try again, or contact support if the problem persists.		</span>
+			</div>
+
+		</div>
+		<div class="wp-block-gamurs-id-auth-login__message" id="wp-block-gamurs-auth-login-details-error">
+			
+	
+	<div
+		class="is-type-error wp-block-gamurs-id-status-message"	>
+				<span>
+			Your details are incorrect, or aren't in our system yet. Please try again, or sign up if you're new here.		</span>
+			</div>
+
+		</div>
+		<div class="wp-block-gamurs-id-auth-login__buttons">
+			
+<button	class="has-color-minimal has-prominence-primary has-text is-full-width wp-block-gamurs-id-button" type="submit"	>
+					<div>Log in</div>
+		</button>
+
+<button	class="has-color-minimal has-prominence-tertiary has-text is-full-width wp-block-gamurs-id-button" id="wp-block-gamurs-auth-login-dont-have-an-account" type="button"	>
+					<div>Don&#039;t have account?</div>
+		</button>
+		</div>
+		<span class="wp-block-gamurs-id-auth-login__recaptcha">
+			This site is protected by reCAPTCHA and the Google <a href="https://policies.google.com/privacy">Privacy Policy</a> and <a href="https://policies.google.com/terms">Terms of Service</a> apply.
+					</span>
+	</form>
+</div>
+			</div>
+			<div id="wp-block-gamurs-auth-signup" class="is-visible">
+				
+
+<div class="wp-block-gamurs-id-auth-signup">
+	<div class="wp-block-gamurs-id-auth-signup__logo">
+		<div class="logo-light">
+			<img src="/wp-content/images/logomark-dark.svg" width="48" height="48">		</div>
+		<div class="logo-dark" style="display: none">
+			<img src="/wp-content/images/logomark-light.svg" width="48" height="48">		</div>
+	</div>
+	<div class="wp-block-gamurs-id-auth-signup__content is-visible" id="wp-block-gamurs-auth-signup-create">
+		<div class="wp-block-gamurs-id-auth-signup__title">Create a GAMURS Account</div>
+		<div class="wp-block-gamurs-id-auth-signup__buttons-socials">
+			
+<button	class="has-prominence-primary has-icon wp-block-gamurs-id-button" id="wp-block-gamurs-auth-signup-google" type="button"	>
+			<span class="screen-reader-text">Continue with Google</span>
+						
+<span class="icon-google-account is-size-md is-color-minimal wp-block-gamurs-icon">
+				<svg width="24px" height=" 24px" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
+				<path d="M1.08572 5.51C1.9347 3.85324 3.23712 2.46051 4.84738 1.48747C6.45764 0.514427 8.31231 -0.000583569 10.2041 4.96231e-07C12.9541 4.96231e-07 15.2643 0.991001 17.0306 2.605L14.1051 5.473C13.0469 4.482 11.702 3.977 10.2041 3.977C7.54592 3.977 5.29592 5.737 4.4949 8.1C4.29082 8.7 4.17449 9.34 4.17449 10C4.17449 10.66 4.29082 11.3 4.4949 11.9C5.29694 14.264 7.54592 16.023 10.2041 16.023C11.5765 16.023 12.7449 15.668 13.6592 15.068C14.1892 14.726 14.643 14.2822 14.9931 13.7635C15.3431 13.2448 15.5822 12.6619 15.6959 12.05H10.2041V8.182H19.8143C19.9347 8.836 20 9.518 20 10.227C20 13.273 18.8878 15.837 16.9571 17.577C15.2694 19.105 12.9592 20 10.2041 20C8.86391 20.0005 7.53677 19.7422 6.29851 19.2399C5.06026 18.7375 3.93515 18.0009 2.98751 17.0722C2.03987 16.1436 1.28826 15.041 0.775648 13.8275C0.263035 12.614 -0.000535573 11.3134 8.17055e-07 10C8.17055e-07 8.386 0.393878 6.86 1.08572 5.51Z" fill="currentColor" />
+			</svg>
+			</span>
+	</button>
+
+<button	class="has-prominence-primary has-icon wp-block-gamurs-id-button" id="wp-block-gamurs-auth-signup-apple" type="button"	>
+			<span class="screen-reader-text">Continue with Apple</span>
+						
+<span class="icon-apple is-size-md is-color-minimal wp-block-gamurs-icon">
+				<svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="2 3 20 20" width="24px">
+				<path d="M17.6643 21.1976C16.5658 22.253 15.3665 22.0864 14.212 21.5864C12.9903 21.0754 11.8695 21.0532 10.5805 21.5864C8.96647 22.2752 8.11462 22.0752 7.15069 21.1976C1.68095 15.6094 2.48796 7.09936 8.69746 6.78828C10.2106 6.86605 11.2642 7.6104 12.1497 7.67706C13.4723 7.41043 14.7388 6.64386 16.1511 6.74385C17.8436 6.87716 19.1214 7.54374 19.962 8.74359C16.4649 10.8211 17.2944 15.3872 20.5 16.6648C19.8611 18.3313 19.0317 19.9866 17.653 21.2087L17.6643 21.1976ZM12.0376 6.72163C11.8695 4.24416 13.8982 2.19997 16.2296 2C16.5546 4.8663 13.6068 6.99937 12.0376 6.72163Z" />
+			</svg>
+			</span>
+	</button>
+		</div>
+		<div class="position-horizontal style-thin wp-block-gamurs-id-tile-divider">
+</div>
+		<form class="wp-block-gamurs-id-auth-signup__form" id="wp-block-gamurs-auth-signup-form">
+			
+
+<label class="is-enabled-state is-text-type wp-block-gamurs-id-input">
+			
+		<span class="wp-block-gamurs-id-input__label">Username</span>
+
+					<div class="wp-block-gamurs-id-input__field">
+								<input class="wp-block-gamurs-id-input__text"
+								name="username"
+				type="text"
+				placeholder="" />
+							</div>
+							<span class="wp-block-gamurs-id-input__helper">
+					3-30 alphanumerical characters				</span>
+						</label>
+
+
+<label class="is-enabled-state is-text-type wp-block-gamurs-id-input">
+			
+		<span class="wp-block-gamurs-id-input__label">Email</span>
+
+					<div class="wp-block-gamurs-id-input__field">
+								<input class="wp-block-gamurs-id-input__text"
+								name="email"
+				type="email"
+				placeholder="" />
+							</div>
+						</label>
+
+
+<label class="is-enabled-state is-text-type wp-block-gamurs-id-input">
+			
+		<span class="wp-block-gamurs-id-input__label">Password</span>
+
+					<div class="wp-block-gamurs-id-input__field">
+								<input class="wp-block-gamurs-id-input__text"
+								name="password"
+				type="password"
+				placeholder="" />
+									
+<span class="icon-visibility-off is-size-md is-color-minimal wp-block-gamurs-icon">
+				<svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox=" 0 -960 960 960" width="24px">
+				<path d=" M792-56 624-222q-35 11-70.5 16.5T480-200q-151 0-269-83.5T40-500q21-53 53-98.5t73-81.5L56-792l56-56 736 736-56 56ZM480-320q11 0 20.5-1t20.5-4L305-541q-3 11-4 20.5t-1 20.5q0 75 52.5 127.5T480-320Zm292 18L645-428q7-17 11-34.5t4-37.5q0-75-52.5-127.5T480-680q-20 0-37.5 4T408-664L306-766q41-17 84-25.5t90-8.5q151 0 269 83.5T920-500q-23 59-60.5 109.5T772-302ZM587-486 467-606q28-5 51.5 4.5T559-574q17 18 24.5 41.5T587-486Z" />
+			</svg>
+			</span>
+							</div>
+							<span class="wp-block-gamurs-id-input__helper">
+					Minimum 8 characters				</span>
+						</label>
+			<span class="wp-block-gamurs-id-auth-signup__recaptcha">
+				By signing up, you agree to our <a href="https://gamurs.group/privacy-policy">Privacy Policy</a> and <a href="https://gamurs.group/terms">Terms of Service</a>.
+			</span>
+			<div class="wp-block-gamurs-id-auth-signup__message" id="wp-block-gamurs-auth-signup-generic-error">
+				
+	
+	<div
+		class="is-type-error wp-block-gamurs-id-status-message"	>
+				<span>
+			Something went wrong. Try again, or contact support if the problem persists.		</span>
+			</div>
+
+			</div>
+			<div class="wp-block-gamurs-id-auth-signup__buttons">
+				
+<button	class="has-color-minimal has-prominence-primary has-text is-full-width wp-block-gamurs-id-button" type="submit"	>
+					<div>Sign up for free</div>
+		</button>
+
+<button	class="has-color-minimal has-prominence-tertiary has-text is-full-width wp-block-gamurs-id-button" id="wp-block-gamurs-auth-signup-already-have-an-account" type="button"	>
+					<div>Already have an account?</div>
+		</button>
+			</div>
+			<span class="wp-block-gamurs-id-auth-signup__recaptcha">
+				This site is protected by reCAPTCHA and the Google <a href="https://policies.google.com/privacy">Privacy Policy</a> and <a href="https://policies.google.com/terms">Terms of Service</a> apply.
+							</span>
+		</form>
+	</div>
+	<div class="wp-block-gamurs-id-auth-signup__content" id="wp-block-gamurs-auth-signup-usernameonly">
+		<div class="wp-block-gamurs-id-auth-signup__title">Choose a username</div>
+		<div class="wp-block-gamurs-id-auth-signup__text">
+			Choose a unique username using 3-30 alphanumeric characters.
+		</div>
+		<form class="wp-block-gamurs-id-auth-signup__form" id="wp-block-gamurs-auth-signup-usernameonly-form">
+			
+
+<label class="is-enabled-state is-text-type wp-block-gamurs-id-input">
+			
+		<span class="wp-block-gamurs-id-input__label">Username</span>
+
+					<div class="wp-block-gamurs-id-input__field">
+								<input class="wp-block-gamurs-id-input__text"
+								name="username"
+				type="text"
+				placeholder="" />
+							</div>
+						</label>
+			<div class="wp-block-gamurs-id-auth-signup__message" id="wp-block-gamurs-auth-signup-usernameonly-generic-error">
+				
+	
+	<div
+		class="is-type-error wp-block-gamurs-id-status-message"	>
+				<span>
+			Something went wrong. Try again, or contact support if the problem persists.		</span>
+			</div>
+
+			</div>
+			<div class="wp-block-gamurs-id-auth-signup__buttons">
+				
+<button	class="has-color-minimal has-prominence-primary has-text is-full-width wp-block-gamurs-id-button" type="submit"	>
+					<div>Submit</div>
+		</button>
+			</div>
+			<span class="wp-block-gamurs-id-auth-signup__recaptcha">
+				This site is protected by reCAPTCHA and the Google <a href="https://policies.google.com/privacy">Privacy Policy</a> and <a href="https://policies.google.com/terms">Terms of Service</a> apply.
+			</span>
+		</form>
+	</div>
+	<div class="wp-block-gamurs-id-auth-signup__content" id="wp-block-gamurs-auth-signup-emailpreferences">
+		<div class="wp-block-gamurs-id-auth-signup__title">Choose your preferences</div>
+		<div class="wp-block-gamurs-id-auth-signup__text">
+			Choose how we communicate with you, opt out at anytime.
+		</div>
+		<form class="wp-block-gamurs-id-auth-signup__form" id="wp-block-gamurs-auth-signup-emailpreferences-form">
+						
+
+<label class="is-enabled-state is-choice-type wp-block-gamurs-id-input">
+						<input
+			class="wp-block-gamurs-id-input__checkbox"
+						name="publicationMarketingConsent"
+			type="checkbox" />
+			
+<span class="icon-checkbox-empty is-size-md is-color-minimal wp-block-gamurs-icon">
+				<svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox=" 0 -960 960 960" width="24px">
+				<path d=" M120-120v-720h720v720H120Zm80-80h560v-560H200v560Z" />
+			</svg>
+			</span>
+
+<span class="icon-checkbox-filled is-size-md is-color-minimal wp-block-gamurs-icon">
+				<svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox=" 0 -960 960 960" width="24px">
+				<path d=" m424-312 282-282-56-56-226 226-114-114-56 56 170 170ZM120-120v-720h720v720H120Z" />
+			</svg>
+			</span>
+		
+		<span class="wp-block-gamurs-id-input__label">Sign up to emails from Pro Game Guides about its offers, products, and services</span>
+
+			</label>
+			
+
+<label class="is-enabled-state is-choice-type wp-block-gamurs-id-input">
+						<input
+			class="wp-block-gamurs-id-input__checkbox"
+						name="networkMarketingConsent"
+			type="checkbox" />
+			
+<span class="icon-checkbox-empty is-size-md is-color-minimal wp-block-gamurs-icon">
+				<svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox=" 0 -960 960 960" width="24px">
+				<path d=" M120-120v-720h720v720H120Zm80-80h560v-560H200v560Z" />
+			</svg>
+			</span>
+
+<span class="icon-checkbox-filled is-size-md is-color-minimal wp-block-gamurs-icon">
+				<svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox=" 0 -960 960 960" width="24px">
+				<path d=" m424-312 282-282-56-56-226 226-114-114-56 56 170 170ZM120-120v-720h720v720H120Z" />
+			</svg>
+			</span>
+		
+		<span class="wp-block-gamurs-id-input__label">Sign up to emails from Pro Game Guides about offers, products, and services from other GAMURS Group brands, and its partners</span>
+
+			</label>
+			<div class="wp-block-gamurs-id-auth-signup__message" id="wp-block-gamurs-auth-signup-emailpreferences-generic-error">
+				
+	
+	<div
+		class="is-type-error wp-block-gamurs-id-status-message"	>
+				<span>
+			Something went wrong. Try again, or contact support if the problem persists.		</span>
+			</div>
+
+			</div>
+			<div class="wp-block-gamurs-id-auth-signup__buttons">
+				
+<button	class="has-color-minimal has-prominence-primary has-text is-full-width wp-block-gamurs-id-button" type="submit"	>
+					<div>Save</div>
+		</button>
+			</div>
+		</form>
+	</div>
+	<div class="wp-block-gamurs-id-auth-signup__content" id="wp-block-gamurs-auth-signup-confirm">
+		<div class="wp-block-gamurs-id-auth-signup__title">Check your email</div>
+		<div class="wp-block-gamurs-id-auth-signup__text">
+			An account confirmation link was sent to your email. Don't forget to check your spam!
+		</div>
+		<div class="wp-block-gamurs-id-auth-signup__buttons">
+			
+<button	class="has-color-minimal has-prominence-primary has-text is-full-width wp-block-gamurs-id-button" id="wp-block-gamurs-auth-signup-got-it" type="button"	>
+					<div>Got it!</div>
+		</button>
+
+<button	class="has-color-minimal has-prominence-tertiary has-text is-full-width wp-block-gamurs-id-button" id="wp-block-gamurs-auth-signup-resend-email" type="button"	>
+					<div>Resend email</div>
+		</button>
+		</div>
+	</div>
+</div>
+			</div>
+			<div id="wp-block-gamurs-auth-forgot" >
+				
+
+<div
+	class="wp-block-gamurs-id-auth-forgot">
+	<div class="wp-block-gamurs-id-auth-forgot__logo">
+		<div class="logo-light">
+			<img src="/wp-content/images/logomark-dark.svg" width="48" height="48">		</div>
+		<div class="logo-dark" style="display: none">
+			<img src="/wp-content/images/logomark-light.svg" width="48" height="48">		</div>
+	</div>
+	
+<button	class="has-color-minimal has-prominence-tertiary has-text has-icon wp-block-gamurs-id-button" id="wp-block-gamurs-auth-forgot-back" type="button"	>
+				
+<span class="icon-arrow-left is-size-md is-color-minimal wp-block-gamurs-icon">
+				<svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox=" 0 -960 960 960" width="24px">
+				<path d=" M400-240 160-480l240-240 56 58-142 142h486v80H314l142 142-56 58Z" />
+			</svg>
+			</span>
+				<div>BACK</div>
+		</button>
+	<div class="wp-block-gamurs-id-auth-forgot__title">Forgot password</div>
+	<div class="wp-block-gamurs-id-auth-forgot__blurb">
+		Enter the email address you used when you joined and we'll send you instructions to reset your password.
+	</div>
+	
+	
+	<div
+		class="is-type-info wp-block-gamurs-id-status-message"	>
+					
+<span class="icon-info is-size-md is-color-minimal wp-block-gamurs-icon">
+				<svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox=" 0 -960 960 960" width="24px">
+				<path d=" M440-280h80v-240h-80v240Zm40-320q17 0 28.5-11.5T520-640q0-17-11.5-28.5T480-680q-17 0-28.5 11.5T440-640q0 17 11.5 28.5T480-600Zm0 520q-83 0-156-31.5T197-197q-54-54-85.5-127T80-480q0-83 31.5-156T197-763q54-54 127-85.5T480-880q83 0 156 31.5T763-763q54 54 85.5 127T880-480q0 83-31.5 156T763-197q-54 54-127 85.5T480-80Zm0-80q134 0 227-93t93-227q0-134-93-227t-227-93q-134 0-227 93t-93 227q0 134 93 227t227 93Zm0-320Z" />
+			</svg>
+			</span>
+				<span>
+			If you used Apple or Google to create your account, this process will create a password for your existing account.		</span>
+			</div>
+
+	<form class="wp-block-gamurs-id-auth-forgot__form" id="wp-block-gamurs-auth-forgot-form">
+		
+
+<label class="is-enabled-state is-text-type wp-block-gamurs-id-input">
+			
+		<span class="wp-block-gamurs-id-input__label">Email</span>
+
+					<div class="wp-block-gamurs-id-input__field">
+								<input class="wp-block-gamurs-id-input__text"
+								name="email"
+				type="email"
+				placeholder="" />
+							</div>
+						</label>
+		<div class="wp-block-gamurs-id-auth-forgot__buttons">
+			
+<button	class="has-color-minimal has-prominence-primary has-text is-full-width wp-block-gamurs-id-button" type="submit"	>
+					<div>Reset password</div>
+		</button>
+		</div>
+		<span class="wp-block-gamurs-id-auth-forgot__recaptcha">
+			This site is protected by reCAPTCHA and the Google <a href="https://policies.google.com/privacy">Privacy Policy</a> and <a href="https://policies.google.com/terms">Terms of Service</a> apply.
+		</span>
+	</form>
+	<div class="wp-block-gamurs-id-auth-forgot__message" id="wp-block-gamurs-auth-forgot-success">
+		
+	
+	<div
+		class="is-type-success wp-block-gamurs-id-status-message"	>
+				<span>
+			Reset password instructions sent. If you have an account with us, you will receive an email within a few minutes.		</span>
+			</div>
+
+	</div>
+	<div class="wp-block-gamurs-id-auth-forgot__message" id="wp-block-gamurs-auth-forgot-generic-error">
+		
+	
+	<div
+		class="is-type-error wp-block-gamurs-id-status-message"	>
+				<span>
+			Something went wrong. Try again or contact support if the problem persists.		</span>
+			</div>
+
+	</div>
+	
+<button	class="has-color-minimal has-prominence-primary has-text is-full-width wp-block-gamurs-id-button" id="wp-block-gamurs-auth-forgot-go-to-login" type="button"	>
+					<div>Login</div>
+		</button>
+</div>
+			</div>
+		</div>
+	</div>
+</div>
+<script id="gamursgroup-defer-noncritical-assets-dummy-footer-handler-js-after">
+(function(){var link=document.createElement("link");link.rel="preload";link.setAttribute("as", "style");link.setAttribute("onload","this.onload=null;this.rel='stylesheet'");link.media="all";link.id="azonpress_block-cgb-block-style-css";link.href="https://progameguides.com/wp-content/plugins/azonpress/public/blocks/dist/blocks.style.build.css?ver=2.1.1";var target=document.querySelector("#gamursgroup-defer-noncritical-assets-dummy-footer-handler-js-after");target.parentNode.insertBefore(link,target);})();
+(function(){var link=document.createElement("link");link.rel="preload";link.setAttribute("as", "style");link.setAttribute("onload","this.onload=null;this.rel='stylesheet'");link.media="all";link.id="load-fa";link.href="https://progameguides.com/wp-content/plugins/azonpress/public/blocks/icons/font-awesome-custom.css?ver=2.1.1";var target=document.querySelector("#gamursgroup-defer-noncritical-assets-dummy-footer-handler-js-after");target.parentNode.insertBefore(link,target);})();
+(function(){var link=document.createElement("link");link.rel="preload";link.setAttribute("as", "style");link.setAttribute("onload","this.onload=null;this.rel='stylesheet'");link.media="all";link.id="azonpress_media_button";link.href="https://progameguides.com/wp-content/plugins/azonpress/public/css/media_button.css?ver=2.1.1";var target=document.querySelector("#gamursgroup-defer-noncritical-assets-dummy-footer-handler-js-after");target.parentNode.insertBefore(link,target);})();
+(function(){var link=document.createElement("link");link.rel="preload";link.setAttribute("as", "style");link.setAttribute("onload","this.onload=null;this.rel='stylesheet'");link.media="all";link.id="gamurs-icons";link.href="https://progameguides.com/wp-content/plugins/gamurs-id/css/icons/gamurs_icon_library.css?ver=2025-05-15";var target=document.querySelector("#gamursgroup-defer-noncritical-assets-dummy-footer-handler-js-after");target.parentNode.insertBefore(link,target);})();
+(function(){var link=document.createElement("link");link.rel="preload";link.setAttribute("as", "style");link.setAttribute("onload","this.onload=null;this.rel='stylesheet'");link.media="all";link.id="pgg-quiz-embed";link.href="https://progameguides.com/wp-content/plugins/pgg-quiz-embed/quiz.css?ver=1.0.0";var target=document.querySelector("#gamursgroup-defer-noncritical-assets-dummy-footer-handler-js-after");target.parentNode.insertBefore(link,target);})();
+(function(){var link=document.createElement("link");link.rel="preload";link.setAttribute("as", "style");link.setAttribute("onload","this.onload=null;this.rel='stylesheet'");link.media="all";link.id="wordpress-popular-posts-css";link.href="https://progameguides.com/wp-content/plugins/wordpress-popular-posts/assets/css/wpp.css?ver=7.3.1";var target=document.querySelector("#gamursgroup-defer-noncritical-assets-dummy-footer-handler-js-after");target.parentNode.insertBefore(link,target);})();
+(function(){var link=document.createElement("link");link.rel="preload";link.setAttribute("as", "style");link.setAttribute("onload","this.onload=null;this.rel='stylesheet'");link.media="all";link.id="tablepress-default";link.href="https://progameguides.com/wp-content/plugins/tablepress/css/build/default.css?ver=3.1.2";var target=document.querySelector("#gamursgroup-defer-noncritical-assets-dummy-footer-handler-js-after");target.parentNode.insertBefore(link,target);})();
+(function(){var link=document.createElement("link");link.rel="preload";link.setAttribute("as", "style");link.setAttribute("onload","this.onload=null;this.rel='stylesheet'");link.media="all";link.id="hurrytimer";link.href="https://progameguides.com/wp-content/uploads/hurrytimer/css/ebfdb3d50793c565.css?ver=7.0.2";var target=document.querySelector("#gamursgroup-defer-noncritical-assets-dummy-footer-handler-js-after");target.parentNode.insertBefore(link,target);})();
+(function(){var link=document.createElement("link");link.rel="preload";link.setAttribute("as", "style");link.setAttribute("onload","this.onload=null;this.rel='stylesheet'");link.media="all";link.id="gdrts-full";link.href="https://progameguides.com/wp-content/plugins/gd-rating-system/css/methods/full.min.css?ver=3.6.2.996";var target=document.querySelector("#gamursgroup-defer-noncritical-assets-dummy-footer-handler-js-after");target.parentNode.insertBefore(link,target);})();
+(function(){var link=document.createElement("link");link.rel="preload";link.setAttribute("as", "style");link.setAttribute("onload","this.onload=null;this.rel='stylesheet'");link.media="all";link.id="gdrts-font-default";link.href="https://progameguides.com/wp-content/plugins/gd-rating-system/css/fonts/default-embed.min.css?ver=3.6.2.996";var target=document.querySelector("#gamursgroup-defer-noncritical-assets-dummy-footer-handler-js-after");target.parentNode.insertBefore(link,target);})();
+(function(){var link=document.createElement("link");link.rel="preload";link.setAttribute("as", "style");link.setAttribute("onload","this.onload=null;this.rel='stylesheet'");link.media="all";link.id="aawp";link.href="https://progameguides.com/wp-content/plugins/aawp/assets/dist/css/main.css?ver=3.18.2";var target=document.querySelector("#gamursgroup-defer-noncritical-assets-dummy-footer-handler-js-after");target.parentNode.insertBefore(link,target);})();
+(function(){var link=document.createElement("link");link.rel="preload";link.setAttribute("as", "style");link.setAttribute("onload","this.onload=null;this.rel='stylesheet'");link.media="all";link.id="gamurs-id-auth-style";link.href="https://progameguides.com/wp-content/plugins/gamurs-id/build/auth/style-index.css?ver=1.1.3";var target=document.querySelector("#gamursgroup-defer-noncritical-assets-dummy-footer-handler-js-after");target.parentNode.insertBefore(link,target);})();
+(function(){var link=document.createElement("link");link.rel="preload";link.setAttribute("as", "style");link.setAttribute("onload","this.onload=null;this.rel='stylesheet'");link.media="all";link.id="gamurs-id-auth-forgot-style";link.href="https://progameguides.com/wp-content/plugins/gamurs-id/build/auth-forgot/style-index.css?ver=1.0.1";var target=document.querySelector("#gamursgroup-defer-noncritical-assets-dummy-footer-handler-js-after");target.parentNode.insertBefore(link,target);})();
+(function(){var link=document.createElement("link");link.rel="preload";link.setAttribute("as", "style");link.setAttribute("onload","this.onload=null;this.rel='stylesheet'");link.media="all";link.id="gamurs-id-auth-login-style";link.href="https://progameguides.com/wp-content/plugins/gamurs-id/build/auth-login/style-index.css?ver=1.0.1";var target=document.querySelector("#gamursgroup-defer-noncritical-assets-dummy-footer-handler-js-after");target.parentNode.insertBefore(link,target);})();
+(function(){var link=document.createElement("link");link.rel="preload";link.setAttribute("as", "style");link.setAttribute("onload","this.onload=null;this.rel='stylesheet'");link.media="all";link.id="gamurs-id-auth-signup-style";link.href="https://progameguides.com/wp-content/plugins/gamurs-id/build/auth-signup/style-index.css?ver=1.1.1";var target=document.querySelector("#gamursgroup-defer-noncritical-assets-dummy-footer-handler-js-after");target.parentNode.insertBefore(link,target);})();
+(function(){var link=document.createElement("link");link.rel="preload";link.setAttribute("as", "style");link.setAttribute("onload","this.onload=null;this.rel='stylesheet'");link.media="all";link.id="gamurs-id-button-style";link.href="https://progameguides.com/wp-content/plugins/gamurs-id/build/button/style-index.css?ver=1.1.6";var target=document.querySelector("#gamursgroup-defer-noncritical-assets-dummy-footer-handler-js-after");target.parentNode.insertBefore(link,target);})();
+(function(){var link=document.createElement("link");link.rel="preload";link.setAttribute("as", "style");link.setAttribute("onload","this.onload=null;this.rel='stylesheet'");link.media="all";link.id="gamurs-icon-style";link.href="https://progameguides.com/wp-content/plugins/gamurs-id/build/icon/style-index.css?ver=1.1.3";var target=document.querySelector("#gamursgroup-defer-noncritical-assets-dummy-footer-handler-js-after");target.parentNode.insertBefore(link,target);})();
+(function(){var link=document.createElement("link");link.rel="preload";link.setAttribute("as", "style");link.setAttribute("onload","this.onload=null;this.rel='stylesheet'");link.media="all";link.id="gamurs-id-input-style";link.href="https://progameguides.com/wp-content/plugins/gamurs-id/build/input/style-index.css?ver=1.1.5";var target=document.querySelector("#gamursgroup-defer-noncritical-assets-dummy-footer-handler-js-after");target.parentNode.insertBefore(link,target);})();
+(function(){var link=document.createElement("link");link.rel="preload";link.setAttribute("as", "style");link.setAttribute("onload","this.onload=null;this.rel='stylesheet'");link.media="all";link.id="gamurs-id-status-message-style";link.href="https://progameguides.com/wp-content/plugins/gamurs-id/build/status-message/style-index.css?ver=2.0.3";var target=document.querySelector("#gamursgroup-defer-noncritical-assets-dummy-footer-handler-js-after");target.parentNode.insertBefore(link,target);})();
+(function(){var link=document.createElement("link");link.rel="preload";link.setAttribute("as", "style");link.setAttribute("onload","this.onload=null;this.rel='stylesheet'");link.media="all";link.id="gamurs-id-tile-divider-style";link.href="https://progameguides.com/wp-content/plugins/gamurs-id/build/tile-divider/style-index.css?ver=1.0.1";var target=document.querySelector("#gamursgroup-defer-noncritical-assets-dummy-footer-handler-js-after");target.parentNode.insertBefore(link,target);})();
+//# sourceURL=gamursgroup-defer-noncritical-assets-dummy-footer-handler-js-after
+</script>
+<script data-wp-strategy="defer" defer id="gamurs-group-analytics-openweb-js" src="https://progameguides.com/var/www/wp-content/plugins/gamurs-group-analytics/js/openweb-tracking.js?ver=1"></script>
+<script id="tablesorter-js" src="https://progameguides.com/wp-content/plugins/pgg-core/js/tablesorter.min.js?ver=1.0.0"></script>
+<script id="tablesorter-widgets-js" src="https://progameguides.com/wp-content/plugins/pgg-core/js/tablesorter-widgets.min.js?ver=1.0.0"></script>
+<script id="hurryt-cookie-js" src="https://progameguides.com/wp-content/plugins/hurrytimer/assets/js/cookie.min.js?ver=3.14.1" defer></script>
+<script id="hurryt-countdown-js" src="https://progameguides.com/wp-content/plugins/hurrytimer/assets/js/jquery.countdown.min.js?ver=2.2.0" defer></script>
+<script id="hurrytimer-js-extra">
+var hurrytimer_ajax_object = {"ajax_url":"https://progameguides.com/wp-admin/admin-ajax.php","ajax_nonce":"9b3ca16a05","disable_actions":"","methods":{"COOKIE":1,"IP":2,"USER_SESSION":3},"actionsOptions":{"none":1,"hide":2,"redirect":3,"stockStatus":4,"hideAddToCartButton":5,"displayMessage":6,"expire_coupon":7},"restartOptions":{"none":1,"immediately":2,"afterReload":3,"after_duration":4},"COOKIEPATH":"/","COOKIE_DOMAIN":"","redirect_no_back":"1","expire_coupon_message":"","invalid_checkout_coupon_message":""};
+//# sourceURL=hurrytimer-js-extra
+</script>
+<script id="hurrytimer-js" src="https://progameguides.com/wp-content/plugins/hurrytimer/assets/js/hurrytimer.js?ver=2.13.0" defer></script>
+<script id="gdrts-full-js-extra">
+var gdrts_rating_data = {"url":"https://progameguides.com/wp-admin/admin-ajax.php","nonce":"8e62f3ead8","rtl":"","user":"0","handler":"gdrts_live_handler","ajax_error":"console","wp_version":"70"};
+//# sourceURL=gdrts-full-js-extra
+</script>
+<script id="gdrts-full-js" src="https://progameguides.com/wp-content/plugins/gd-rating-system/js/methods/full.min.js?ver=3.6.2.996" defer></script>
+<script id="aawp-js" src="https://progameguides.com/wp-content/plugins/aawp/assets/dist/js/main.js?ver=3.18.2" defer></script>
+<script id="jetpack-stats-js-before">
+_stq = window._stq || [];
+_stq.push([ "view", {"v":"ext","blog":"210960686","post":"0","tz":"-7","srv":"progameguides.com","arch_err":"/phasmophobia/all-ghost-types-in-phasmophobia/","hp":"vip","j":"1:16.0.1"} ]);
+_stq.push([ "clickTrackerInit", "210960686", "0" ]);
+//# sourceURL=jetpack-stats-js-before
+</script>
+<script data-wp-strategy="defer" defer fetchpriority="low" id="jetpack-stats-js" src="https://stats.wp.com/e-202631.js"></script>
+<script async id="pushly-sdk-js" src="https://cdn.p-n.io/pushly-sdk.min.js?domain_key=Na1NE60oQf0YAYpgYwckgmHqq22dHgS8Lyj7&#038;ver=7.0.2"></script>
+<!-- START: RUN GD RATING SYSTEM PRO JAVASCRIPT -->
+<script type="text/javascript">
+    ;(function($, window, document, undefined) {
+        $(document).ready(function() {
+            if (typeof window.wp.gdrts.core !== "undefined") {
+                window.wp.gdrts.core.run();
+            } else {
+                if (window.console) {
+                    console.log("INIT ERROR: GD Rating System - JavaScript not initialized properly.");
+                }
+            }
+        });
+    })(jQuery, window, document);
+</script>
+<!-- START: RUN GD RATING SYSTEM PRO JAVASCRIPT -->
+
+<script>(function(){function c(){var b=a.contentDocument||(a.contentWindow&&a.contentWindow.document);if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'a21c42eaa99d8ef8',t:'MTc4NTE2MTc4MA=='};var a=document.createElement('script');a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script><script type="module" src="https://static.cloudflareinsights.com/beacon.min.js/v4513226cdae34746b4dedf0b4dfa099e1781791509496" integrity="sha512-ZE9pZaUXND66v380QUtch/5sE9tPFh2zg45pR2PB0CVkCtOREv2AJKkSidISWkysEuQ0EH8faUU5du78bx87UQ==" data-cf-beacon='{"version":"2024.11.0","token":"042d3ff49010474883b9c59480838e7f"}' crossorigin="anonymous"></script>
+</body>
+</html>
+
