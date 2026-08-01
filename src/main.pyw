@@ -1,9 +1,10 @@
-﻿# Phasmophobia 鬼魂特征查看器 - 主程序 v2.0
+# Phasmophobia 鬼魂特征查看器 - 主程序 v2.0
 import tkinter as tk
 from tkinter import ttk, messagebox
 import json
 import os
 import sys
+import keyboard
 
 class GhostViewer:
     def __init__(self, root):
@@ -28,6 +29,8 @@ class GhostViewer:
         # 创建界面
         self.create_widgets()
         
+        # 注册全局热键
+        self.setup_global_hotkeys()
         # 绑定快捷键
         self.root.bind('<Escape>', lambda e: self.minimize_to_float())
         self.root.bind('<Control-f>', lambda e: self.search_entry.focus_set())
@@ -39,6 +42,28 @@ class GhostViewer:
         self.root.bind('<Button-1>', self.start_move)
         self.root.bind('<B1-Motion>', self.on_move)
     
+
+    def setup_global_hotkeys(self):
+        import ctypes
+        try:
+            is_admin = ctypes.windll.shell32.IsUserAnAdmin() != 0
+        except:
+            is_admin = False
+        if not is_admin:
+            print("Tip: Not running as admin, global hotkeys may not work")
+        try:
+            keyboard.add_hotkey('ctrl+f', lambda: self.root.after(0, self.search_entry.focus_set))
+            keyboard.add_hotkey('ctrl+d', lambda: self.root.after(0, self.clear_filters))
+            keyboard.add_hotkey('escape', lambda: self.root.after(0, self.minimize_to_float))
+        except Exception as e:
+            print(f"Global hotkey failed: {e}")
+
+    def cleanup_global_hotkeys(self):
+        try:
+            keyboard.unhook_all()
+        except:
+            pass
+
     def minimize_to_float(self):
         """缩小到50x50悬浮窗"""
         # 保存当前窗口位置和大小
@@ -115,9 +140,16 @@ class GhostViewer:
         """加载鬼魂数据"""
         # 获取脚本所在目录
         script_dir = os.path.dirname(os.path.abspath(__file__))
-        
+
+        # PyInstaller 打包后的临时解压目录
+        if getattr(sys, 'frozen', False):
+            base_dir = sys._MEIPASS
+        else:
+            base_dir = script_dir
+
         # 尝试多个可能的路径
         possible_paths = [
+            os.path.join(base_dir, 'data', 'ghosts_data_cn.json'),
             os.path.join(script_dir, '..', 'data', 'ghosts_data_cn.json'),
             os.path.join(script_dir, 'ghosts_data_cn.json'),
             os.path.join(os.getcwd(), 'data', 'ghosts_data_cn.json'),
@@ -192,6 +224,7 @@ class GhostViewer:
         
         # 证据复选框
         self.evidence_vars = {}
+        self.evidence_cbs = {}
         evidence_types = [
             ('emf', 'EMF读数5级'),
             ('box', '通灵盒'),
@@ -203,35 +236,48 @@ class GhostViewer:
         ]
         
         for i, (ev_id, ev_name) in enumerate(evidence_types):
-            var = tk.BooleanVar()
+            var = tk.IntVar(value=0)
             self.evidence_vars[ev_id] = var
-            cb = ttk.Checkbutton(filter_frame, text=ev_name, variable=var, 
-                                command=self.on_filter_change)
+            cb = tk.Label(filter_frame, text=ev_name, relief=tk.RAISED, 
+                         padx=8, pady=4, cursor='hand2', bg='#f0f0f0',
+                         font=('Microsoft YaHei', 11))
+            cb.bind('<Button-1>', lambda e, eid=ev_id: self.cycle_evidence(eid))
             cb.grid(row=i//4, column=i%4, sticky=tk.W, padx=5, pady=2)
+            self.evidence_cbs[ev_id] = cb
         
         # 清除筛选按钮
         clear_btn = ttk.Button(filter_frame, text="清除筛选", 
                               command=self.clear_filters)
         clear_btn.grid(row=2, column=0, columnspan=4, pady=(5, 0))
         
+        # 鬼魂网格容器
         # 鬼魂列表
         list_frame = ttk.LabelFrame(main_frame, text="👻 鬼魂列表", padding="5")
         list_frame.pack(fill=tk.BOTH, expand=True)
         
-        # 列表框和滚动条
-        list_container = ttk.Frame(list_frame)
-        list_container.pack(fill=tk.BOTH, expand=True)
+        self.ghost_grid_frame = tk.Frame(list_frame)
+        self.ghost_grid_frame.pack(fill=tk.BOTH, expand=True)
         
-        scrollbar = ttk.Scrollbar(list_container)
-        scrollbar.pack(side=tk.RIGHT, fill=tk.Y)
+        # 滚动条
+        self.ghost_canvas = tk.Canvas(self.ghost_grid_frame)
+        self.ghost_scrollbar = ttk.Scrollbar(self.ghost_grid_frame, orient=tk.VERTICAL, command=self.ghost_canvas.yview)
+        self.ghost_scrollable_frame = tk.Frame(self.ghost_canvas)
         
-        self.ghost_listbox = tk.Listbox(list_container, yscrollcommand=scrollbar.set,
-                                       font=('微软雅黑', 10), selectmode=tk.SINGLE)
-        self.ghost_listbox.pack(side=tk.LEFT, fill=tk.BOTH, expand=True)
-        scrollbar.config(command=self.ghost_listbox.yview)
+        self.ghost_scrollable_frame.bind(
+            "<Configure>",
+            lambda e: self.ghost_canvas.configure(scrollregion=self.ghost_canvas.bbox("all"))
+        )
         
-        # 绑定选择事件
-        self.ghost_listbox.bind('<<ListboxSelect>>', self.on_ghost_select)
+        self.ghost_canvas.create_window((0, 0), window=self.ghost_scrollable_frame, anchor="nw")
+        self.ghost_canvas.configure(yscrollcommand=self.ghost_scrollbar.set)
+        
+        self.ghost_canvas.pack(side=tk.LEFT, fill=tk.BOTH, expand=True)
+        self.ghost_scrollbar.pack(side=tk.RIGHT, fill=tk.Y)
+        
+        # 鬼魂按钮列表
+        self.ghost_buttons = []
+        self.ghost_names = []
+
         
         # 详情显示区域
         detail_frame = ttk.LabelFrame(main_frame, text="📖 鬼魂详情", padding="5")
@@ -291,15 +337,46 @@ class GhostViewer:
         self.update_ghost_list()
     
     def clear_filters(self):
-        """清除所有筛选条件"""
+        """Clear all filters"""
         self.search_var.set('')
-        for var in self.evidence_vars.values():
-            var.set(False)
+        for ev_id, var in self.evidence_vars.items():
+            var.set(0)
+            self.update_evidence_display(ev_id)
         self.update_ghost_list()
+    
+    def cycle_evidence(self, ev_id):
+        var = self.evidence_vars[ev_id]
+        current = var.get()
+        var.set((current + 1) % 3)
+        self.update_evidence_display(ev_id)
+        self.update_ghost_list()
+    
+    def update_evidence_display(self, ev_id):
+        var = self.evidence_vars[ev_id]
+        cb = self.evidence_cbs[ev_id]
+        state = var.get()
+        ev_name = self.get_evidence_name(ev_id)
+        if state == 1:
+            cb.configure(text="+ " + ev_name, bg='#90EE90')
+        elif state == 2:
+            cb.configure(text="- " + ev_name, bg='#FFB6C1')
+        else:
+            cb.configure(text=ev_name, bg='#f0f0f0')
+    
+    def get_evidence_name(self, ev_id):
+        names = {
+            'emf': 'EMF读数5级',
+            'box': '通灵盒',
+            'uv': '紫外线',
+            'orb': '灵球',
+            'writing': '鬼魂笔记',
+            'freezing': '刺骨寒温',
+            'dots': '点阵投影仪'
+        }
+        return names.get(ev_id, ev_id)
     
     def update_ghost_list(self):
         """更新鬼魂列表显示"""
-        self.ghost_listbox.delete(0, tk.END)
         
         # 获取筛选条件
         search_text = self.search_var.get().lower()
@@ -316,25 +393,50 @@ class GhostViewer:
             'dots': '点阵投影仪'
         }
         
+        # Get tri-state conditions
+        include_evidence = []
+        exclude_evidence = []
+        for ev_id, var in self.evidence_vars.items():
+            state = var.get()
+            ev_name = evidence_names.get(ev_id, ev_id)
+            if state == 1:
+                include_evidence.append(ev_name)
+            elif state == 2:
+                exclude_evidence.append(ev_name)
+        
         # 筛选鬼魂
         filtered_ghosts = []
         for ghost in self.ghosts:
-            # 搜索筛选
             if search_text and search_text not in ghost['name'].lower():
                 continue
-            
-            # 证据筛选
-            if selected_evidence:
-                # 将英文证据ID转换为中文证据名称
-                selected_evidence_names = [evidence_names.get(ev, ev) for ev in selected_evidence]
-                if not all(ev in ghost['evidence'] for ev in selected_evidence_names):
+            if include_evidence:
+                if not all(ev in ghost['evidence'] for ev in include_evidence):
                     continue
-            
+            if exclude_evidence:
+                if any(ev in ghost['evidence'] for ev in exclude_evidence):
+                    continue
             filtered_ghosts.append(ghost)
         
-        # 添加到列表
-        for ghost in filtered_ghosts:
-            self.ghost_listbox.insert(tk.END, ghost['name'])
+        # Clear ghost grid
+        for widget in self.ghost_scrollable_frame.winfo_children():
+            widget.destroy()
+        self.ghost_buttons = []
+        self.ghost_names = []
+        
+        # Add ghosts to grid (3 per row)
+        cols = 3
+        for i, ghost in enumerate(filtered_ghosts):
+            row = i // cols
+            col = i % cols
+            btn = tk.Button(self.ghost_scrollable_frame, text=ghost['name'],
+                          command=lambda g=ghost: self.on_ghost_click(g),
+                          relief=tk.RAISED, padx=8, pady=4, cursor='hand2',
+                          font=('Microsoft YaHei', 10))
+            btn.grid(row=row, column=col, padx=3, pady=3, sticky='ew')
+            self.ghost_buttons.append(btn)
+            self.ghost_names.append(ghost['name'])
+        for i in range(cols):
+            self.ghost_scrollable_frame.columnconfigure(i, weight=1)
         
         # 更新状态
         count_text = f"{len(filtered_ghosts)}/{len(self.ghosts)}"
@@ -347,14 +449,12 @@ class GhostViewer:
             self.detail_text.delete(1.0, tk.END)
             self.detail_text.insert(1.0, "没有找到匹配的鬼魂。\n\n请尝试：\n1. 修改搜索关键词\n2. 减少筛选条件\n3. 点击 [清除筛选] 按钮")
             self.detail_text.config(state=tk.DISABLED)
+    def on_ghost_click(self, ghost):
+        self.current_ghost = ghost
+        self.show_ghost_detail(ghost)
+    
     def on_ghost_select(self, event):
-        """鬼魂选择事件"""
-        selection = self.ghost_listbox.curselection()
-        if not selection:
-            return
-        
-        index = selection[0]
-        ghost_name = self.ghost_listbox.get(index)
+        pass
         
         # 查找对应的鬼魂数据
         for ghost in self.ghosts:
@@ -387,9 +487,9 @@ class GhostViewer:
         }
         
         # 构建详情文本
-        # self.detail_text.insert(tk.END, f"【{ghost['name']}】\n\n", 'title')
+        self.detail_text.insert(tk.END, f"【{ghost['name']}】\n\n", 'title')
         
-        # # 基本信息
+        # 基本信息
         # self.detail_text.insert(tk.END, "基本信息:\n", 'header')
         # self.detail_text.insert(tk.END, f"  危险等级: ", 'normal')
         # danger_color = danger_colors.get(ghost['danger'], 'black')
@@ -414,17 +514,16 @@ class GhostViewer:
             self.detail_text.insert(tk.END, f"{ghost['ability']}\n", 'normal')
         
         # 特征
-        if ghost.get('test'):
+        if ghost.get('weakness'):
             self.detail_text.insert(tk.END, "\n缺点:\n", 'header')
-            self.detail_text.insert(tk.END, f"{ghost['test']}\n", 'normal')
+            self.detail_text.insert(tk.END, f"{ghost['weakness']}\n", 'normal')
 
-         # 社区总结
+        # 社区总结
         # if ghost['traits']:
         #     self.detail_text.insert(tk.END, "\n社区总结:\n", 'header')
         #     for trait in ghost['traits']:
         #         self.detail_text.insert(tk.END, f"  • {trait}\n", 'normal')
-                
-
+        
         
         self.detail_text.config(state=tk.DISABLED)
         
@@ -447,6 +546,12 @@ def main():
         pass
     
     app = GhostViewer(root)
+    
+    def on_closing():
+        app.cleanup_global_hotkeys()
+        root.destroy()
+    
+    root.protocol("WM_DELETE_WINDOW", on_closing)
     root.mainloop()
 
 if __name__ == "__main__":
