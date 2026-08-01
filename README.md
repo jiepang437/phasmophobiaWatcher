@@ -46,6 +46,7 @@
 │  匹配 30/30 个鬼魂              Ctrl+F:搜索 | Esc:退出  │
 └─────────────────────────────────────────────────────────┘
 `
+![style_preview](./assets/style_preview.png)
 
 ## 🎨 背景色说明
 
@@ -69,7 +70,6 @@
 | 快捷键 | 功能 |
 |--------|------|
 | Ctrl + F | 聚焦到搜索框 |
-| Ctrl + D | 清除所有筛选条件 |
 | Esc | 缩小为悬浮窗 |
 
 ## 📖 使用说明
@@ -127,12 +127,11 @@ phasmophobiaWatcher/
 ├── dist/
 │   └── 恐鬼症查看器.exe       # 可执行程序（推荐使用）
 ├── src/
-│   ├── main.py               # Python 源码
-│   └── main.pyw              # 无控制台窗口版本
+│   └── main.py               # Python 源码
 ├── data/
 │   ├── config.json           # 配置文件
 │   └── ghosts_data_cn.json   # 鬼魂数据（中文）
-├── 启动查看器.vbs             # VBS 启动脚本
+├── 启动查看器.vbs             # VBS 启动脚本（需要 Python 环境）
 └── README.md
 `
 
@@ -142,9 +141,9 @@ phasmophobiaWatcher/
 如果你已安装 Python，可以双击 启动查看器.vbs 启动，这个方式不会显示命令行窗口。
 
 ### 方式三：直接运行 Python 脚本
-`ash
+```bash
 python src/main.py
-`
+```
 
 ## 📊 数据来源
 

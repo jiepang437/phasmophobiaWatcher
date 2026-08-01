@@ -208,18 +208,6 @@ class GhostViewer:
             txt = ttk.Label(legend_frame, text=label, font=('微软雅黑', 8))
             txt.pack(side=tk.LEFT, padx=(0, 10))
         
-        # 最小化和关闭按钮
-        btn_frame = ttk.Frame(title_frame)
-        btn_frame.pack(side=tk.RIGHT)
-        
-        minimize_btn = ttk.Button(btn_frame, text="—", width=3, 
-                                 command=self.minimize_to_float)
-        minimize_btn.pack(side=tk.LEFT, padx=2)
-        
-        close_btn = ttk.Button(btn_frame, text="✕", width=3, 
-                              command=self.root.destroy)
-        close_btn.pack(side=tk.LEFT, padx=2)
-        
         # 搜索框
         search_frame = ttk.LabelFrame(main_frame, text="🔍 搜索鬼魂", padding="5")
         search_frame.pack(fill=tk.X, pady=(0, 10))
