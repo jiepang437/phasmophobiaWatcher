@@ -38,8 +38,14 @@ class GhostViewer:
         
         # 加载配置与字号倍率
         self.config = self.load_config()
-        self.font_scale = float(self.config.get('font', {}).get('scale', 1.0))
-        self.detail_font_scale = float(self.config.get('font', {}).get('detail_scale', 1.0))
+        self.save_font_scale = bool(self.config.get('font', {}).get('save_scale', True))
+        if self.save_font_scale:
+            self.font_scale = float(self.config.get('font', {}).get('scale', 1.0))
+            self.detail_font_scale = float(self.config.get('font', {}).get('detail_scale', 1.0))
+        else:
+            # 未开启保存时，每次启动都使用默认 100%
+            self.font_scale = 1.0
+            self.detail_font_scale = 1.0
         
         # 当前选中的鬼魂
         self.current_ghost = None
@@ -185,44 +191,33 @@ class GhostViewer:
         return []
 
     def load_config(self):
-        """加载配置文件（找不到或解析失败时返回默认值）"""
-        default_config = {"font": {"scale": 1.0}}
-        script_dir = os.path.dirname(os.path.abspath(__file__))
-        if getattr(sys, 'frozen', False):
-            base_dir = sys._MEIPASS
-        else:
-            base_dir = script_dir
+        """加载配置文件：优先读取 %APPDATA%\\恐鬼症查看器\\config.json"""
+        default_config = {"font": {"scale": 1.0, "detail_scale": 1.0, "save_scale": True}}
+        config_dir = os.path.join(os.environ.get('APPDATA', os.path.expanduser('~')),
+                                  '恐鬼症查看器')
+        try:
+            os.makedirs(config_dir, exist_ok=True)
+            self.config_path = os.path.join(config_dir, 'config.json')
+        except OSError:
+            self.config_path = None
 
-        possible_paths = []
-        if getattr(sys, 'frozen', False):
-            # 打包后优先读取 exe 同级的 data 目录，保证配置可持久保存
-            possible_paths.append(os.path.join(
-                os.path.dirname(sys.executable), 'data', 'config.json'))
-        possible_paths += [
-            os.path.join(base_dir, 'data', 'config.json'),
-            os.path.join(script_dir, '..', 'data', 'config.json'),
-            os.path.join(os.getcwd(), 'data', 'config.json'),
-        ]
-        for config_path in possible_paths:
-            abs_path = os.path.abspath(config_path)
-            if os.path.exists(abs_path):
-                try:
-                    with open(abs_path, 'r', encoding='utf-8-sig') as f:
-                        data = json.load(f)
-                    self.config_path = abs_path
-                    if not isinstance(data.get('font'), dict):
-                        data['font'] = {}
-                    return data
-                except (json.JSONDecodeError, OSError):
-                    continue
-
-        self.config_path = os.path.abspath(
-            os.path.join(script_dir, '..', 'data', 'config.json'))
+        if self.config_path and os.path.exists(self.config_path):
+            try:
+                with open(self.config_path, 'r', encoding='utf-8-sig') as f:
+                    data = json.load(f)
+                if not isinstance(data.get('font'), dict):
+                    data['font'] = {}
+                return data
+            except (json.JSONDecodeError, OSError):
+                pass
         return default_config
 
     def save_config(self):
-        """把当前配置写回 config.json"""
+        """把当前配置写回 %APPDATA%\\恐鬼症查看器\\config.json"""
+        if not self.config_path:
+            return
         try:
+            os.makedirs(os.path.dirname(self.config_path), exist_ok=True)
             with open(self.config_path, 'w', encoding='utf-8') as f:
                 json.dump(self.config, f, ensure_ascii=False, indent=2)
         except OSError:
@@ -239,20 +234,28 @@ class GhostViewer:
     def change_font_scale(self, delta):
         """调整全局字号倍率、保存配置并重建界面"""
         self.font_scale = round(min(2.5, max(0.5, self.font_scale + delta)), 2)
-        self.config.setdefault('font', {})['scale'] = self.font_scale
+        if self.save_font_scale:
+            self.config.setdefault('font', {})['scale'] = self.font_scale
+            self.save_config()
         if hasattr(self, 'font_scale_var'):
             self.font_scale_var.set(str(int(self.font_scale * 100)))
-        self.save_config()
         self.rebuild_ui()
 
     def change_detail_font_scale(self, delta):
         """调整详情面板字号倍率、保存配置并重建界面"""
         self.detail_font_scale = round(min(2.5, max(0.5, self.detail_font_scale + delta)), 2)
-        self.config.setdefault('font', {})['detail_scale'] = self.detail_font_scale
+        if self.save_font_scale:
+            self.config.setdefault('font', {})['detail_scale'] = self.detail_font_scale
+            self.save_config()
         if hasattr(self, 'detail_font_scale_var'):
             self.detail_font_scale_var.set(str(int(self.detail_font_scale * 100)))
-        self.save_config()
         self.rebuild_ui()
+
+    def on_save_scale_toggle(self):
+        """「保存字号设置」勾选状态变化：立即持久化这个偏好本身"""
+        self.save_font_scale = bool(self.save_font_scale_var.get())
+        self.config.setdefault('font', {})['save_scale'] = self.save_font_scale
+        self.save_config()
 
     def _read_scale_var(self, var, current):
         """解析百分比输入框：非法值回退到当前值，并夹取到 50–250"""
@@ -267,16 +270,18 @@ class GhostViewer:
     def _apply_font_scale_from_var(self):
         """读取全局字号输入框并应用"""
         self.font_scale = self._read_scale_var(self.font_scale_var, self.font_scale)
-        self.config.setdefault('font', {})['scale'] = self.font_scale
-        self.save_config()
+        if self.save_font_scale:
+            self.config.setdefault('font', {})['scale'] = self.font_scale
+            self.save_config()
         self.rebuild_ui()
 
     def _apply_detail_font_scale_from_var(self):
         """读取详情字号输入框并应用"""
         self.detail_font_scale = self._read_scale_var(self.detail_font_scale_var,
                                                       self.detail_font_scale)
-        self.config.setdefault('font', {})['detail_scale'] = self.detail_font_scale
-        self.save_config()
+        if self.save_font_scale:
+            self.config.setdefault('font', {})['detail_scale'] = self.detail_font_scale
+            self.save_config()
         self.rebuild_ui()
 
     def rebuild_ui(self):
@@ -298,6 +303,7 @@ class GhostViewer:
         style.configure('Header.TLabel', font=('微软雅黑', self.fs(10), 'bold'))
         style.configure('Detail.TLabel', font=('微软雅黑', self.fs(9)))
         style.configure('App.TButton', font=('微软雅黑', self.fs(10)))
+        style.configure('App.TCheckbutton', font=('微软雅黑', self.fs(9)))
         
         # 主框架
         main_frame = ttk.Frame(self.root, padding="10")
@@ -330,6 +336,13 @@ class GhostViewer:
         # 右上角：字号调节（A- / 输入框 / A+），与图例平行
         font_ctrl_frame = ttk.Frame(legend_frame)
         font_ctrl_frame.pack(side=tk.RIGHT)
+
+        # 是否保存字号设置
+        self.save_font_scale_var = tk.BooleanVar(value=self.save_font_scale)
+        ttk.Checkbutton(font_ctrl_frame, text="保存字号设置",
+                        variable=self.save_font_scale_var,
+                        style='App.TCheckbutton',
+                        command=self.on_save_scale_toggle).pack(side=tk.LEFT, padx=(0, 6))
 
         ttk.Label(font_ctrl_frame, text="全局", font=('微软雅黑', self.fs(8))).pack(side=tk.LEFT)
         ttk.Button(font_ctrl_frame, text="A-", width=2,
