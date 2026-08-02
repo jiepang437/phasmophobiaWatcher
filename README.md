@@ -46,7 +46,7 @@
 │  匹配 30/30 个鬼魂              Ctrl+F:搜索 | Esc:退出  │
 └─────────────────────────────────────────────────────────┘
 `
-![style_preview](./assets/style_preview.png)
+![预览图](./assets/style_preview.png)
 
 ## 🎨 背景色说明
 
