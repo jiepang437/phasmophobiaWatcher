@@ -148,7 +148,12 @@ class GhostViewer:
             base_dir = script_dir
 
         # 尝试多个可能的路径
-        possible_paths = [
+        possible_paths = []
+        if getattr(sys, 'frozen', False):
+            # 打包后优先读取 exe 同级的 data 目录，保证配置可持久保存
+            possible_paths.append(os.path.join(
+                os.path.dirname(sys.executable), 'data', 'ghosts_data_cn.json'))
+        possible_paths += [
             os.path.join(base_dir, 'data', 'ghosts_data_cn.json'),
             os.path.join(script_dir, '..', 'data', 'ghosts_data_cn.json'),
             os.path.join(script_dir, 'ghosts_data_cn.json'),
@@ -188,7 +193,12 @@ class GhostViewer:
         else:
             base_dir = script_dir
 
-        possible_paths = [
+        possible_paths = []
+        if getattr(sys, 'frozen', False):
+            # 打包后优先读取 exe 同级的 data 目录，保证配置可持久保存
+            possible_paths.append(os.path.join(
+                os.path.dirname(sys.executable), 'data', 'config.json'))
+        possible_paths += [
             os.path.join(base_dir, 'data', 'config.json'),
             os.path.join(script_dir, '..', 'data', 'config.json'),
             os.path.join(os.getcwd(), 'data', 'config.json'),
