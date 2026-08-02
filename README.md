@@ -163,8 +163,6 @@ phasmophobiaWatcher/
 │   └── ghosts_data_cn.json   # 30 只鬼的中文数据（含识别技巧）
 ├── assets/
 │   └── style_preview.png     # 界面预览图
-├── ghost_page.html           # Web 版页面（未完成，仅供参考）
-├── phasmo-script.js          # Web 版脚本（含英文识别技巧素材）
 ├── 启动查看器.vbs            # VBS 启动脚本（需要 Python 环境）
 └── README.md
 ```
@@ -181,30 +179,13 @@ phasmophobiaWatcher/
 python src/main.py
 ```
 
-## 📦 打包方法
-
-需要 Python 3 环境并安装 PyInstaller：
-
-```bash
-pyinstaller --noconfirm --clean --onefile --windowed --name 恐鬼症查看器 --add-data data;data src\main.py
-```
-
-产物在 `dist/恐鬼症查看器.exe`。exe 内置全部数据，可独立运行；如需覆盖数据，可在 exe 同级放一个 `data/` 目录。
-
-## 📊 数据来源
-
-- 鬼魂基础数据来源于社区维护的《恐鬼症》数据库，包含全部 30 种鬼魂
-- 识别技巧整理自仓库内 `phasmo-script.js` 的英文资料并翻译浓缩
-
 ## 📝 更新日志
 
 ### v2.1
-- 全局与详情字号独立调节（A- / A+ / 直接输入 50–250%）
+- 全局与鬼魂详情字号独立调节（A- / A+ / 直接输入 50–250%）
 - 新增「保存字号设置」开关，配置保存到 `%APPDATA%\恐鬼症查看器\config.json`
 - 详情面板增强：恢复危险等级、猎杀阈值、移动速度、闪烁频率
 - 新增 30 只鬼的中文识别技巧
-- 打包支持：单文件 exe，数据内置
-- 修复：无控制台启动崩溃、详情滚动位置、Ctrl+F 重建后失效
 
 ### v2.0
 - 全新横向三栏布局
