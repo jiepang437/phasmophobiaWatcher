@@ -36,6 +36,17 @@ class GhostViewer:
         # 加载鬼魂数据
         self.ghosts = self.load_ghost_data()
         
+        # 加载配置与字号倍率
+        self.config = self.load_config()
+        self.save_font_scale = bool(self.config.get('font', {}).get('save_scale', True))
+        if self.save_font_scale:
+            self.font_scale = float(self.config.get('font', {}).get('scale', 1.0))
+            self.detail_font_scale = float(self.config.get('font', {}).get('detail_scale', 1.0))
+        else:
+            # 未开启保存时，每次启动都使用默认 100%
+            self.font_scale = 1.0
+            self.detail_font_scale = 1.0
+        
         # 当前选中的鬼魂
         self.current_ghost = None
         self.float_mode = False
@@ -50,7 +61,7 @@ class GhostViewer:
         
         # 绑定快捷键
         self.root.bind('<Escape>', lambda e: self.minimize_to_float())
-        self.root.bind('<Control-f>', lambda e: self.search_entry.focus_set())
+        self.root.bind('<Control-f>', self.focus_search)
         
         # 初始化显示
         self.update_ghost_list()
@@ -81,7 +92,7 @@ class GhostViewer:
         float_frame.pack(fill=tk.BOTH, expand=True)
         
         # 添加标签
-        float_label = tk.Label(float_frame, text="👻", font=('Arial', 20), 
+        float_label = tk.Label(float_frame, text="👻", font=('Arial', self.fs(20)),
                               bg='#2c3e50', fg='white')
         float_label.pack(expand=True)
         
@@ -143,7 +154,12 @@ class GhostViewer:
             base_dir = script_dir
 
         # 尝试多个可能的路径
-        possible_paths = [
+        possible_paths = []
+        if getattr(sys, 'frozen', False):
+            # 打包后优先读取 exe 同级的 data 目录，保证配置可持久保存
+            possible_paths.append(os.path.join(
+                os.path.dirname(sys.executable), 'data', 'ghosts_data_cn.json'))
+        possible_paths += [
             os.path.join(base_dir, 'data', 'ghosts_data_cn.json'),
             os.path.join(script_dir, '..', 'data', 'ghosts_data_cn.json'),
             os.path.join(script_dir, 'ghosts_data_cn.json'),
@@ -157,11 +173,13 @@ class GhostViewer:
                 try:
                     with open(abs_path, 'r', encoding='utf-8-sig') as f:
                         data = json.load(f)
-                        print(f"成功加载数据文件: {abs_path}")
-                        print(f"鬼魂数量: {len(data)}")
+                        if sys.stdout is not None:
+                            print(f"成功加载数据文件: {abs_path}")
+                            print(f"鬼魂数量: {len(data)}")
                         return data
                 except json.JSONDecodeError as e:
-                    print(f"错误: JSON解析失败 - {abs_path}: {e}")
+                    if sys.stdout is not None:
+                        print(f"错误: JSON解析失败 - {abs_path}: {e}")
                     continue
         
         # 如果找不到文件，显示错误
@@ -172,13 +190,120 @@ class GhostViewer:
         messagebox.showerror("错误", error_msg)
         return []
 
+    def load_config(self):
+        """加载配置文件：优先读取 %APPDATA%\\恐鬼症查看器\\config.json"""
+        default_config = {"font": {"scale": 1.0, "detail_scale": 1.0, "save_scale": True}}
+        config_dir = os.path.join(os.environ.get('APPDATA', os.path.expanduser('~')),
+                                  '恐鬼症查看器')
+        try:
+            os.makedirs(config_dir, exist_ok=True)
+            self.config_path = os.path.join(config_dir, 'config.json')
+        except OSError:
+            self.config_path = None
+
+        if self.config_path and os.path.exists(self.config_path):
+            try:
+                with open(self.config_path, 'r', encoding='utf-8-sig') as f:
+                    data = json.load(f)
+                if not isinstance(data.get('font'), dict):
+                    data['font'] = {}
+                return data
+            except (json.JSONDecodeError, OSError):
+                pass
+        return default_config
+
+    def save_config(self):
+        """把当前配置写回 %APPDATA%\\恐鬼症查看器\\config.json"""
+        if not self.config_path:
+            return
+        try:
+            os.makedirs(os.path.dirname(self.config_path), exist_ok=True)
+            with open(self.config_path, 'w', encoding='utf-8') as f:
+                json.dump(self.config, f, ensure_ascii=False, indent=2)
+        except OSError:
+            pass
+
+    def fs(self, size):
+        """按全局字号倍率计算实际字号"""
+        return max(6, int(round(size * self.font_scale)))
+
+    def dfs(self, size):
+        """按详情面板字号倍率计算实际字号"""
+        return max(6, int(round(size * self.detail_font_scale)))
+
+    def change_font_scale(self, delta):
+        """调整全局字号倍率、保存配置并重建界面"""
+        self.font_scale = round(min(2.5, max(0.5, self.font_scale + delta)), 2)
+        if self.save_font_scale:
+            self.config.setdefault('font', {})['scale'] = self.font_scale
+            self.save_config()
+        if hasattr(self, 'font_scale_var'):
+            self.font_scale_var.set(str(int(self.font_scale * 100)))
+        self.rebuild_ui()
+
+    def change_detail_font_scale(self, delta):
+        """调整详情面板字号倍率、保存配置并重建界面"""
+        self.detail_font_scale = round(min(2.5, max(0.5, self.detail_font_scale + delta)), 2)
+        if self.save_font_scale:
+            self.config.setdefault('font', {})['detail_scale'] = self.detail_font_scale
+            self.save_config()
+        if hasattr(self, 'detail_font_scale_var'):
+            self.detail_font_scale_var.set(str(int(self.detail_font_scale * 100)))
+        self.rebuild_ui()
+
+    def on_save_scale_toggle(self):
+        """「保存字号设置」勾选状态变化：立即持久化这个偏好本身"""
+        self.save_font_scale = bool(self.save_font_scale_var.get())
+        self.config.setdefault('font', {})['save_scale'] = self.save_font_scale
+        self.save_config()
+
+    def _read_scale_var(self, var, current):
+        """解析百分比输入框：非法值回退到当前值，并夹取到 50–250"""
+        try:
+            val = int(float(str(var.get()).strip()))
+        except (ValueError, AttributeError):
+            val = int(current * 100)
+        val = max(50, min(250, val))
+        var.set(str(val))
+        return round(val / 100.0, 2)
+
+    def _apply_font_scale_from_var(self):
+        """读取全局字号输入框并应用"""
+        self.font_scale = self._read_scale_var(self.font_scale_var, self.font_scale)
+        if self.save_font_scale:
+            self.config.setdefault('font', {})['scale'] = self.font_scale
+            self.save_config()
+        self.rebuild_ui()
+
+    def _apply_detail_font_scale_from_var(self):
+        """读取详情字号输入框并应用"""
+        self.detail_font_scale = self._read_scale_var(self.detail_font_scale_var,
+                                                      self.detail_font_scale)
+        if self.save_font_scale:
+            self.config.setdefault('font', {})['detail_scale'] = self.detail_font_scale
+            self.save_config()
+        self.rebuild_ui()
+
+    def rebuild_ui(self):
+        """销毁并重建整个界面"""
+        for widget in self.root.winfo_children():
+            widget.destroy()
+        self.create_widgets()
+        self.update_ghost_list()
+
+    def focus_search(self, event=None):
+        """Ctrl+F：聚焦搜索框"""
+        self.search_entry.focus_set()
+
     def create_widgets(self):
         """创建界面组件 - 横向三栏布局"""
         # 自定义样式
         style = ttk.Style()
-        style.configure('Title.TLabel', font=('微软雅黑', 12, 'bold'))
-        style.configure('Header.TLabel', font=('微软雅黑', 10, 'bold'))
-        style.configure('Detail.TLabel', font=('微软雅黑', 9))
+        style.configure('Title.TLabel', font=('微软雅黑', self.fs(12), 'bold'))
+        style.configure('Header.TLabel', font=('微软雅黑', self.fs(10), 'bold'))
+        style.configure('Detail.TLabel', font=('微软雅黑', self.fs(9)))
+        style.configure('App.TButton', font=('微软雅黑', self.fs(10)))
+        style.configure('App.TCheckbutton', font=('微软雅黑', self.fs(9)))
         
         # 主框架
         main_frame = ttk.Frame(self.root, padding="10")
@@ -205,8 +330,49 @@ class GhostViewer:
         for color, bg, label in legend_items:
             swatch = tk.Label(legend_frame, text='  ', bg=bg, relief=tk.SUNKEN, width=2)
             swatch.pack(side=tk.LEFT, padx=(5, 2))
-            txt = ttk.Label(legend_frame, text=label, font=('微软雅黑', 8))
+            txt = ttk.Label(legend_frame, text=label, font=('微软雅黑', self.fs(8)))
             txt.pack(side=tk.LEFT, padx=(0, 10))
+        
+        # 右上角：字号调节（A- / 输入框 / A+），与图例平行
+        font_ctrl_frame = ttk.Frame(legend_frame)
+        font_ctrl_frame.pack(side=tk.RIGHT)
+
+        # 是否保存字号设置
+        self.save_font_scale_var = tk.BooleanVar(value=self.save_font_scale)
+        ttk.Checkbutton(font_ctrl_frame, text="保存字号设置",
+                        variable=self.save_font_scale_var,
+                        style='App.TCheckbutton',
+                        command=self.on_save_scale_toggle).pack(side=tk.LEFT, padx=(0, 6))
+
+        ttk.Label(font_ctrl_frame, text="全局", font=('微软雅黑', self.fs(8))).pack(side=tk.LEFT)
+        ttk.Button(font_ctrl_frame, text="A-", width=2,
+                   style='App.TButton',
+                   command=lambda: self.change_font_scale(-0.15)).pack(side=tk.LEFT, padx=(2, 0))
+        ttk.Button(font_ctrl_frame, text="A+", width=2,
+                   style='App.TButton',
+                   command=lambda: self.change_font_scale(0.15)).pack(side=tk.LEFT, padx=(2, 0))
+        self.font_scale_var = tk.StringVar(value=str(int(self.font_scale * 100)))
+        font_entry = ttk.Entry(font_ctrl_frame, textvariable=self.font_scale_var,
+                               width=5, justify=tk.RIGHT)
+        font_entry.pack(side=tk.LEFT, padx=(2, 0))
+        font_entry.bind('<Return>', lambda e: self._apply_font_scale_from_var())
+        font_entry.bind('<FocusOut>', lambda e: self._apply_font_scale_from_var())
+        ttk.Label(font_ctrl_frame, text="%", font=('微软雅黑', self.fs(8))).pack(side=tk.LEFT)
+
+        ttk.Label(font_ctrl_frame, text="详情", font=('微软雅黑', self.fs(8))).pack(side=tk.LEFT, padx=(8, 0))
+        ttk.Button(font_ctrl_frame, text="A-", width=2,
+                   style='App.TButton',
+                   command=lambda: self.change_detail_font_scale(-0.15)).pack(side=tk.LEFT, padx=(2, 0))
+        ttk.Button(font_ctrl_frame, text="A+", width=2,
+                   style='App.TButton',
+                   command=lambda: self.change_detail_font_scale(0.15)).pack(side=tk.LEFT, padx=(2, 0))
+        self.detail_font_scale_var = tk.StringVar(value=str(int(self.detail_font_scale * 100)))
+        detail_entry = ttk.Entry(font_ctrl_frame, textvariable=self.detail_font_scale_var,
+                                 width=5, justify=tk.RIGHT)
+        detail_entry.pack(side=tk.LEFT, padx=(2, 0))
+        detail_entry.bind('<Return>', lambda e: self._apply_detail_font_scale_from_var())
+        detail_entry.bind('<FocusOut>', lambda e: self._apply_detail_font_scale_from_var())
+        ttk.Label(font_ctrl_frame, text="%", font=('微软雅黑', self.fs(8))).pack(side=tk.LEFT)
         
         # 搜索框
         search_frame = ttk.LabelFrame(main_frame, text="🔍 搜索鬼魂", padding="5")
@@ -244,14 +410,14 @@ class GhostViewer:
             self.evidence_vars[ev_id] = var
             cb = tk.Label(evidence_frame, text=ev_name, relief=tk.RAISED, 
                          padx=8, pady=4, cursor='hand2', bg='#f0f0f0',
-                         font=('Microsoft YaHei', 10))
+                         font=('Microsoft YaHei', self.fs(10)))
             cb.bind('<Button-1>', lambda e, eid=ev_id: self.cycle_evidence(eid))
             cb.pack(fill=tk.X, pady=2)
             self.evidence_cbs[ev_id] = cb
         
         # 清除筛选按钮
         clear_btn = ttk.Button(evidence_frame, text="清除筛选", 
-                              command=self.clear_filters)
+                              style='App.TButton', command=self.clear_filters)
         clear_btn.pack(fill=tk.X, pady=(10, 0))
         
         # 第二栏：鬼魂列表（中间，纵向滚动列表）
@@ -297,28 +463,28 @@ class GhostViewer:
         detail_scrollbar.pack(side=tk.RIGHT, fill=tk.Y)
         
         self.detail_text = tk.Text(detail_container, wrap=tk.WORD, 
-                                  font=('微软雅黑', 9), yscrollcommand=detail_scrollbar.set)
+                                  font=('微软雅黑', self.dfs(9)), yscrollcommand=detail_scrollbar.set)
         self.detail_text.pack(side=tk.LEFT, fill=tk.BOTH, expand=True)
         detail_scrollbar.config(command=self.detail_text.yview)
         
         self.detail_text.config(state=tk.DISABLED)
         
         # 配置文本标签
-        self.detail_text.tag_configure('title', font=('微软雅黑', 11, 'bold'))
-        self.detail_text.tag_configure('header', font=('微软雅黑', 9, 'bold'))
-        self.detail_text.tag_configure('normal', font=('微软雅黑', 9))
+        self.detail_text.tag_configure('title', font=('微软雅黑', self.dfs(11), 'bold'))
+        self.detail_text.tag_configure('header', font=('微软雅黑', self.dfs(9), 'bold'))
+        self.detail_text.tag_configure('normal', font=('微软雅黑', self.dfs(9)))
         self.detail_text.tag_configure('highlight', foreground='blue')
         
         # 状态栏
         status_frame = ttk.Frame(main_frame)
         status_frame.pack(fill=tk.X, pady=(5, 0))
         
-        self.status_label = ttk.Label(status_frame, text="就绪", font=('微软雅黑', 8))
+        self.status_label = ttk.Label(status_frame, text="就绪", font=('微软雅黑', self.fs(8)))
         self.status_label.pack(side=tk.LEFT)
         
         # 快捷键提示
         shortcut_label = ttk.Label(status_frame, text="Ctrl+F: 搜索 | Esc: 退出", 
-                                  font=('微软雅黑', 8))
+                                  font=('微软雅黑', self.fs(8)))
         shortcut_label.pack(side=tk.RIGHT)
     
     def start_move(self, event):
@@ -456,7 +622,7 @@ class GhostViewer:
                 btn = tk.Button(self.ghost_scrollable_frame, text=name,
                               command=lambda g=ghost: self.on_ghost_click(g),
                               relief=tk.RAISED, padx=8, pady=4, cursor='hand2',
-                              font=('Microsoft YaHei', 10),
+                              font=('Microsoft YaHei', self.fs(10)),
                               bg='#f0f0f0', fg='black',
                               activebackground='#e0e0e0', activeforeground='black')
                 btn.bind('<Enter>', lambda e, b=btn: b.configure(bg='#d0d0d0') if b.cget('state') == 'normal' else None)
@@ -466,7 +632,7 @@ class GhostViewer:
                 btn = tk.Button(self.ghost_scrollable_frame, text=name,
                               state=tk.DISABLED,
                               relief=tk.FLAT, padx=8, pady=4,
-                              font=('Microsoft YaHei', 10),
+                              font=('Microsoft YaHei', self.fs(10)),
                               bg='#a0a0a0', fg='#666666',
                               disabledforeground='#666666')
             
@@ -556,23 +722,24 @@ class GhostViewer:
         
         # 危险等级颜色
         danger_colors = {
-            'Low': 'green',
-            'Med': 'orange',
-            'High': 'red'
+            '低': 'green',
+            '中': 'orange',
+            '高': 'red',
+            '极高': '#8B0000'
         }
         
         # 构建详情文本
         self.detail_text.insert(tk.END, f"【{ghost['name']}】\n\n", 'title')
         
         # 基本信息
-        # self.detail_text.insert(tk.END, "基本信息:\n", 'header')
-        # self.detail_text.insert(tk.END, f"  危险等级: ", 'normal')
-        # danger_color = danger_colors.get(ghost['danger'], 'black')
-        # self.detail_text.insert(tk.END, f"{ghost['danger']}\n", ('highlight',))
-        
-        # self.detail_text.insert(tk.END, f"  猎杀阈值: {ghost['huntThreshold']}\n", 'normal')
-        # self.detail_text.insert(tk.END, f"  移动速度: {ghost['speed']}\n", 'normal')
-        # self.detail_text.insert(tk.END, f"  闪烁频率: {ghost['blink']}\n\n", 'normal')
+        self.detail_text.insert(tk.END, "基本信息:\n", 'header')
+        self.detail_text.insert(tk.END, "  危险等级: ", 'normal')
+        danger_color = danger_colors.get(ghost.get('danger', ''), 'black')
+        self.detail_text.tag_config('danger', foreground=danger_color)
+        self.detail_text.insert(tk.END, f"{ghost.get('danger', '未知')}\n", ('danger',))
+        self.detail_text.insert(tk.END, f"  猎杀阈值: {ghost.get('huntThreshold', '未知')}\n", 'normal')
+        self.detail_text.insert(tk.END, f"  移动速度: {ghost.get('speed', '未知')}\n", 'normal')
+        self.detail_text.insert(tk.END, f"  闪烁频率: {ghost.get('blink', '未知')}\n", 'normal')
         
         # 证据类型
         self.detail_text.insert(tk.END, "证据类型:\n", 'header')
@@ -588,22 +755,27 @@ class GhostViewer:
             self.detail_text.insert(tk.END, "\n特征:\n", 'header')
             self.detail_text.insert(tk.END, f"{ghost['ability']}\n", 'normal')
         
-        # 特征
+        # 缺点
         if ghost.get('weakness'):
             self.detail_text.insert(tk.END, "\n缺点:\n", 'header')
             self.detail_text.insert(tk.END, f"{ghost['weakness']}\n", 'normal')
 
-        # 社区总结
-        # if ghost['traits']:
-        #     self.detail_text.insert(tk.END, "\n社区总结:\n", 'header')
-        #     for trait in ghost['traits']:
-        #         self.detail_text.insert(tk.END, f"  • {trait}\n", 'normal')
-        
+        # 特征标签
+        traits = ghost.get('traits', [])
+        if traits:
+            self.detail_text.insert(tk.END, "\n特征标签:\n", 'header')
+            for trait in traits:
+                self.detail_text.insert(tk.END, f"  • {trait}\n", 'normal')
+
+        # 识别技巧
+        if ghost.get('test'):
+            self.detail_text.insert(tk.END, "\n识别技巧:\n", 'header')
+            self.detail_text.insert(tk.END, f"{ghost['test']}\n", 'normal')
         
         self.detail_text.config(state=tk.DISABLED)
         
         # 滚动到顶部
-        self.detail_text.see(tk.END)
+        self.detail_text.see('1.0')
 
 def main():
     # 检查Python版本

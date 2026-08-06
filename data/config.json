@@ -1,4 +1,4 @@
-﻿{
+{
   "window": {
     "width": 450,
     "height": 700,
@@ -7,7 +7,10 @@
   },
   "font": {
     "family": "微软雅黑",
-    "size": 10
+    "size": 10,
+    "scale": 1.0,
+    "detail_scale": 1.0,
+    "save_scale": true
   },
   "colors": {
     "background": "#f0f0f0",
