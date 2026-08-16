@@ -1,6 +1,23 @@
-﻿# Phasmophobia 鬼魂特征查看器 - 主程序 v2.0
+# Phasmophobia 鬼魂特征查看器 - 主程序
 import os
 import sys
+
+APP_NAME = "恐鬼症鬼魂特征查看器"
+APP_VERSION = "v2.2"
+
+# 难度模式
+DIFFICULTIES = ['普通', '噩梦', '疯人院', '零证据']
+
+# 噩梦/疯人院难度下必定出现在笔记本上的"强制证据"
+# 中文鬼名 -> 中文证据名
+FORCED_EVIDENCE = {
+    '御灵': '点阵投影仪',   # Goryo
+    '幻妖': '紫外线',       # Obake
+    '寒魔': '刺骨寒温',     # Hantu
+    '魔洛伊': '通灵盒',     # Moroi
+    '雾影': '通灵盒',       # Deogen
+    '拟魂': '灵球',         # Mimic
+}
 
 # PyInstaller frozen path support
 if getattr(sys, 'frozen', False):
@@ -51,6 +68,9 @@ class GhostViewer:
         self.current_ghost = None
         self.float_mode = False
         
+        # 难度模式（默认普通）
+        self.difficulty = DIFFICULTIES[0]
+        
         # 鬼魂选择状态：0=未选, 1=选中(绿色), 2=排除(粉色)
         self.ghost_states = {}
         # 存储鬼魂按钮引用
@@ -72,20 +92,24 @@ class GhostViewer:
     
     def minimize_to_float(self):
         """缩小到50x50悬浮窗"""
+        # 已在悬浮模式下：忽略重复的 Esc，避免覆盖原始窗口几何信息
+        if self.float_mode:
+            return
+        
         # 保存当前窗口位置和大小
         self.original_geometry = self.root.geometry()
         
-        # 设置新大小和位置（50x50，在左上角）
-        new_x = 10
-        new_y = 10
+        # 先移除窗口边框再改大小，避免边框切换时尺寸被重置
+        self.root.overrideredirect(True)
         
         # 隐藏所有组件
         for widget in self.root.winfo_children():
             widget.pack_forget()
         
-        # 设置窗口大小
+        # 设置新大小和位置（50x50，在左上角）
+        new_x = 10
+        new_y = 10
         self.root.geometry(f"50x50+{new_x}+{new_y}")
-        self.root.overrideredirect(True)  # 移除窗口边框
         
         # 创建一个小的可点击区域
         float_frame = tk.Frame(self.root, bg='#2c3e50', cursor='hand2')
@@ -108,26 +132,44 @@ class GhostViewer:
         float_frame.bind('<B1-Motion>', self.drag_float_window)
         float_label.bind('<B1-Motion>', self.drag_float_window)
         
+        # 立即应用小窗口尺寸（overrideredirect 切换是异步的，等一帧再设置更稳妥）
+        self.root.update_idletasks()
+        self.root.geometry(f"50x50+{new_x}+{new_y}")
+        
         self.float_mode = True
     
     def restore_from_float(self):
         """从悬浮窗恢复"""
-        if hasattr(self, 'original_geometry'):
-            # 恢复窗口边框
-            self.root.overrideredirect(False)
-            
-            # 恢复原始大小
-            self.root.geometry(self.original_geometry)
-            
-            # 删除悬浮窗组件
-            for widget in self.root.winfo_children():
-                widget.destroy()
-            
-            # 重新创建界面
-            self.create_widgets()
-            self.update_ghost_list()
-            
-            self.float_mode = False
+        if not self.float_mode:
+            return
+        if not hasattr(self, 'original_geometry') or not self.original_geometry:
+            # 没有保存过原始几何信息时，至少保证窗口可用
+            self.root.geometry("1200x700")
+            self.original_geometry = self.root.geometry()
+        
+        # 恢复窗口边框
+        self.root.overrideredirect(False)
+        
+        # 先让边框切换生效，再应用原始尺寸；
+        # 注意：geometry() 的尺寸要到空闲处理时才真正生效，
+        # 若先销毁组件再等空闲，未生效的尺寸会被新内容的要求尺寸顶掉
+        self.root.update_idletasks()
+        self.root.geometry(self.original_geometry)
+        self.root.update_idletasks()
+        
+        # 删除悬浮窗组件
+        for widget in self.root.winfo_children():
+            widget.destroy()
+        
+        # 重新创建界面
+        self.create_widgets()
+        self.update_ghost_list()
+        
+        # 边框切换是异步的，稍后再应用一次原始尺寸，确保最终大小正确
+        orig = self.original_geometry
+        self.root.after(50, lambda: self.root.geometry(orig))
+        
+        self.float_mode = False
     
     def show_float_menu(self, event):
         """显示悬浮窗右键菜单"""
@@ -313,7 +355,7 @@ class GhostViewer:
         title_frame = ttk.Frame(main_frame)
         title_frame.pack(fill=tk.X, pady=(0, 10))
         
-        title_label = ttk.Label(title_frame, text="👻 恐鬼症鬼魂特征查看器", style='Title.TLabel')
+        title_label = ttk.Label(title_frame, text=f"👻 {APP_NAME} {APP_VERSION}", style='Title.TLabel')
         title_label.pack(side=tk.LEFT)
         
         # 背景色说明
@@ -332,6 +374,27 @@ class GhostViewer:
             swatch.pack(side=tk.LEFT, padx=(5, 2))
             txt = ttk.Label(legend_frame, text=label, font=('微软雅黑', self.fs(8)))
             txt.pack(side=tk.LEFT, padx=(0, 10))
+        
+        # 右上角：难度模式选择（真正下拉框形态：字段 + ▾ 按钮 + 弹出菜单）
+        diff_frame = ttk.Frame(legend_frame)
+        diff_frame.pack(side=tk.RIGHT, padx=(0, 6))
+
+        self.difficulty_var = tk.StringVar(value=self.difficulty)
+        self.difficulty_entry = tk.Entry(
+            diff_frame, textvariable=self.difficulty_var, state='readonly',
+            font=('微软雅黑', self.fs(11), 'bold'),
+            bg='#dbeafe', fg='#1e3a8a', readonlybackground='#dbeafe',
+            relief=tk.SUNKEN, bd=2, width=9, justify=tk.CENTER)
+        self.difficulty_entry.pack(side=tk.LEFT, ipady=2)
+        self.difficulty_entry.bind('<Button-1>', lambda e: self._pop_difficulty_menu())
+
+        self.difficulty_btn = tk.Button(
+            diff_frame, text='▾', command=self._pop_difficulty_menu,
+            font=('微软雅黑', self.fs(11), 'bold'),
+            bg='#1e40af', fg='white',
+            activebackground='#2563eb', activeforeground='white',
+            relief=tk.RAISED, bd=2, cursor='hand2', padx=8)
+        self.difficulty_btn.pack(side=tk.LEFT, fill=tk.Y)
         
         # 右上角：字号调节（A- / 输入框 / A+），与图例平行
         font_ctrl_frame = ttk.Frame(legend_frame)
@@ -519,23 +582,73 @@ class GhostViewer:
     
     def cycle_evidence(self, ev_id):
         """切换证据状态：0=未选, 1=包含(+), 2=排除(-)"""
+        if self.difficulty == '零证据':
+            self.status_label.config(text="零证据模式下无证据可收集，请通过行为特征判断")
+            return
         var = self.evidence_vars[ev_id]
         current = var.get()
+        if current == 0:
+            slots = self.evidence_slots()
+            included = sum(1 for v in self.evidence_vars.values() if v.get() == 1)
+            if included >= slots:
+                self.status_label.config(
+                    text=f"当前难度（{self.difficulty}）最多确认 {slots} 条证据，请先排除其他证据")
+                return
         var.set((current + 1) % 3)
         self.update_evidence_display(ev_id)
+        self.update_ghost_list()
+    
+    def evidence_slots(self):
+        """当前难度下最多可确认（包含）的证据数"""
+        if self.difficulty == '噩梦':
+            return 2
+        if self.difficulty == '疯人院':
+            return 1
+        if self.difficulty == '零证据':
+            return 0
+        return 7  # 普通
+    
+    def _pop_difficulty_menu(self):
+        """弹出难度下拉菜单"""
+        menu = tk.Menu(self.difficulty_btn, tearoff=0,
+                       font=('微软雅黑', self.fs(10)),
+                       bg='#dbeafe', fg='#1e3a8a',
+                       activebackground='#1e40af', activeforeground='white')
+        for d in DIFFICULTIES:
+            label = ('✓ ' + d) if d == self.difficulty else d
+            menu.add_command(label=label, command=lambda d=d: self.set_difficulty(d))
+        try:
+            menu.tk_popup(self.difficulty_btn.winfo_rootx(),
+                          self.difficulty_btn.winfo_rooty() + self.difficulty_btn.winfo_height())
+        finally:
+            menu.grab_release()
+    
+    def set_difficulty(self, difficulty):
+        """切换难度模式"""
+        self.difficulty = difficulty
+        self.difficulty_var.set(difficulty)
+        # 难度切换后证据语义不同，清空证据筛选
+        for ev_id, var in self.evidence_vars.items():
+            var.set(0)
+            self.update_evidence_display(ev_id)
+        self.status_label.config(text=f"难度已切换为：{self.difficulty}")
         self.update_ghost_list()
     
     def update_evidence_display(self, ev_id):
         """更新证据按钮的显示状态 - 只改变背景色，不改变文字"""
         var = self.evidence_vars[ev_id]
         cb = self.evidence_cbs[ev_id]
+        if self.difficulty == '零证据':
+            # 零证据模式下证据按钮置灰不可用
+            cb.configure(bg='#d9d9d9', fg='#999999', cursor='arrow')
+            return
         state = var.get()
         if state == 1:
-            cb.configure(bg='#90EE90')  # 绿色 = 包含
+            cb.configure(bg='#90EE90', fg='black')  # 绿色 = 包含
         elif state == 2:
-            cb.configure(bg='#FFB6C1')  # 粉色 = 排除
+            cb.configure(bg='#FFB6C1', fg='black')  # 粉色 = 排除
         else:
-            cb.configure(bg='#f0f0f0')  # 灰色 = 未选
+            cb.configure(bg='#f0f0f0', fg='black')  # 灰色 = 未选
     
     def get_evidence_name(self, ev_id):
         """获取证据的中文名称"""
@@ -578,6 +691,9 @@ class GhostViewer:
             elif state == 2:
                 exclude_evidence.append(ev_name)
         
+        # 零证据模式：无证据筛选
+        zero_ev = (self.difficulty == '零证据')
+        
         # 判断每个鬼魂是否匹配
         ghost_match = {}
         matched_count = 0
@@ -589,15 +705,26 @@ class GhostViewer:
             if search_text and search_text not in name.lower():
                 is_match = False
             
-            # 证据包含筛选
-            if is_match and include_evidence:
-                if not all(ev in ghost['evidence'] for ev in include_evidence):
-                    is_match = False
-            
-            # 证据排除筛选
-            if is_match and exclude_evidence:
-                if any(ev in ghost['evidence'] for ev in exclude_evidence):
-                    is_match = False
+            if not zero_ev:
+                # 证据包含筛选
+                if is_match and include_evidence:
+                    if not all(ev in ghost['evidence'] for ev in include_evidence):
+                        is_match = False
+                
+                # 证据排除筛选
+                if is_match and exclude_evidence:
+                    if any(ev in ghost['evidence'] for ev in exclude_evidence):
+                        is_match = False
+                
+                # 噩梦/疯人院：强制证据规则
+                # 该难度下每只鬼的"强制证据"必定出现在笔记本上；
+                # 当已确认（包含）的证据数达到该难度的证据槽位时，
+                # 若某鬼的强制证据不在已确认证据中，则该鬼不可能是答案
+                if is_match and self.difficulty in ('噩梦', '疯人院'):
+                    forced = FORCED_EVIDENCE.get(name)
+                    if forced and len(include_evidence) >= self.evidence_slots():
+                        if forced not in include_evidence:
+                            is_match = False
             
             ghost_match[name] = is_match
             if is_match:
@@ -655,8 +782,8 @@ class GhostViewer:
         
         # 更新状态
         count_text = f"{matched_count}/{len(self.ghosts)}"
-        self.root.title(f"恐鬼症鬼魂特征查看器 ({count_text})")
-        self.status_label.config(text=f"匹配 {count_text} 个鬼魂")
+        self.root.title(f"{APP_NAME} {APP_VERSION} ({count_text})")
+        self.status_label.config(text=f"匹配 {count_text} 个鬼魂 | 难度：{self.difficulty}")
         
         # 如果没有匹配结果，显示提示
         if matched_count == 0:
@@ -731,6 +858,13 @@ class GhostViewer:
         # 构建详情文本
         self.detail_text.insert(tk.END, f"【{ghost['name']}】\n\n", 'title')
         
+        # 零证据模式提示
+        if self.difficulty == '零证据':
+            self.detail_text.insert(
+                tk.END,
+                "（零证据模式：没有可收集的证据，请通过下方行为特征与识别技巧判断）\n\n",
+                'highlight')
+        
         # 基本信息
         self.detail_text.insert(tk.END, "基本信息:\n", 'header')
         self.detail_text.insert(tk.END, "  危险等级: ", 'normal')
@@ -745,6 +879,15 @@ class GhostViewer:
         self.detail_text.insert(tk.END, "证据类型:\n", 'header')
         for ev in ghost['evidence']:
             self.detail_text.insert(tk.END, f"  • {evidence_names.get(ev, ev)}\n", 'normal')
+        
+        # 噩梦/疯人院难度：强制证据提示
+        if self.difficulty in ('噩梦', '疯人院'):
+            forced = FORCED_EVIDENCE.get(ghost['name'])
+            if forced:
+                self.detail_text.insert(
+                    tk.END,
+                    f"  ⭐ 强制证据（{self.difficulty}难度下必定出现）: {forced}\n",
+                    'highlight')
         
         # 描述
         self.detail_text.insert(tk.END, "\n描述:\n", 'header')
