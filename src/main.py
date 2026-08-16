@@ -3,7 +3,7 @@ import os
 import sys
 
 APP_NAME = "恐鬼症鬼魂特征查看器"
-APP_VERSION = "v2.2"
+APP_VERSION = "v2.3"
 
 # 难度模式
 DIFFICULTIES = ['普通', '噩梦', '疯人院', '零证据']
@@ -85,10 +85,8 @@ class GhostViewer:
         
         # 初始化显示
         self.update_ghost_list()
-        
-        # 使窗口可拖动
-        self.root.bind('<Button-1>', self.start_move)
-        self.root.bind('<B1-Motion>', self.on_move)
+        # 窗口拖动改为仅绑定在顶部标题栏（见 create_widgets），
+        # 避免在证据/鬼魂按钮上拖拽时误移动窗口
     
     def minimize_to_float(self):
         """缩小到50x50悬浮窗"""
@@ -358,6 +356,12 @@ class GhostViewer:
         title_label = ttk.Label(title_frame, text=f"👻 {APP_NAME} {APP_VERSION}", style='Title.TLabel')
         title_label.pack(side=tk.LEFT)
         
+        # 仅拖动顶部标题栏可移动窗口
+        title_frame.bind('<Button-1>', self.start_move)
+        title_frame.bind('<B1-Motion>', self.on_move)
+        title_label.bind('<Button-1>', self.start_move)
+        title_label.bind('<B1-Motion>', self.on_move)
+        
         # 背景色说明
         legend_frame = ttk.Frame(main_frame)
         legend_frame.pack(fill=tk.X, pady=(0, 5))
@@ -441,19 +445,27 @@ class GhostViewer:
         search_frame = ttk.LabelFrame(main_frame, text="🔍 搜索鬼魂", padding="5")
         search_frame.pack(fill=tk.X, pady=(0, 10))
         
+        # 开始新对局按钮
+        new_contract_btn = ttk.Button(search_frame, text="🆕 开始新对局",
+                                      style='App.TButton',
+                                      command=self.start_new_contract)
+        new_contract_btn.pack(side=tk.RIGHT, padx=(6, 0))
+        
         self.search_var = tk.StringVar()
         self.search_var.trace('w', self.on_search_change)
         self.search_entry = ttk.Entry(search_frame, textvariable=self.search_var)
         self.search_entry.pack(fill=tk.X)
         self.search_entry.bind('<Return>', lambda e: self.search_entry.selection_clear())
         
-        # ===== 横向三栏容器 =====
-        columns_frame = ttk.Frame(main_frame)
-        columns_frame.pack(fill=tk.BOTH, expand=True)
+        # ===== 横向四栏容器（可拖动分隔条，每栏可单独拉宽） =====
+        self.paned = tk.PanedWindow(main_frame, orient=tk.HORIZONTAL,
+                                    sashwidth=6, sashrelief=tk.RAISED,
+                                    bg='#c0c0c0', bd=0, relief=tk.FLAT)
+        self.paned.pack(fill=tk.BOTH, expand=True)
         
         # 第一栏：证据筛选（左侧，纵向排列）
-        evidence_frame = ttk.LabelFrame(columns_frame, text="📋 证据筛选", padding="5")
-        evidence_frame.pack(side=tk.LEFT, fill=tk.Y, padx=(0, 10))
+        evidence_frame = ttk.LabelFrame(self.paned, text="📋 证据筛选", padding="5")
+        self.paned.add(evidence_frame, minsize=120, width=140, stretch='never')
         
         # 证据复选框
         self.evidence_vars = {}
@@ -484,8 +496,8 @@ class GhostViewer:
         clear_btn.pack(fill=tk.X, pady=(10, 0))
         
         # 第二栏：鬼魂列表（中间，纵向滚动列表）
-        list_frame = ttk.LabelFrame(columns_frame, text="👻 鬼魂列表", padding="5")
-        list_frame.pack(side=tk.LEFT, fill=tk.BOTH, expand=True, padx=(0, 10))
+        list_frame = ttk.LabelFrame(self.paned, text="👻 鬼魂列表", padding="5")
+        self.paned.add(list_frame, minsize=200, width=380, stretch='always')
         
         self.ghost_grid_frame = tk.Frame(list_frame)
         self.ghost_grid_frame.pack(fill=tk.BOTH, expand=True)
@@ -505,6 +517,8 @@ class GhostViewer:
         
         self.ghost_canvas.pack(side=tk.LEFT, fill=tk.BOTH, expand=True)
         self.ghost_scrollbar.pack(side=tk.RIGHT, fill=tk.Y)
+        # 画布宽度变化时同步内部网格宽度（拉宽列表栏时按钮自动填满）
+        self.ghost_canvas.bind('<Configure>', self.on_canvas_resize)
         
         # 鬼魂按钮列表
         self.ghost_buttons = []
@@ -514,12 +528,15 @@ class GhostViewer:
         self.ghost_canvas.bind("<MouseWheel>", lambda e: self.ghost_canvas.yview_scroll(-1*(e.delta//120), "units"))
         self.ghost_scrollable_frame.bind("<MouseWheel>", lambda e: self.ghost_canvas.yview_scroll(-1*(e.delta//120), "units"))
         
+        # 候选鉴别建议栏（列表与详情之间，候选收窄到 2-4 只时自动插入）
+        self.candidate_frame = ttk.LabelFrame(self.paned, text="💡 候选鉴别建议", padding="5")
+        
         # 第三栏：鬼魂详情（右侧，纵向填充）
-        detail_frame = ttk.LabelFrame(columns_frame, text="📖 鬼魂详情", padding="5")
-        detail_frame.pack(side=tk.LEFT, fill=tk.BOTH, expand=True)
+        self.detail_frame = ttk.LabelFrame(self.paned, text="📖 鬼魂详情", padding="5")
+        self.paned.add(self.detail_frame, minsize=250, width=380, stretch='always')
         
         # 详情文本框和滚动条
-        detail_container = ttk.Frame(detail_frame)
+        detail_container = ttk.Frame(self.detail_frame)
         detail_container.pack(fill=tk.BOTH, expand=True)
         
         detail_scrollbar = ttk.Scrollbar(detail_container)
@@ -633,6 +650,182 @@ class GhostViewer:
             self.update_evidence_display(ev_id)
         self.status_label.config(text=f"难度已切换为：{self.difficulty}")
         self.update_ghost_list()
+    
+    def start_new_contract(self):
+        """开始新对局：清空搜索、证据筛选与鬼魂选择状态"""
+        self.search_var.set('')
+        for ev_id, var in self.evidence_vars.items():
+            var.set(0)
+            self.update_evidence_display(ev_id)
+        self.ghost_states.clear()
+        self.current_ghost = None
+        self.status_label.config(text=f"🆕 已开始新对局 | 难度：{self.difficulty}")
+        self.update_ghost_list()
+    
+    def _test_short_name(self, ghost):
+        """从识别技巧中提取测试名称（第一个「：」之前的部分）"""
+        test = ghost.get('test', '') or ''
+        if '：' in test:
+            return test.split('：', 1)[0]
+        if ':' in test:
+            return test.split(':', 1)[0]
+        return (test[:12] + '…') if len(test) > 12 else test
+    
+    def _cjk_wrap_line(self, line, font_name, max_w):
+        """中文排版禁则断行：行首不出闭合标点（，。；等），行尾不留开括号（（「等）"""
+        if not line:
+            return line
+        no_start = set('，。；：、！？）」』】》…')
+        no_end = set('（「『《【')
+        measure = lambda s: float(self.root.tk.call('font', 'measure', font_name, s))
+        lines = []
+        cur = ''
+        cur_w = 0.0
+        for ch in line:
+            w = measure(ch)
+            if cur and cur_w + w > max_w:
+                if ch in no_start:
+                    # 行首禁标点：把它留在当前行尾（允许轻微超出）
+                    cur += ch
+                    cur_w += w
+                else:
+                    if cur[-1] in no_end:
+                        # 行尾不留开括号：把它带到下一行
+                        lines.append(cur[:-1])
+                        cur = cur[-1] + ch
+                    else:
+                        lines.append(cur)
+                        cur = ch
+                    cur_w = measure(cur)
+            else:
+                cur += ch
+                cur_w += w
+        if cur:
+            lines.append(cur)
+        return '\n'.join(lines)
+    
+    def _candidate_rewrap(self, event):
+        """候选列宽度变化时按新宽度重新断行"""
+        txt = getattr(self, '_candidate_txt', None)
+        if txt is None or not getattr(self, '_candidate_segments', None):
+            return
+        if txt is not event.widget:
+            return
+        w = max(60, event.width - 8)
+        if abs(w - getattr(self, '_candidate_last_w', 0)) < 12:
+            return
+        self._candidate_last_w = w
+        try:
+            y = txt.yview()[0]
+        except Exception:
+            y = 0.0
+        txt.config(state=tk.NORMAL)
+        txt.delete(1.0, tk.END)
+        font_name = txt.cget('font')
+        for text, tag in self._candidate_segments:
+            wrapped = '\n'.join(self._cjk_wrap_line(ln, font_name, w)
+                                for ln in text.split('\n'))
+            txt.insert(tk.END, wrapped, tag)
+        txt.config(state=tk.DISABLED)
+        try:
+            txt.yview_moveto(y)
+        except Exception:
+            pass
+    
+    def update_candidate_advice(self, matched_names):
+        """候选收窄到 2-4 只时，展示区分线索与各候选完整测试方式"""
+        MAX_CANDIDATES = 4
+        if not (2 <= len(matched_names) <= MAX_CANDIDATES):
+            if hasattr(self, 'candidate_frame') and \
+                    self.candidate_frame.winfo_manager() == 'panedwindow':
+                self.paned.forget(self.candidate_frame)
+            return
+        # 清空旧内容
+        for widget in self.candidate_frame.winfo_children():
+            widget.destroy()
+        
+        cands = [g for g in self.ghosts if g['name'] in matched_names]
+        
+        # 可滚动文本区域（手动禁则断行，不依赖 Text 自带的 WORD/CHAR 换行）
+        text_frame = ttk.Frame(self.candidate_frame)
+        text_frame.pack(fill=tk.BOTH, expand=True)
+        scrollbar = ttk.Scrollbar(text_frame, orient=tk.VERTICAL)
+        scrollbar.pack(side=tk.RIGHT, fill=tk.Y)
+        txt = tk.Text(text_frame, wrap=tk.NONE,
+                      font=('微软雅黑', self.fs(9)),
+                      yscrollcommand=scrollbar.set, width=30,
+                      relief=tk.FLAT, borderwidth=0, padx=4, pady=2)
+        txt.pack(side=tk.LEFT, fill=tk.BOTH, expand=True)
+        scrollbar.config(command=txt.yview)
+        self._candidate_txt = txt
+        self._candidate_last_w = 0
+        
+        txt.tag_configure('head', font=('微软雅黑', self.fs(9), 'bold'))
+        txt.tag_configure('name', font=('微软雅黑', self.fs(9), 'bold'),
+                          foreground='#1e3a8a')
+        txt.tag_configure('normal', font=('微软雅黑', self.fs(9)))
+        
+        # 收集内容段（文本, 标签），供宽度变化时重排
+        self._candidate_segments = []
+        def put(text, tag):
+            self._candidate_segments.append((text, tag))
+        
+        put(f"候选 {len(cands)} 只\n", 'head')
+        
+        # 区分线索：只出现在部分候选身上的证据
+        ev_counter = {}
+        for g in cands:
+            for ev in g['evidence']:
+                ev_counter[ev] = ev_counter.get(ev, 0) + 1
+        disc_ev = [ev for ev, c in ev_counter.items() if 0 < c < len(cands)]
+        # 按界面证据顺序排列
+        order = {name: i for i, (_, name) in enumerate([
+            ('emf', 'EMF读数5级'), ('box', '通灵盒'), ('uv', '紫外线'),
+            ('orb', '灵球'), ('writing', '鬼魂笔记'),
+            ('freezing', '刺骨寒温'), ('dots', '点阵投影仪')])}
+        disc_ev.sort(key=lambda ev: order.get(ev, 99))
+        
+        if disc_ev:
+            put("\n🔑 区分线索（看到即可锁定/排除）\n", 'head')
+            for ev in disc_ev:
+                owners = [g['name'] for g in cands if ev in g['evidence']]
+                put(f"  • {ev} → {'、'.join(owners)}\n", 'normal')
+        
+        # 各候选完整测试方式
+        put("\n🧪 完整测试方式\n", 'head')
+        for g in cands:
+            short = self._test_short_name(g)
+            put(f"◆ {g['name']}", 'name')
+            if short:
+                put(f"（{short}）", 'name')
+            put("\n", 'normal')
+            test = g.get('test', '') or ''
+            if test:
+                put(test + "\n\n", 'normal')
+        
+        # 按当前可用宽度断行插入
+        font_name = txt.cget('font')
+        w = self._candidate_text_width(txt)
+        self._candidate_last_w = w
+        for text, tag in self._candidate_segments:
+            wrapped = '\n'.join(self._cjk_wrap_line(ln, font_name, w)
+                                for ln in text.split('\n'))
+            txt.insert(tk.END, wrapped, tag)
+        
+        txt.config(state=tk.DISABLED)
+        # 栏宽变化（拖动分隔条/窗口缩放）时重排
+        txt.bind('<Configure>', self._candidate_rewrap)
+        
+        if self.candidate_frame.winfo_manager() != 'panedwindow':
+            self.paned.add(self.candidate_frame, minsize=200, width=290,
+                           before=self.detail_frame)
+    
+    def _candidate_text_width(self, txt):
+        """当前可用文本宽度（未布局时按默认栏宽估算）"""
+        w = txt.winfo_width()
+        if w <= 1:
+            w = 290 - 30  # 默认栏宽 - 滚动条与边距
+        return max(60, w - 8)  # 减去 padx(4*2)
     
     def update_evidence_display(self, ev_id):
         """更新证据按钮的显示状态 - 只改变背景色，不改变文字"""
@@ -783,7 +976,19 @@ class GhostViewer:
         # 更新状态
         count_text = f"{matched_count}/{len(self.ghosts)}"
         self.root.title(f"{APP_NAME} {APP_VERSION} ({count_text})")
-        self.status_label.config(text=f"匹配 {count_text} 个鬼魂 | 难度：{self.difficulty}")
+        status = f"匹配 {count_text} 个鬼魂 | 难度：{self.difficulty}"
+        # 噩梦/疯人院：显示已确认证据进度
+        if self.difficulty in ('噩梦', '疯人院'):
+            slots = self.evidence_slots()
+            included = sum(1 for v in self.evidence_vars.values() if v.get() == 1)
+            status += f" | 已确认证据 {included}/{slots}"
+        if matched_count == 1:
+            status += " | ✅ 已锁定"
+        self.status_label.config(text=status)
+        
+        # 候选鉴别建议
+        matched_names = [name for name, m in ghost_match.items() if m]
+        self.update_candidate_advice(matched_names)
         
         # 如果没有匹配结果，显示提示
         if matched_count == 0:
