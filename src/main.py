@@ -3,7 +3,7 @@ import os
 import sys
 
 APP_NAME = "恐鬼症鬼魂特征查看器"
-APP_VERSION = "v2.3"
+APP_VERSION = "v2.4"
 
 # 难度模式
 DIFFICULTIES = ['普通', '噩梦', '疯人院', '零证据']
@@ -17,6 +17,48 @@ FORCED_EVIDENCE = {
     '魔洛伊': '通灵盒',     # Moroi
     '雾影': '通灵盒',       # Deogen
     '拟魂': '灵球',         # Mimic
+}
+
+# 明/暗两套主题配色
+THEMES = {
+    'light': {
+        'window': '#f0f0f0', 'field': '#ffffff',
+        'text': '#000000', 'muted': '#666666', 'btn_bg': '#e0e0e0',
+        'ev_bg': '#f0f0f0', 'ev_include': '#90EE90', 'ev_include_fg': '#000000',
+        'ev_exclude': '#FFB6C1', 'ev_exclude_fg': '#000000',
+        'ev_disabled': '#d9d9d9', 'ev_disabled_fg': '#999999',
+        'ghost_bg': '#f0f0f0', 'ghost_hover': '#d0d0d0', 'ghost_active': '#e0e0e0',
+        'ghost_disabled_bg': '#a0a0a0', 'ghost_disabled_fg': '#666666',
+        'canvas_bg': '#f0f0f0', 'text_bg': '#ffffff',
+        'select_bg': '#90EE90', 'select_fg': '#000000',
+        'exclude_bg': '#FFB6C1', 'exclude_fg': '#000000',
+        'cand_name': '#1e3a8a', 'highlight': 'blue',
+        'danger_low': 'green', 'danger_med': 'orange',
+        'danger_high': 'red', 'danger_extreme': '#8B0000',
+        'paned_bg': '#c0c0c0',
+        'diff_field_bg': '#dbeafe', 'diff_field_fg': '#1e3a8a',
+        'diff_btn_bg': '#1e40af', 'diff_btn_fg': 'white',
+        'diff_active': '#2563eb',
+    },
+    'dark': {
+        'window': '#1e1e1e', 'field': '#2d2d2d',
+        'text': '#e0e0e0', 'muted': '#9a9a9a', 'btn_bg': '#3a3a3a',
+        'ev_bg': '#2f2f2f', 'ev_include': '#2e7d4f', 'ev_include_fg': '#eafff2',
+        'ev_exclude': '#8a3b52', 'ev_exclude_fg': '#ffe9f0',
+        'ev_disabled': '#262626', 'ev_disabled_fg': '#777777',
+        'ghost_bg': '#2f2f2f', 'ghost_hover': '#3d3d3d', 'ghost_active': '#3a3a3a',
+        'ghost_disabled_bg': '#232323', 'ghost_disabled_fg': '#666666',
+        'canvas_bg': '#1e1e1e', 'text_bg': '#2d2d2d',
+        'select_bg': '#2e7d4f', 'select_fg': '#eafff2',
+        'exclude_bg': '#8a3b52', 'exclude_fg': '#ffe9f0',
+        'cand_name': '#7fb3e0', 'highlight': '#82b1ff',
+        'danger_low': '#66bb6a', 'danger_med': '#ffa726',
+        'danger_high': '#ef5350', 'danger_extreme': '#ff5252',
+        'paned_bg': '#3a3a3a',
+        'diff_field_bg': '#1e3a5f', 'diff_field_fg': '#dbeafe',
+        'diff_btn_bg': '#1e40af', 'diff_btn_fg': 'white',
+        'diff_active': '#2563eb',
+    },
 }
 
 # PyInstaller frozen path support
@@ -55,6 +97,8 @@ class GhostViewer:
         
         # 加载配置与字号倍率
         self.config = self.load_config()
+        # 黑夜模式（从配置读取，默认关闭）
+        self.dark = bool(self.config.get('dark', False))
         self.save_font_scale = bool(self.config.get('font', {}).get('save_scale', True))
         if self.save_font_scale:
             self.font_scale = float(self.config.get('font', {}).get('scale', 1.0))
@@ -263,6 +307,55 @@ class GhostViewer:
         except OSError:
             pass
 
+    def tc(self, key):
+        """当前主题下的颜色"""
+        return THEMES['dark' if self.dark else 'light'].get(key, '#000000')
+
+    def toggle_dark(self):
+        """切换黑夜模式并保存配置"""
+        self.dark = bool(self.dark_var.get())
+        self.config['dark'] = self.dark
+        self.save_config()
+        self.rebuild_ui()
+
+    def _apply_ttk_theme(self, style):
+        """按当前主题配置 ttk 样式（需先切换到 clam 主题才能自定义颜色）"""
+        bg = self.tc('window')
+        text = self.tc('text')
+        field = self.tc('field')
+        btn_bg = self.tc('btn_bg')
+        active = self.tc('ghost_active')
+        muted = self.tc('muted')
+        style.configure('TFrame', background=bg)
+        style.configure('TLabelframe', background=bg, bordercolor=btn_bg)
+        style.configure('TLabelframe.Label', background=bg, foreground=text,
+                        font=('微软雅黑', self.fs(9), 'bold'))
+        style.configure('TLabel', background=bg, foreground=text)
+        style.configure('Title.TLabel', background=bg, foreground=text,
+                        font=('微软雅黑', self.fs(12), 'bold'))
+        style.configure('Header.TLabel', background=bg, foreground=text,
+                        font=('微软雅黑', self.fs(10), 'bold'))
+        style.configure('Detail.TLabel', background=bg, foreground=text,
+                        font=('微软雅黑', self.fs(9)))
+        style.configure('TButton', background=btn_bg, foreground=text,
+                        bordercolor=btn_bg, focusthickness=0)
+        style.map('TButton',
+                  background=[('active', active), ('pressed', active)],
+                  foreground=[('disabled', muted)])
+        style.configure('App.TButton', background=btn_bg, foreground=text)
+        style.map('App.TButton',
+                  background=[('active', active), ('pressed', active)])
+        style.configure('TCheckbutton', background=bg, foreground=text)
+        style.map('TCheckbutton', background=[('active', bg)])
+        style.configure('App.TCheckbutton', background=bg, foreground=text)
+        style.map('App.TCheckbutton', background=[('active', bg)])
+        style.configure('TEntry', fieldbackground=field, foreground=text,
+                        insertcolor=text, bordercolor=btn_bg)
+        style.configure('Vertical.TScrollbar', background=btn_bg, troughcolor=bg,
+                        bordercolor=bg, arrowcolor=text)
+        style.configure('Horizontal.TScrollbar', background=btn_bg, troughcolor=bg,
+                        bordercolor=bg, arrowcolor=text)
+
     def fs(self, size):
         """按全局字号倍率计算实际字号"""
         return max(6, int(round(size * self.font_scale)))
@@ -325,20 +418,41 @@ class GhostViewer:
         self.rebuild_ui()
 
     def rebuild_ui(self):
-        """销毁并重建整个界面"""
+        """销毁并重建整个界面（保留证据筛选、搜索与当前查看状态）"""
+        # 保存当前界面状态
+        ev_states = {}
+        if hasattr(self, 'evidence_vars'):
+            ev_states = {ev_id: var.get() for ev_id, var in self.evidence_vars.items()}
+        search_text = ''
+        if hasattr(self, 'search_var'):
+            search_text = self.search_var.get()
+        current_ghost = self.current_ghost
+        
         for widget in self.root.winfo_children():
             widget.destroy()
         self.create_widgets()
+        
+        # 恢复状态
+        for ev_id, state in ev_states.items():
+            if ev_id in self.evidence_vars:
+                self.evidence_vars[ev_id].set(state)
+                self.update_evidence_display(ev_id)
+        self.search_var.set(search_text)
         self.update_ghost_list()
+        if current_ghost is not None:
+            self.show_ghost_detail(current_ghost)
 
     def focus_search(self, event=None):
         """Ctrl+F：聚焦搜索框"""
         self.search_entry.focus_set()
 
     def create_widgets(self):
-        """创建界面组件 - 横向三栏布局"""
-        # 自定义样式
+        """创建界面组件 - 横向四栏布局"""
+        # 应用主题背景（ttk 用 clam 主题以支持自定义颜色）
+        self.root.configure(bg=self.tc('window'))
         style = ttk.Style()
+        style.theme_use('clam')
+        self._apply_ttk_theme(style)
         style.configure('Title.TLabel', font=('微软雅黑', self.fs(12), 'bold'))
         style.configure('Header.TLabel', font=('微软雅黑', self.fs(10), 'bold'))
         style.configure('Detail.TLabel', font=('微软雅黑', self.fs(9)))
@@ -367,10 +481,10 @@ class GhostViewer:
         legend_frame.pack(fill=tk.X, pady=(0, 5))
         
         legend_items = [
-            ('  ', '#f0f0f0', '未选中'),
-            ('  ', '#90EE90', '选中'),
-            ('  ', '#FFB6C1', '排除'),
-            ('  ', '#a0a0a0', '不匹配'),
+            ('  ', self.tc('ev_bg'), '未选中'),
+            ('  ', self.tc('select_bg'), '选中'),
+            ('  ', self.tc('exclude_bg'), '排除'),
+            ('  ', self.tc('ghost_disabled_bg'), '不匹配'),
         ]
         
         for color, bg, label in legend_items:
@@ -378,6 +492,12 @@ class GhostViewer:
             swatch.pack(side=tk.LEFT, padx=(5, 2))
             txt = ttk.Label(legend_frame, text=label, font=('微软雅黑', self.fs(8)))
             txt.pack(side=tk.LEFT, padx=(0, 10))
+        
+        # 右上角：黑夜模式开关（最右侧）
+        self.dark_var = tk.BooleanVar(value=self.dark)
+        ttk.Checkbutton(legend_frame, text="🌙 黑夜模式",
+                        variable=self.dark_var, style='App.TCheckbutton',
+                        command=self.toggle_dark).pack(side=tk.RIGHT, padx=(8, 2))
         
         # 右上角：难度模式选择（真正下拉框形态：字段 + ▾ 按钮 + 弹出菜单）
         diff_frame = ttk.Frame(legend_frame)
@@ -387,7 +507,8 @@ class GhostViewer:
         self.difficulty_entry = tk.Entry(
             diff_frame, textvariable=self.difficulty_var, state='readonly',
             font=('微软雅黑', self.fs(11), 'bold'),
-            bg='#dbeafe', fg='#1e3a8a', readonlybackground='#dbeafe',
+            bg=self.tc('diff_field_bg'), fg=self.tc('diff_field_fg'),
+            readonlybackground=self.tc('diff_field_bg'),
             relief=tk.SUNKEN, bd=2, width=9, justify=tk.CENTER)
         self.difficulty_entry.pack(side=tk.LEFT, ipady=2)
         self.difficulty_entry.bind('<Button-1>', lambda e: self._pop_difficulty_menu())
@@ -395,8 +516,8 @@ class GhostViewer:
         self.difficulty_btn = tk.Button(
             diff_frame, text='▾', command=self._pop_difficulty_menu,
             font=('微软雅黑', self.fs(11), 'bold'),
-            bg='#1e40af', fg='white',
-            activebackground='#2563eb', activeforeground='white',
+            bg=self.tc('diff_btn_bg'), fg=self.tc('diff_btn_fg'),
+            activebackground=self.tc('diff_active'), activeforeground='white',
             relief=tk.RAISED, bd=2, cursor='hand2', padx=8)
         self.difficulty_btn.pack(side=tk.LEFT, fill=tk.Y)
         
@@ -460,7 +581,7 @@ class GhostViewer:
         # ===== 横向四栏容器（可拖动分隔条，每栏可单独拉宽） =====
         self.paned = tk.PanedWindow(main_frame, orient=tk.HORIZONTAL,
                                     sashwidth=6, sashrelief=tk.RAISED,
-                                    bg='#c0c0c0', bd=0, relief=tk.FLAT)
+                                    bg=self.tc('paned_bg'), bd=0, relief=tk.FLAT)
         self.paned.pack(fill=tk.BOTH, expand=True)
         
         # 第一栏：证据筛选（左侧，纵向排列）
@@ -484,7 +605,8 @@ class GhostViewer:
             var = tk.IntVar(value=0)
             self.evidence_vars[ev_id] = var
             cb = tk.Label(evidence_frame, text=ev_name, relief=tk.RAISED, 
-                         padx=8, pady=4, cursor='hand2', bg='#f0f0f0',
+                         padx=8, pady=4, cursor='hand2', bg=self.tc('ev_bg'),
+                         fg=self.tc('text'),
                          font=('Microsoft YaHei', self.fs(10)))
             cb.bind('<Button-1>', lambda e, eid=ev_id: self.cycle_evidence(eid))
             cb.pack(fill=tk.X, pady=2)
@@ -499,13 +621,14 @@ class GhostViewer:
         list_frame = ttk.LabelFrame(self.paned, text="👻 鬼魂列表", padding="5")
         self.paned.add(list_frame, minsize=200, width=380, stretch='always')
         
-        self.ghost_grid_frame = tk.Frame(list_frame)
+        self.ghost_grid_frame = tk.Frame(list_frame, bg=self.tc('window'))
         self.ghost_grid_frame.pack(fill=tk.BOTH, expand=True)
         
         # 滚动条
-        self.ghost_canvas = tk.Canvas(self.ghost_grid_frame)
+        self.ghost_canvas = tk.Canvas(self.ghost_grid_frame, bg=self.tc('canvas_bg'),
+                                      highlightthickness=0)
         self.ghost_scrollbar = ttk.Scrollbar(self.ghost_grid_frame, orient=tk.VERTICAL, command=self.ghost_canvas.yview)
-        self.ghost_scrollable_frame = tk.Frame(self.ghost_canvas)
+        self.ghost_scrollable_frame = tk.Frame(self.ghost_canvas, bg=self.tc('canvas_bg'))
         
         self.ghost_scrollable_frame.bind(
             "<Configure>",
@@ -543,7 +666,10 @@ class GhostViewer:
         detail_scrollbar.pack(side=tk.RIGHT, fill=tk.Y)
         
         self.detail_text = tk.Text(detail_container, wrap=tk.WORD, 
-                                  font=('微软雅黑', self.dfs(9)), yscrollcommand=detail_scrollbar.set)
+                                  font=('微软雅黑', self.dfs(9)),
+                                  bg=self.tc('text_bg'), fg=self.tc('text'),
+                                  insertbackground=self.tc('text'),
+                                  yscrollcommand=detail_scrollbar.set)
         self.detail_text.pack(side=tk.LEFT, fill=tk.BOTH, expand=True)
         detail_scrollbar.config(command=self.detail_text.yview)
         
@@ -553,7 +679,7 @@ class GhostViewer:
         self.detail_text.tag_configure('title', font=('微软雅黑', self.dfs(11), 'bold'))
         self.detail_text.tag_configure('header', font=('微软雅黑', self.dfs(9), 'bold'))
         self.detail_text.tag_configure('normal', font=('微软雅黑', self.dfs(9)))
-        self.detail_text.tag_configure('highlight', foreground='blue')
+        self.detail_text.tag_configure('highlight', foreground=self.tc('highlight'))
         
         # 状态栏
         status_frame = ttk.Frame(main_frame)
@@ -566,6 +692,26 @@ class GhostViewer:
         shortcut_label = ttk.Label(status_frame, text="Ctrl+F: 搜索 | Esc: 退出", 
                                   font=('微软雅黑', self.fs(8)))
         shortcut_label.pack(side=tk.RIGHT)
+        
+        # 系统标题栏跟随明/暗主题
+        self._apply_windows_titlebar_theme()
+    
+    def _apply_windows_titlebar_theme(self):
+        """Windows 10/11：让系统窗口标题栏跟随明/暗主题"""
+        if sys.platform != 'win32':
+            return
+        try:
+            from ctypes import windll, c_int, byref, sizeof
+            hwnd = windll.user32.GetParent(self.root.winfo_id())
+            if not hwnd:
+                return
+            value = c_int(1 if self.dark else 0)
+            # DWMWA_USE_IMMERSIVE_DARK_MODE：Win10 2004+ 用 20，旧版用 19
+            ret = windll.dwmapi.DwmSetWindowAttribute(hwnd, 20, byref(value), sizeof(value))
+            if ret != 0:
+                windll.dwmapi.DwmSetWindowAttribute(hwnd, 19, byref(value), sizeof(value))
+        except Exception:
+            pass
     
     def start_move(self, event):
         """开始移动窗口"""
@@ -629,8 +775,8 @@ class GhostViewer:
         """弹出难度下拉菜单"""
         menu = tk.Menu(self.difficulty_btn, tearoff=0,
                        font=('微软雅黑', self.fs(10)),
-                       bg='#dbeafe', fg='#1e3a8a',
-                       activebackground='#1e40af', activeforeground='white')
+                       bg=self.tc('diff_field_bg'), fg=self.tc('diff_field_fg'),
+                       activebackground=self.tc('diff_btn_bg'), activeforeground='white')
         for d in DIFFICULTIES:
             label = ('✓ ' + d) if d == self.difficulty else d
             menu.add_command(label=label, command=lambda d=d: self.set_difficulty(d))
@@ -753,6 +899,8 @@ class GhostViewer:
         scrollbar.pack(side=tk.RIGHT, fill=tk.Y)
         txt = tk.Text(text_frame, wrap=tk.NONE,
                       font=('微软雅黑', self.fs(9)),
+                      bg=self.tc('text_bg'), fg=self.tc('text'),
+                      insertbackground=self.tc('text'),
                       yscrollcommand=scrollbar.set, width=30,
                       relief=tk.FLAT, borderwidth=0, padx=4, pady=2)
         txt.pack(side=tk.LEFT, fill=tk.BOTH, expand=True)
@@ -762,7 +910,7 @@ class GhostViewer:
         
         txt.tag_configure('head', font=('微软雅黑', self.fs(9), 'bold'))
         txt.tag_configure('name', font=('微软雅黑', self.fs(9), 'bold'),
-                          foreground='#1e3a8a')
+                          foreground=self.tc('cand_name'))
         txt.tag_configure('normal', font=('微软雅黑', self.fs(9)))
         
         # 收集内容段（文本, 标签），供宽度变化时重排
@@ -833,15 +981,16 @@ class GhostViewer:
         cb = self.evidence_cbs[ev_id]
         if self.difficulty == '零证据':
             # 零证据模式下证据按钮置灰不可用
-            cb.configure(bg='#d9d9d9', fg='#999999', cursor='arrow')
+            cb.configure(bg=self.tc('ev_disabled'), fg=self.tc('ev_disabled_fg'),
+                         cursor='arrow')
             return
         state = var.get()
         if state == 1:
-            cb.configure(bg='#90EE90', fg='black')  # 绿色 = 包含
+            cb.configure(bg=self.tc('ev_include'), fg=self.tc('ev_include_fg'))  # 包含
         elif state == 2:
-            cb.configure(bg='#FFB6C1', fg='black')  # 粉色 = 排除
+            cb.configure(bg=self.tc('ev_exclude'), fg=self.tc('ev_exclude_fg'))  # 排除
         else:
-            cb.configure(bg='#f0f0f0', fg='black')  # 灰色 = 未选
+            cb.configure(bg=self.tc('ev_bg'), fg=self.tc('text'))  # 未选
     
     def get_evidence_name(self, ev_id):
         """获取证据的中文名称"""
@@ -943,9 +1092,12 @@ class GhostViewer:
                               command=lambda g=ghost: self.on_ghost_click(g),
                               relief=tk.RAISED, padx=8, pady=4, cursor='hand2',
                               font=('Microsoft YaHei', self.fs(10)),
-                              bg='#f0f0f0', fg='black',
-                              activebackground='#e0e0e0', activeforeground='black')
-                btn.bind('<Enter>', lambda e, b=btn: b.configure(bg='#d0d0d0') if b.cget('state') == 'normal' else None)
+                              bg=self.tc('ghost_bg'), fg=self.tc('text'),
+                              activebackground=self.tc('ghost_active'),
+                              activeforeground=self.tc('text'))
+                btn.bind('<Enter>',
+                         lambda e, b=btn: b.configure(bg=self.tc('ghost_hover'))
+                         if b.cget('state') == 'normal' else None)
                 btn.bind('<Leave>', lambda e, b=btn, n=name: self._restore_ghost_btn_bg(b, n))
             else:
                 # 不匹配的鬼魂：变暗，禁用
@@ -953,8 +1105,9 @@ class GhostViewer:
                               state=tk.DISABLED,
                               relief=tk.FLAT, padx=8, pady=4,
                               font=('Microsoft YaHei', self.fs(10)),
-                              bg='#a0a0a0', fg='#666666',
-                              disabledforeground='#666666')
+                              bg=self.tc('ghost_disabled_bg'),
+                              fg=self.tc('ghost_disabled_fg'),
+                              disabledforeground=self.tc('ghost_disabled_fg'))
             
             btn.grid(row=row, column=col, padx=3, pady=2, sticky='ew')
             self.ghost_buttons.append(btn)
@@ -965,9 +1118,9 @@ class GhostViewer:
             saved_state = self.ghost_states.get(name, 0)
             if is_match:
                 if saved_state == 1:
-                    btn.configure(bg="#90EE90")
+                    btn.configure(bg=self.tc('select_bg'), fg=self.tc('select_fg'))
                 elif saved_state == 2:
-                    btn.configure(bg="#FFB6C1")
+                    btn.configure(bg=self.tc('exclude_bg'), fg=self.tc('exclude_fg'))
         
         # 设置列权重使三列均匀分布，并让按钮填满
         for i in range(cols):
@@ -1006,11 +1159,11 @@ class GhostViewer:
             return
         state = self.ghost_states.get(name, 0)
         if state == 1:
-            btn.configure(bg='#90EE90')
+            btn.configure(bg=self.tc('select_bg'), fg=self.tc('select_fg'))
         elif state == 2:
-            btn.configure(bg='#FFB6C1')
+            btn.configure(bg=self.tc('exclude_bg'), fg=self.tc('exclude_fg'))
         else:
-            btn.configure(bg='#f0f0f0')
+            btn.configure(bg=self.tc('ghost_bg'), fg=self.tc('text'))
     
     def on_ghost_click(self, ghost):
         """点击鬼魂按钮的回调 - 三态切换"""
@@ -1023,11 +1176,11 @@ class GhostViewer:
         if name in self.ghost_btn_refs:
             btn = self.ghost_btn_refs[name]
             if new_state == 1:
-                btn.configure(bg="#90EE90")  # 绿色 = 选中
+                btn.configure(bg=self.tc('select_bg'), fg=self.tc('select_fg'))  # 选中
             elif new_state == 2:
-                btn.configure(bg="#FFB6C1")  # 粉色 = 排除
+                btn.configure(bg=self.tc('exclude_bg'), fg=self.tc('exclude_fg'))  # 排除
             else:
-                btn.configure(bg="#f0f0f0")  # 灰色 = 未选
+                btn.configure(bg=self.tc('ghost_bg'), fg=self.tc('text'))  # 未选
         
         # 显示详情
         self.current_ghost = ghost
@@ -1054,10 +1207,10 @@ class GhostViewer:
         
         # 危险等级颜色
         danger_colors = {
-            '低': 'green',
-            '中': 'orange',
-            '高': 'red',
-            '极高': '#8B0000'
+            '低': self.tc('danger_low'),
+            '中': self.tc('danger_med'),
+            '高': self.tc('danger_high'),
+            '极高': self.tc('danger_extreme')
         }
         
         # 构建详情文本
@@ -1073,7 +1226,7 @@ class GhostViewer:
         # 基本信息
         self.detail_text.insert(tk.END, "基本信息:\n", 'header')
         self.detail_text.insert(tk.END, "  危险等级: ", 'normal')
-        danger_color = danger_colors.get(ghost.get('danger', ''), 'black')
+        danger_color = danger_colors.get(ghost.get('danger', ''), self.tc('text'))
         self.detail_text.tag_config('danger', foreground=danger_color)
         self.detail_text.insert(tk.END, f"{ghost.get('danger', '未知')}\n", ('danger',))
         self.detail_text.insert(tk.END, f"  猎杀阈值: {ghost.get('huntThreshold', '未知')}\n", 'normal')
